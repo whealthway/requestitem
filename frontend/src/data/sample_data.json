@@ -1,0 +1,251 @@
+{
+    "ItemGroup": [
+        {
+            "code": 100,
+            "value": "Items"    
+        },
+        { 
+            "code": 101, 
+            "value": "Medical Supplies"
+        },
+        { 
+            "code": 102, 
+            "value": "Lab Supplies"
+        },
+        { 
+            "code": 103, 
+            "value": "Imaging Supplies"
+        },
+        { 
+            "code": 104, 
+            "value": "Office Supplies"
+        },
+        { 
+            "code": 105, 
+            "value": "Linen and Beddings"
+        },
+        { 
+            "code": 106, 
+            "value": "Housekeeping"
+        },
+        { 
+            "code": 107, 
+            "value": "General and Pharmacy Medicine"
+        },
+        { 
+            "code": 108, 
+            "value": "Consumables"
+        },
+        { 
+            "code": 109, 
+            "value": "Galenical Goods"
+        },
+        { 
+            "code": 110, 
+            "value": "Marketing Supplies"
+        },
+        { 
+            "code": 111, 
+            "value": "Services"
+        },
+        { 
+            "code": 112, 
+            "value": "Dental Supplies"
+        },
+        { 
+            "code": 113, 
+            "value": "Doctors Fee"
+        },
+        { 
+            "code": 114, 
+            "value": "Uniform Supplies"
+        },
+        { 
+            "code": 115, 
+            "value": "Package"
+        },
+        { 
+            "code": 116, 
+            "value": "Procedure"
+        },
+        { 
+            "code": 117, 
+            "value": "Non- Inventory"
+        },
+        { 
+            "code": 118, 
+            "value": "Examinations"
+        },
+        { 
+            "code": 119, 
+            "value": "Miscellaneous"
+        },
+        { 
+            "code": 120, 
+            "value": "Sales Of Service"
+        },
+        { 
+            "code": 121, 
+            "value": "Hospital Services"
+        },
+        { 
+            "code": 122, 
+            "value": "Other Hospital Services"
+        },
+        { 
+            "code": 123, 
+            "value": "Use Of Facilities"
+        },
+        { 
+            "code": 124, 
+            "value": "Sales Of Goods - Meds"
+        },
+        { 
+            "code": 125, 
+            "value": "Sales Of Goods - Meds (Vat Ex)"
+        },
+        { 
+            "code": 126, 
+            "value": "Sales Of Goods - Non-Meds"
+        },
+        { 
+            "code": 127, 
+            "value": "Sales Of Goods - Non-Meds (Vat Ex)"
+        },
+        { 
+            "code": 128, 
+            "value": "Professional Fees"
+        },
+        { 
+            "code": 129, 
+            "value": "Consultation Fees (Md Share)"
+        },
+        { 
+            "code": 130, 
+            "value": "Readers Fees"
+        },
+        { 
+            "code": 131, 
+            "value": "Fixed Asset"
+        },
+        { 
+            "code": 132, 
+            "value": "Contracted Services"
+        },
+        { 
+            "code": 133, 
+            "value": "Non Inventory"
+        },
+        { 
+            "code": 134, 
+            "value": "Laboratory"
+        },
+        { 
+            "code": 135, 
+            "value": "Imaging"
+        },
+        { 
+            "code": 136, 
+            "value": "Ancillary"
+        },
+        { 
+            "code": 137, 
+            "value": "Operating Room"
+        },
+        { 
+            "code": 138, 
+            "value": "Professional Fee Ruv"
+        },
+        { 
+            "code": 139, 
+            "value": "Consultation"
+        },
+        { 
+            "code": 140, 
+            "value": "Industrial Medicine"
+        },
+        { 
+            "code": 141, 
+            "value": "Sales Discount"
+        },
+        { 
+            "code": 142, 
+            "value": "CCS"
+        },
+        { 
+            "code": 143, 
+            "value": "Endoscopy"
+        },
+        { 
+            "code": 144, 
+            "value": "Senior Citizen"
+        },
+        { 
+            "code": 145, 
+            "value": "Derma Supplies"
+        },
+        { 
+            "code": 146, 
+            "value": "Dermatology"
+        },
+        { 
+            "code": 147, 
+            "value": "Nutrition"
+        },
+        { 
+            "code": 148, 
+            "value": "Professional Fee - Ophthalmology"
+        },
+        { 
+            "code": 149, 
+            "value": "Professional Fee - Ent"
+        },
+        { 
+            "code": 150, 
+            "value": "Rehab Med"
+        },
+        { 
+            "code": 151, 
+            "value": "Treatment Room"
+        },
+        { 
+            "code": 152, 
+            "value": "Vaccination Package"
+        },
+        { 
+            "code": 153, 
+            "value": "Dental"
+        },
+        { 
+            "code": 154, 
+            "value": "Cards"
+        },
+        { 
+            "code": 155, 
+            "value": "Insurance"
+        },
+        { 
+            "code": 156, 
+            "value": "Integrative Medicine"
+        },
+        { 
+            "code": 157, 
+            "value": "Repairs and Maintenance"
+        },
+        { 
+            "code": 158, 
+            "value": "Utilities"
+        },
+        { 
+            "code": 159, 
+            "value": "Minor Equipment"
+        },
+        { 
+            "code": 160, 
+            "value": "Conduction"
+        },
+        { 
+            "code": 161, 
+            "value": "Grocery"}
+    ]
+}
