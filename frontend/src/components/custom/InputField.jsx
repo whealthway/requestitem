@@ -2,15 +2,13 @@ import React from 'react'
 
 const InputField = () => {
   return (
-    <div>
-      <input 
+      <input
         type='text'
-        placeholder='Search Item'
+        placeholder='input'
         id='search_item'
         name='search_item'
-        className='h-8 w-40 p-2 outline-none border-solid shadow-lg rounded-md'> 
+        className='h-8 w-50 p-2 text-[16px] outline-none border border-gray-300 shadow-lg rounded-md'> 
       </input>
-    </div>
   )
 }
 

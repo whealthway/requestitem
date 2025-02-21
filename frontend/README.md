@@ -15,3 +15,26 @@ UI
 
 Backend 
 -> Mar 3 - 4"# requestitem" 
+
+
+Major Fields:
+**Department(select) who will consume the ordered item
+**Item Type(select)
+--not all input fields will be shown, depends on Item Type selected
+**Item Name(separated fields)
+    *List of Fields
+        -Generic Name
+        -Brand Name
+        --Meaurement
+            -measure
+            -uom
+        -Medicine Type/Receptacle
+        -MFG (Manufacturer) or Distributor
+        -Other Description
+        -Procedure/Machine
+        -Acronym
+        -Body Part/Section
+        -Area
+        -Other Descriptors
+        -With or Without contrast
+

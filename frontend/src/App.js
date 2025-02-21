@@ -1,17 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
-import InputField from './components/custom/InputField';
-import Button from './components/custom/Button';
-import SelectField from './components/custom/SelectField';
-
+import CreateRequestItem from './components/page/CreateRequestItem';
 function App() {
   return (
-    <div className="m-8 flex">
-      <InputField />
-      <Button
-        button_name="Search"
-      />
-      <SelectField />
+    <div className="m-4 p-4 flex border border-gray-400 rounded-md">
+      <CreateRequestItem />
     </div>
   );
 }
