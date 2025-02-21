@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Label from '../custom/Label';
+import InputField from '../custom/InputField';
 
 const TestAddField = () => {
   const [fields, setFields] = useState([]);
@@ -19,12 +20,12 @@ const TestAddField = () => {
   };
 
   return (
-    <div>
+    <div className='space-y-2 p-4 border border-gray-300 rounded-md'>
       <button onClick={addFields} disabled={fields.length + 1<=5?false:true}>Add Generic Name and UOM</button>
       {fields.map((field, index) => (
         <div key={field.id}>
           <Label label_name={`Generic Name ${index + 1}`} />
-          <input
+          <InputField
             type="text"
             name="value1"
             value={field.value1}
@@ -32,7 +33,7 @@ const TestAddField = () => {
             placeholder={`Field ${index}`}
           />
           <Label label_name={`Measure ${index + 1}`} />
-          <input
+          <InputField
             type="text"
             name="value2"
             value={field.value2}
@@ -40,7 +41,7 @@ const TestAddField = () => {
             placeholder={`Field ${index}`}
           />
           <Label label_name={`UOM ${index + 1}`} />
-          <input
+          <InputField
             type="text"
             name="value3"
             value={field.value3}

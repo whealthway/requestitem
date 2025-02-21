@@ -27,6 +27,20 @@ const CreateRequestItem = () => {
       </Grid>
       {/* <ItemName /> */}
       <TestAddField />
+      <div className='grid grid-cols-3 gap-4'>
+        <div className='grid'>
+          <Label label_name={"Receptacle"} />
+          <InputField />
+        </div>
+        <div className='grid'>
+          <Label label_name={"MFG"} />
+          <InputField />
+        </div>
+        <div className='grid'>
+          <Label label_name={"Other Descriptors"} />
+          <InputField />
+        </div>
+      </div>
     </div>
   )
 }
