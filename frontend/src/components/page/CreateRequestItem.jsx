@@ -4,11 +4,13 @@ import InputField from '../custom/InputField'
 import Grid from '../custom/Grid'
 import Button from '../custom/Button'
 import ItemName from './component/ItemName'
+import TestAddField from './TestAddField'
 
 const CreateRequestItem = () => {
+  
   return (
-    <div className='w-full space-y-4'>
-      <div className='flex flex-wrap space-x-4'>
+    <div className='w-full space-y-4 min-w-[770px]'>
+      <div className='flex flex-wrap space-x-2 space-y-2'>
           <Label label_name={"Search Item"} />
           <InputField />
           <Button button_name={"Search"}/>
@@ -23,7 +25,8 @@ const CreateRequestItem = () => {
           <InputField />
         </div>
       </Grid>
-      <ItemName />
+      {/* <ItemName /> */}
+      <TestAddField />
     </div>
   )
 }
