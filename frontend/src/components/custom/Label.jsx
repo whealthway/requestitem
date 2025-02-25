@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
 
-const Label = ({label_name}) => {
+const Label = ({ labelName }) => {
   return (
-    <label className='mx-4 h-8 w-auto text-[14px]'>
-        {label_name}
+    <label
+      htmlFor=""
+      className="m-2 text-center px-2 text-[14px] sm:text-[13px] md:text-[14px]"
+    >
+      {labelName}
     </label>
-  )
-}
+  );
+};
 
-export default Label
+export default Label;

@@ -1,10 +1,14 @@
-import './App.css';
-import CreateRequestItem from './components/page/CreateRequestItem';
+import "./App.css";
+import Header from "./components/custom/Header";
+import CreateRequestItem from "./components/page/CreateRequestItem";
 function App() {
   return (
-    <div className="m-4 p-4 flex border border-gray-400 rounded-md min-w-[800px]">
-      <CreateRequestItem />
-    </div>
+    <>
+      <Header />
+      <div className="m-4 p-4 flex border border-gray-400 rounded-md min-w-[172px]">
+        <CreateRequestItem />
+      </div>
+    </>
   );
 }
 
