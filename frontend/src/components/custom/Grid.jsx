@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Grid = ({column_count, children}) => {
-    const col_cnt = "grid-cols-" + column_count
+const Grid = ({style, children}) => {
+  console.log(style)
   return (
-    <div className={`grid w-[100%] md:grid-cols-2 grid-cols-1 space-y-2`}>
+    <div className={`${style}`}>
       {children}
     </div>
   )
