@@ -2,10 +2,7 @@ import React from "react";
 
 const Label = ({ labelName }) => {
   return (
-    <label
-      htmlFor=""
-      className="m-2 text-center px-2 text-[14px] sm:text-[13px] md:text-[14px]"
-    >
+    <label className="text-[14px] md:text-[16px] lg:text-[18px]">
       {labelName}
     </label>
   );
