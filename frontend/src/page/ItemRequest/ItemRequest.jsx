@@ -2,14 +2,29 @@ import React, { useState } from "react";
 import { CiSquarePlus } from "react-icons/ci";
 import ItemGroup from "../../data/item_group.json";
 import ProcedureItem from "./component/ProcedureItem";
-import Button from "../ui/Button";
-import TextField from "../ui/TextField";
-import Label from "../ui/Label";
+import Button from "../../components/ui/Button";
+import TextField from "../../components/ui/TextField";
+import Label from "../../components/ui/Label";
 import SampleData from "../../data/sample_data.json";
 import SearchTable from "./component/DataTable";
 
 const CreateRequestItem = () => {
   const [fields, setFields] = useState([]);
+  const [searchItem, setSearchItem] = useState("");
+
+  // const handleSearch = (e) => {
+  //   setSearchItem(e.target.value);
+  // };
+
+  let filteredData = "";
+
+  const handleSearch = () => {
+    filteredData = SampleData.data.filter(
+      (item) =>
+        item.item_name.toLowerCase().includes(searchItem.toLowerCase()) ||
+        item.requested_by.toLowerCase().includes(searchItem.toLowerCase())
+    );
+  };
 
   const handleAddFields = () => {
     setFields([...fields, { field1: "", field2: "", field3: "" }]);
@@ -23,10 +38,10 @@ const CreateRequestItem = () => {
 
   const itemGroup = 1;
   const hide = false;
-  const result_data = 10;
+  const resultData = 10;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 hide:bg-gray-200 w-full">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 hide:bg-gray-200 w-full">
       <div className="flex flex-wrap sm:col-span-2 md:col-span-3 space-x-8 space-y-2 items-center">
         {/* <label>Search Item</label> */}
         <Label labelName={"Search item"} />
@@ -35,11 +50,17 @@ const CreateRequestItem = () => {
           type="text"
         /> */}
         <TextField />
-        <Button buttonName={"Search"} />
+        <Button buttonName={"Search"} onClick={handleSearch} />
         {/* <button>Search</button> */}
       </div>
-      <div className="col-span-3">
-        {result_data && <SearchTable data={SampleData.data} rowsPerPage={10} />}
+      <div className="sm:col-span-2 md:col-span-3">
+        {resultData ? (
+          <SearchTable data={SampleData.data} rowsPerPage={10} />
+        ) : (
+          <div>
+            <p>No results</p>
+          </div>
+        )}
       </div>
       {hide ? (
         ""
@@ -160,15 +181,15 @@ const CreateRequestItem = () => {
                           <TextField />
                         </div>
                       </div>
-                      {/* <div className="row-span-2">
-                        <div>
-                          <label htmlFor="" className="font-bold text-4xl">
-                            +
-                          </label>
-                        </div>
-                      </div> */}
                       {fields.map((_, index) => (
                         <>
+                          <div className="md:col-span-2 lg:col-span-3">
+                            <div>
+                              <label htmlFor="" className="font-bold text-4xl">
+                                +
+                              </label>
+                            </div>
+                          </div>
                           <div className="row-span-2" key={index}>
                             <div>
                               {/* <label htmlFor="">Generic Name</label> */}
