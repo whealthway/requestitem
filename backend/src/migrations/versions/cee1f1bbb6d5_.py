@@ -1,16 +1,16 @@
 """empty message
 
-Revision ID: cbce033739cc
+Revision ID: cee1f1bbb6d5
 Revises: 
-Create Date: 2025-02-28 08:33:31.803899
+Create Date: 2025-03-03 15:28:56.384270
 
 """
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects import postgresql
+
 
 # revision identifiers, used by Alembic.
-revision = 'cbce033739cc'
+revision = 'cee1f1bbb6d5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,6 +33,7 @@ def upgrade():
     )
     op.create_table('item',
     sa.Column('item_id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('item_code', sa.String(length=100), nullable=True),
     sa.Column('date_requested', sa.DateTime(timezone=True), nullable=True),
     sa.Column('requested_by_id', sa.String(length=100), nullable=True),
     sa.Column('requested_by', sa.String(length=100), nullable=True),
@@ -46,12 +47,14 @@ def upgrade():
     sa.Column('brand_name', sa.String(length=100), nullable=True),
     sa.Column('mfg', sa.String(length=100), nullable=True),
     sa.Column('other_descriptors', sa.String(length=100), nullable=True),
-    sa.Column('purc_sell_item', sa.Boolean(), nullable=True),
-    sa.Column('sell_item', sa.Boolean(), nullable=True),
+    sa.Column('purchaseable', sa.Boolean(), nullable=True),
+    sa.Column('sellable', sa.Boolean(), nullable=True),
     sa.Column('inventory_item', sa.Boolean(), nullable=True),
+    sa.Column('status', sa.String(length=100), nullable=True),
     sa.Column('created', sa.DateTime(timezone=True), nullable=True),
     sa.Column('updated', sa.DateTime(timezone=True), nullable=True),
-    sa.PrimaryKeyConstraint('item_id')
+    sa.PrimaryKeyConstraint('item_id'),
+    sa.UniqueConstraint('item_code')
     )
     op.create_table('item_group',
     sa.Column('item_group_id', sa.Integer(), autoincrement=True, nullable=False),
