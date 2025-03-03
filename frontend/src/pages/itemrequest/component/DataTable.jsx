@@ -13,31 +13,36 @@ const SearchTable = ({ data, rowsPerPage }) => {
   const currentData = data.slice(startIndex, startIndex + rowsPerPage);
 
   return (
-    <div className="container w-full p-4">
-      <table className="min-w-full border border-gray-300">
+    <div className="w-[100%] p-4">
+      <table className="w-[100%] border border-gray-300">
         <thead className="static">
-          <tr>
-            <th className="py-2 px-4 border-b"></th>
-            <th className="py-2 px-4 border-b">Request By</th>
-            <th className="py-2 px-4 border-b">BizBox Code</th>
-            <th className="py-2 px-4 border-b">Qualimed BU</th>
-            <th className="py-2 px-4 border-b">Item Group</th>
-            <th className="py-2 px-4 border-b">Item Details</th>
-            <th className="py-2 px-4 border-b">Unit of Measure</th>
+          <tr className="bg-[#35314c] text-white">
+            <th className="py-2 px-4 border"></th>
+            <th className="py-2 px-4 border">Request By</th>
+            <th className="py-2 px-4 border">BizBox Code</th>
+            <th className="py-2 px-4 border">Qualimed BU</th>
+            <th className="py-2 px-4 border">Item Group</th>
+            <th className="py-2 px-4 border">Item Details</th>
+            <th className="py-2 px-4 border">Unit of Measure</th>
           </tr>
         </thead>
         <tbody>
           {currentData.map((item, index) => (
-            <tr key={item.id}>
-              <td className="py-2 px-4 border-b">
-                {currentPage == 1 ? index + 1 : currentPage * 10 + index + 1}
+            <tr
+              key={item.id}
+              className={`${
+                index % 2 !== 0 ? "bg-gray-100" : ""
+              } text-[14px] h-16`}
+            >
+              <td className="py-2 px-4 border">
+                {currentPage === 1 ? index + 1 : currentPage * 10 + index + 1}
               </td>
-              <td className="py-2 px-4 border-b">{item.requested_by}</td>
-              <td className="py-2 px-4 border-b">{item.bizbox_code}</td>
-              <td className="py-2 px-4 border-b">{item.qm_bu}</td>
-              <td className="py-2 px-4 border-b">{item.item_group_desc}</td>
-              <td className="py-2 px-4 border-b">{item.item_name}</td>
-              <td className="py-2 px-4 border-b">{item.uom_desc}</td>
+              <td className="py-2 px-4 border">{item.requested_by}</td>
+              <td className="py-2 px-4 border">{item.bizbox_code}</td>
+              <td className="py-2 px-4 border">{item.qm_bu}</td>
+              <td className="py-2 px-4 border">{item.item_group_desc}</td>
+              <td className="py-2 px-4 border">{item.item_name}</td>
+              <td className="py-2 px-4 border">{item.uom_desc}</td>
             </tr>
           ))}
         </tbody>

@@ -1,4 +1,7 @@
 from flask import request, jsonify
+from sqlalchemy import or_, func
+import json
+
 import uuid
 
 from .. import db
@@ -20,28 +23,92 @@ def list_all_items_controller():
 def create_item_controller():
     
     try:
-        request_items = dict(request.get_json())
-        for request_item in request_items['data']:
-            new_item = Item (
-                date_requested =   request_item['date_requested'],
-                requested_by_id =  request_item['requested_by_id'],
-                requested_by =     request_item['requested_by'],
-                qualimed_bu =      request_item['qualimed_bu'],
-                item_name =        request_item['item_name'],
-                item_group_code =  request_item['item_group_code'],
-                purc_sell_item =   request_item['purc_sell_item'],
-                sell_item =        request_item['sell_item'],
-                inventory_item =   request_item['inventory_item'],
-                u_bb_code =        request_item['u_bb_code'],
-            )
+        request_item = dict(request.get_json())
+        data = request_item['data']
+        trans_generic_name = {}
+        trans_measurement = {}
+        trans_uom_code = {}
+        new_item = Item (
+            item_code         = data['itemCode'],
+            date_requested    = data['dateRequested'],
+            requested_by_id   = data['requestedById'],
+            requested_by      = data['requestedBy'],
+            item_group_code   = data['itemGroupCode'],
+            qualimed_bu       = data['qualimedBu'],
+            u_bb_code         = data['bizboxCode'],
+            item_name         = data['itemName'],
+            generic_name      = trans_generic_name,
+            measurement       = trans_measurement,
+            uom_code          = trans_uom_code,
+            brand_name        = data['brandName'],
+            mfg               = data['mfg'],
+            other_descriptors = data['otherDescriptors'],
+            purchaseable      = data['purchaseable'],
+            sellable          = data['sellable'],
+            inventory_item    = data['inventoryItem'],
+            status            = data['status']
+            
+        )
 
-            db.session.add(new_item)
+        db.session.add(new_item)
         db.session.commit()
+        # region - bulk registration
+        # request_items = dict(request.get_json())
+        # # data = request_items['data']
+        # for data in request_items['data']:
+        #     trans_generic_name = {}
+        #     trans_measurement = {}
+        #     trans_uom_code = {}
+        #     new_item = Item (
+        #         # item_code         = data['itemCode'],
+        #         # date_requested    = data['dateRequested'],
+        #         # requested_by_id   = data['requestedById'],
+        #         requested_by      = data['requestedBy'],
+        #         # item_group_code   = data['itemGroupCode'],
+        #         qualimed_bu       = data['qualimedBu'],
+        #         # u_bb_code         = data['bizboxCode'],
+        #         item_name         = data['itemName'],
+        #         generic_name      = trans_generic_name,
+        #         measurement       = trans_measurement,
+        #         uom_code          = trans_uom_code,
+        #         # brand_name        = data['brandName'],
+        #         # mfg               = data['mfg'],
+        #         # other_descriptors = data['otherDescriptors'],
+        #         # purchaseable      = data['purchaseable'],
+        #         # sellable          = data['sellable'],
+        #         # inventory_item    = data['inventoryItem'],
+        #         # status            = data['status']
+                
+        #     )
+
+        #     db.session.add(new_item)
+        #end region
 
         return jsonify({"code": 200, "message": "Item created successfully"})
     except Exception as e:
         db.session.rollback()
         return jsonify({"code":400, "message": f"Unexpected error occur: {e}"})
+
+def search_item():
+
+    try:
+        search_term = request.get_json()['searchItem']
+        items = Item.query
+
+        search_items = items.filter(Item.item_name.like('%' + search_term + '%'))
+        
+        # courses = courses.order_by(models.Course.name).all()
+        
+        # result = session.query(Item).filter(func.lower(Item.item_name).like(f"%{search_term.lower()}%")).all()
+        json_data = [u.toDict() for u in search_items]
+        print(f"Search value: {json_data}")
+        # print(f"Result: {result}")
+        return jsonify({"code": 200, "data": json_data})
+
+    except Exception as e:
+        return jsonify({"code": 401, "message": f"Unexpected Error: {e}"})
+
+
 
 def retrieve_item_controller(item_id):
     response = Item.query.get(item_id).toDict()

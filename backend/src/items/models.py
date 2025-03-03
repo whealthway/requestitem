@@ -1,7 +1,10 @@
 from sqlalchemy import inspect
 from datetime import datetime
+import os
 # from flask_validator import ValidateEmail, ValidateString, ValidateCountry
 from sqlalchemy.orm import validates
+from sqlalchemy.orm import sessionmaker
+
 
 from .. import db # from __init__.py
 
@@ -10,9 +13,9 @@ from .. import db # from __init__.py
 # SQL Datatype Objects => https://docs.sqlalchemy.org/en/14/core/types.html
 class Item(db.Model):
 # Auto Generated Fields:
-    item_id           = db.Column(db.Integer, primary_key=True)
-    item_code         = db.Column(db.String(100), unique=True ,primary_key=True)
+    item_id           = db.Column(db.Integer, autoincrement=True,primary_key=True)
 # Input by User Fields:
+    item_code         = db.Column(db.String(100), unique=True, nullable=True)
     date_requested    = db.Column(db.DateTime(timezone=True), nullable=True)
     requested_by_id   = db.Column(db.String(100), nullable=True)
     requested_by      = db.Column(db.String(100), nullable=True)
@@ -26,10 +29,10 @@ class Item(db.Model):
     brand_name        = db.Column(db.String(100), nullable=True)
     mfg               = db.Column(db.String(100), nullable=True)
     other_descriptors = db.Column(db.String(100), nullable=True)
-    purc_sell_item    = db.Column(db.Boolean, nullable=True)
-    sell_item         = db.Column(db.Boolean, nullable=True)
+    purchaseable      = db.Column(db.Boolean, nullable=True)
+    sellable          = db.Column(db.Boolean, nullable=True)
     inventory_item    = db.Column(db.Boolean, nullable=True)
-    status            = db.Column(db.Boolean, nullable=True)
+    status            = db.Column(db.String(100), nullable=True)
 #Auto Generated Fields
     created      = db.Column(db.DateTime(timezone=True), default=datetime.now)                           # The Date of the Instance Creation => Created one Time when Instantiation
     updated      = db.Column(db.DateTime(timezone=True), default=datetime.now, onupdate=datetime.now)    # The Date of the Instance Update => Changed with Every Update
@@ -67,3 +70,6 @@ class UnitOfMeasure(db.Model):
         
     def __repr__(self):
         return "<%r>" % self.uom_id
+
+# Session = sessionmaker(bind=os.environ.get('get_engine'))
+# session = Session()
