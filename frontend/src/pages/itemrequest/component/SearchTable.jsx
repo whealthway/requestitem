@@ -1,5 +1,5 @@
 // src/PaginatedTable.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const SearchTable = ({ data, rowsPerPage }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -11,6 +11,10 @@ const SearchTable = ({ data, rowsPerPage }) => {
 
   const startIndex = (currentPage - 1) * rowsPerPage;
   const currentData = data.slice(startIndex, startIndex + rowsPerPage);
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [data])
 
   return (
     <div className="w-[100%] p-4">
