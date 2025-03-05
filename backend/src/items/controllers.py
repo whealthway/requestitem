@@ -1,8 +1,6 @@
 from flask import request, jsonify
 from sqlalchemy import or_, func
-import json
-
-import uuid
+from datetime import datetime
 
 from .. import db
 from .models import Item
@@ -13,41 +11,49 @@ from .models import Item
 # Session Object Methods => https://docs.sqlalchemy.org/en/14/orm/session_api.html#sqlalchemy.orm.Session
 # How to serialize SqlAlchemy PostgreSQL Query to JSON => https://stackoverflow.com/a/46180522
 
+
 def list_all_items_controller():
     items = Item.query.all()
     response = []
     for item in items: response.append(item.toDict())
 
-    return jsonify(response)
+    return jsonify({"code": 200, "data":response})
 
 def create_item_controller():
-    
+
     try:
         request_item = dict(request.get_json())
         data = request_item['data']
-        trans_generic_name = {}
-        trans_measurement = {}
-        trans_uom_code = {}
+
+        generic_name, measurement, uom, item_name = '', '', '', ''
+        itemNameCount = data['itemNameCount']
+        for x in range(1, itemNameCount + 1):
+            generic_name += f"{data[f"genericName{x}"]}{'+' if x < itemNameCount else ''}"
+            item_name    += f"{data[f"genericName{x}"]} "
+            measurement  += f"{data[f"measurement{x}"]}{'+' if x < itemNameCount else ''}"
+            item_name    += f"{data[f"measurement{x}"]}"
+            uom          += f"{data[f"unitOfMeasure{x}"]}{'+' if x < itemNameCount else ''}"
+            item_name    += f"{data[f"unitOfMeasure{x}"]} {'+' if x < itemNameCount else ''} "
+
         new_item = Item (
             item_code         = data['itemCode'],
-            date_requested    = data['dateRequested'],
+            date_requested    = datetime.fromisoformat(data['dateRequested'].replace("Z", "+00:00")),
             requested_by_id   = data['requestedById'],
             requested_by      = data['requestedBy'],
-            item_group_code   = data['itemGroupCode'],
+            # item_group_code   = data['itemGroupCode'],
             qualimed_bu       = data['qualimedBu'],
-            u_bb_code         = data['bizboxCode'],
-            item_name         = data['itemName'],
-            generic_name      = trans_generic_name,
-            measurement       = trans_measurement,
-            uom_code          = trans_uom_code,
+            # u_bb_code         = data['bizboxCode'],
+            item_name         = item_name + data['brandName'] + data['mfg'] + data['otherDescriptors'],
+            generic_name      = generic_name,
+            measurement       = measurement,
+            uom_code          = uom,
             brand_name        = data['brandName'],
             mfg               = data['mfg'],
             other_descriptors = data['otherDescriptors'],
             purchaseable      = data['purchaseable'],
             sellable          = data['sellable'],
             inventory_item    = data['inventoryItem'],
-            status            = data['status']
-            
+            # status            = data['status']
         )
 
         db.session.add(new_item)
@@ -92,17 +98,15 @@ def create_item_controller():
 def search_item():
 
     try:
-        search_term = request.get_json()['searchItem']
+        search_term = request.get_json()['searchItem'].lower()
         items = Item.query
 
-        search_items = items.filter(Item.item_name.like('%' + search_term + '%'))
+        search_items = items.filter(func.lower(Item.item_name).like(f"%{search_term}%"))
         
-        # courses = courses.order_by(models.Course.name).all()
+        # search_items = items.order_by(Item.item_name).all()
         
         # result = session.query(Item).filter(func.lower(Item.item_name).like(f"%{search_term.lower()}%")).all()
         json_data = [u.toDict() for u in search_items]
-        print(f"Search value: {json_data}")
-        # print(f"Result: {result}")
         return jsonify({"code": 200, "data": json_data})
 
     except Exception as e:

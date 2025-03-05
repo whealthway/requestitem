@@ -1,4 +1,4 @@
-from sqlalchemy import inspect
+from sqlalchemy import inspect, ARRAY, String
 from datetime import datetime
 import os
 # from flask_validator import ValidateEmail, ValidateString, ValidateCountry
@@ -23,9 +23,9 @@ class Item(db.Model):
     qualimed_bu       = db.Column(db.String(100), nullable=True)
     u_bb_code         = db.Column(db.Integer, nullable=True)
     item_name         = db.Column(db.String(250), nullable=True)
-    generic_name      = db.Column(db.JSON, nullable=True)
-    measurement       = db.Column(db.JSON, nullable=True)
-    uom_code          = db.Column(db.JSON, nullable=True)
+    generic_name      = db.Column(db.String(250), nullable=True)
+    measurement       = db.Column(db.String(250), nullable=True)
+    uom_code          = db.Column(db.String(250), nullable=True)
     brand_name        = db.Column(db.String(100), nullable=True)
     mfg               = db.Column(db.String(100), nullable=True)
     other_descriptors = db.Column(db.String(100), nullable=True)
