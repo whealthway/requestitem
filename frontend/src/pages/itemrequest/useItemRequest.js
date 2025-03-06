@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import getBaseUrl from "../../utils/baseUrl";
@@ -11,22 +11,27 @@ const useItemRequest = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(itemRequestSchema),
-  });
+    control,
+    // formState: { errors },
+  } = useForm();
 
-  const [fields, setFields] = useState([]);
+  const [searchItem, setSearchItem] = useState({ searchItem: "" });
   const [searchData, setSearchData] = useState([]);
-  const [searchItem, setSearchItem] = useState({
-    searchItem: "",
-  });
-  const [isSearching, setIsSearching] = useState(false);
-  const [itemNameCount, setItemNameCount] = useState(1);
-  const [isSaving, setIsSaving] = useState(false);
+  const [doneSearching, setDoneSearching] = useState(false);
 
+  const [proceed, setProceed] = useState(false);
+
+  const [selectedItemGroup, setSelectedItemGroup] = useState("");
+  const [fields, setFields] = useState([]);
+  const [itemNameCount, setItemNameCount] = useState(1);
+
+  const [itemGroup, setItemGroup] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [uoms, setUoms] = useState([]);
   const [itemDescription, setItemDescription] = useState("");
 
+  const [isSaving, setIsSaving] = useState(false);
   const handleRadioChange = (event) => {
     setItemDescription(event.target.value);
   };
@@ -37,11 +42,6 @@ const useItemRequest = () => {
     });
   };
 
-  const handleAddFields = () => {
-    setFields([...fields, { field1: "", field2: "", field3: "" }]);
-    setItemNameCount(itemNameCount + 1);
-  };
-
   // Search API
   const handleSearchItem = async () => {
     try {
@@ -49,18 +49,7 @@ const useItemRequest = () => {
         `${getBaseUrl()}/items/search`,
         searchItem
       );
-
-      if (response.data.data.length === 0) {
-        Swal.fire({
-          title: "No record Found",
-          text: "",
-          icon: "info",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Okay",
-        });
-      }
       setSearchData(response.data.data);
-      setIsSearching(true);
     } catch (error) {
       Swal.fire({
         title: `Unexpected error: ${error}`,
@@ -70,15 +59,27 @@ const useItemRequest = () => {
         confirmButtonText: "Okay",
       });
     } finally {
-      setIsSearching(false);
+      setDoneSearching(true);
     }
+  };
+
+  const handleYesProceed = () => {
+    setProceed(true);
+  };
+
+  const handleNotProceed = () => {
+    setProceed(false);
+  };
+
+  const handleAddFields = () => {
+    setFields([...fields, { field1: "", field2: "", field3: "" }]);
+    setItemNameCount(itemNameCount + 1);
   };
 
   // Create API
   const handleSubmitData = handleSubmit(async (data) => {
     try {
       const date = new Date();
-      setFields([]);
       data = {
         ...data,
         itemCode: "Test-ItemCode5",
@@ -90,35 +91,77 @@ const useItemRequest = () => {
         inventoryItem: true,
         itemNameCount: itemNameCount,
       };
+      console.log(data);
+      // const response = await axios.post(`${getBaseUrl()}/items`, {
+      //   data: data,
+      // });
+      // setIsSaving(true);
 
-      const response = await axios.post(`${getBaseUrl()}/items`, {
-        data: data,
-      });
-      setIsSaving(true);
-
-      if (response.data.code === 200) {
-        console.log(response);
-        setIsSaving(false);
-        reset();
-        setFields([]);
-      }
+      // if (response.data.code === 200) {
+      //   console.log(response);
+      //   setIsSaving(false);
+      //   reset();
+      //   setFields([]);
+      // }
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   });
+
+  // Get all API
+  useEffect(() => {
+    const getItemGroup = async () => {
+      try {
+        const response = await axios.get(`${getBaseUrl()}/itemgroup`);
+        console.log(response);
+        if (response.data.code === 200) {
+          setItemGroup(response.data.data);
+        }
+      } catch (error) {
+        alert(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getItemGroup();
+  }, []);
+
+  //Get all UOMS
+  useEffect(() => {
+    const getAlluoms = async () => {
+      try {
+        const response = await axios.get(`${getBaseUrl()}/uoms`);
+        console.log(response);
+        if (response.data.code === 200) {
+          setUoms(response.data.data);
+        }
+      } catch (error) {
+        alert(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getAlluoms();
+  }, []);
 
   return {
     form: {
       register,
+      control,
     },
-    state: {
-      errors,
+    states: {
+      // errors,
       searchData,
       searchItem,
       isSaving,
-      isSearching,
+      doneSearching,
       fields,
       itemDescription,
+      itemGroup,
+      loading,
+      uoms,
+      selectedItemGroup,
+      proceed,
     },
     actions: {
       handleAddFields,
@@ -126,6 +169,9 @@ const useItemRequest = () => {
       handleSubmitData,
       handleChange,
       handleRadioChange,
+      setSelectedItemGroup,
+      handleYesProceed,
+      handleNotProceed,
     },
   };
 };

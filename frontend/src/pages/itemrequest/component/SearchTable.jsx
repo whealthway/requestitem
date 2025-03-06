@@ -13,8 +13,8 @@ const SearchTable = ({ data, rowsPerPage }) => {
   const currentData = data.slice(startIndex, startIndex + rowsPerPage);
 
   useEffect(() => {
-    setCurrentPage(1)
-  }, [data])
+    setCurrentPage(1);
+  }, [data]);
 
   return (
     <div className="w-[100%] p-4">
