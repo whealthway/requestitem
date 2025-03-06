@@ -3,7 +3,7 @@ from sqlalchemy import or_, func
 from datetime import datetime
 
 from .. import db
-from .models import Item
+from .models import Item, SAPOITBItemGrp, SAPUOM
 
 # ----------------------------------------------- #
 
@@ -102,11 +102,12 @@ def search_item():
         items = Item.query
 
         search_items = items.filter(func.lower(Item.item_name).like(f"%{search_term}%"))
-        
-        # search_items = items.order_by(Item.item_name).all()
-        
-        # result = session.query(Item).filter(func.lower(Item.item_name).like(f"%{search_term.lower()}%")).all()
-        json_data = [u.toDict() for u in search_items]
+
+        if search_items:
+            json_data = [u.toDict() for u in search_items]
+        else:
+            json_data = []
+            
         return jsonify({"code": 200, "data": json_data})
 
     except Exception as e:
@@ -155,3 +156,18 @@ def create_item_group_controller():
     except Exception as e:
         db.session.rollback()
         return jsonify({"code":400, "message": f"Unexpected error occur: {e}"})
+    
+
+def get_all_item_group():
+    item_groups = SAPOITBItemGrp.query.all()
+    response = []
+    for item_group in item_groups: response.append(item_group.toDict())
+
+    return jsonify({"code": 200, "data":response})
+
+def get_all_uoms():
+    uoms = SAPUOM.query.all()
+    response = []
+    for uom in uoms: response.append(uom.toDict())
+
+    return jsonify({"code": 200, "data":response})

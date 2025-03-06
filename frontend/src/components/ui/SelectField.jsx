@@ -1,22 +1,35 @@
-import React from 'react'
+import React from "react";
+import Select from "react-select";
 
-const SelectField = ({item_group_data}) => {
-  console.log(item_group_data)
-  item_group_data.map((data, index) => console.log("code: " + data.code + " " + data.value))
+const SelectField = ({
+  field,
+  data,
+  code_key,
+  value_key,
+  setSelectedItemGroup = () => {},
+  placeholder,
+}) => {
+  const options = data.map((item, index) => {
+    return {
+      value: item[code_key],
+      label: item[value_key],
+    };
+  });
+
   return (
-    <div>
-      <select 
-        className='h-8 w-40 p-2 text-xs outline-none border border-gray-400 shadow-lg rounded-md'
-      > 
-        {item_group_data.map((data, index) => {
-          <option value={data.code}>
-            {data.value}
-          </option>
-        })
-        }
-      </select>
-    </div>
-  )
-}
+    <Select
+      {...field}
+      value={options.label}
+      options={options}
+      onChange={(selectedOption) => {
+        field.onChange(selectedOption.value);
+        setSelectedItemGroup(selectedOption.value);
+      }}
+      isSearchable
+      placeholder={placeholder}
+      className="p-2 text-[21px] h-12 w-80"
+    />
+  );
+};
 
-export default SelectField
+export default SelectField;

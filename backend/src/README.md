@@ -1,4 +1,7 @@
 Setup Virtual environment
+install: 
+Download Microsoft ODBC Driver 18 for SQL Server (x64)
+https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver16
 
 Go to backend folder and open the terminal and run the command below:
 "virtual env"

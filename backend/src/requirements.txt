@@ -5,11 +5,14 @@ colorama==0.4.6
 dnspython==2.7.0
 email-validator==1.1.2
 Flask==3.1.0
+flask-cors==5.0.1
+Flask-Debug==0.4.3
 Flask-Migrate==4.1.0
-Flask-SQLAlchemy==2.4.4
+Flask-SQLAlchemy==3.1.1
 Flask-Validator==1.4.2
 greenlet==3.1.1
 idna==3.10
+inflection==0.5.1
 isbnlib==3.10.3
 iso3166==1.0.1
 itsdangerous==2.2.0
