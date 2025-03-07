@@ -17,7 +17,7 @@ const SearchTable = ({ data, rowsPerPage }) => {
   }, [data]);
 
   return (
-    <div className="w-[100%] p-4">
+    <div className="w-[100%] p-4 m-4">
       <table className="w-[100%] border border-gray-300">
         <thead className="static">
           <tr className="bg-[#35314c] text-white">
@@ -33,7 +33,7 @@ const SearchTable = ({ data, rowsPerPage }) => {
         <tbody>
           {currentData.map((item, index) => (
             <tr
-              key={item.id}
+              key={index}
               className={`${
                 index % 2 !== 0 ? "bg-gray-100" : ""
               } text-[14px] h-16`}
@@ -42,9 +42,9 @@ const SearchTable = ({ data, rowsPerPage }) => {
                 {currentPage === 1 ? index + 1 : currentPage * 10 + index + 1}
               </td>
               <td className="py-2 px-4 border">{item.requested_by}</td>
-              <td className="py-2 px-4 border">{item.bizbox_code}</td>
-              <td className="py-2 px-4 border">{item.qm_bu}</td>
-              <td className="py-2 px-4 border">{item.item_group_desc}</td>
+              <td className="py-2 px-4 border">{item.u_bb_code}</td>
+              <td className="py-2 px-4 border">{item.qualimed_bu}</td>
+              <td className="py-2 px-4 border">{item.item_group_name}</td>
               <td className="py-2 px-4 border">{item.item_name}</td>
               <td className="py-2 px-4 border">{item.uom_desc}</td>
             </tr>

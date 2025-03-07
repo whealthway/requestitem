@@ -15,7 +15,7 @@ const RadioButton = ({
       value={value}
       checked={itemDescription === value}
       onChange={handleRadioChange}
-      className="h-6 w-6"
+      className="h-6 w-6 text-[21px]"
     />
   );
 };
