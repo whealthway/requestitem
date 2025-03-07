@@ -22,12 +22,12 @@ const SelectField = ({
       value={options.label}
       options={options}
       onChange={(selectedOption) => {
-        field.onChange(selectedOption.value);
+        field.onChange(selectedOption);
         setSelectedItemGroup(selectedOption.value);
       }}
       isSearchable
       placeholder={placeholder}
-      className="p-2 text-[21px] h-12 w-80"
+      className="text-[21px] h-11 w-80 shadow-lg shadow-slate-300"
     />
   );
 };

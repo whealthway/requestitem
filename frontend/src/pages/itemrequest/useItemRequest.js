@@ -17,13 +17,13 @@ const useItemRequest = () => {
 
   const [searchItem, setSearchItem] = useState({ searchItem: "" });
   const [searchData, setSearchData] = useState([]);
-  const [doneSearching, setDoneSearching] = useState(false);
+  const [searching, setSearching] = useState(true);
 
   const [proceed, setProceed] = useState(false);
 
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
   const [fields, setFields] = useState([]);
-  const [itemNameCount, setItemNameCount] = useState(1);
+  const [itemNameCount, setItemNameCount] = useState(0);
 
   const [itemGroup, setItemGroup] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,9 +32,8 @@ const useItemRequest = () => {
   const [itemDescription, setItemDescription] = useState("");
 
   const [isSaving, setIsSaving] = useState(false);
-  const handleRadioChange = (event) => {
-    setItemDescription(event.target.value);
-  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChange = (e) => {
     setSearchItem({
@@ -49,7 +48,12 @@ const useItemRequest = () => {
         `${getBaseUrl()}/items/search`,
         searchItem
       );
-      setSearchData(response.data.data);
+
+      if (response.data.code === 200) {
+        setSearchData(response.data.data);
+      } else {
+        alert(response.data.message);
+      }
     } catch (error) {
       Swal.fire({
         title: `Unexpected error: ${error}`,
@@ -59,21 +63,29 @@ const useItemRequest = () => {
         confirmButtonText: "Okay",
       });
     } finally {
-      setDoneSearching(true);
+      setSearching(false);
+      setProceed(false);
     }
   };
 
   const handleYesProceed = () => {
     setProceed(true);
+    setSearching(true);
   };
 
   const handleNotProceed = () => {
     setProceed(false);
+    setSearching(true);
+    setSearchItem({ searchItem: "" });
   };
 
   const handleAddFields = () => {
     setFields([...fields, { field1: "", field2: "", field3: "" }]);
     setItemNameCount(itemNameCount + 1);
+  };
+
+  const handleRadioChange = (event) => {
+    setItemDescription(event.target.value);
   };
 
   // Create API
@@ -82,29 +94,31 @@ const useItemRequest = () => {
       const date = new Date();
       data = {
         ...data,
-        itemCode: "Test-ItemCode5",
+        itemCode: "Test-ItemCode1",
         dateRequested: date.toISOString(),
         requestedById: "Test-requestedById",
         requestedBy: "Test-requestedBy",
-        purchaseable: false,
-        sellable: false,
-        inventoryItem: true,
         itemNameCount: itemNameCount,
+        sellable: data.sellable === itemDescription,
+        purchaseable: data.purchaseable === itemDescription,
+        inventoryItem: data.inventoryItem === itemDescription,
       };
       console.log(data);
-      // const response = await axios.post(`${getBaseUrl()}/items`, {
-      //   data: data,
-      // });
-      // setIsSaving(true);
+      const response = await axios.post(`${getBaseUrl()}/items`, {
+        data: data,
+      });
+      setIsSaving(true);
 
-      // if (response.data.code === 200) {
-      //   console.log(response);
-      //   setIsSaving(false);
-      //   reset();
-      //   setFields([]);
-      // }
+      if (response.data.code === 200) {
+        reset();
+        setFields([]);
+      } else {
+        alert(response.data.message);
+      }
     } catch (error) {
       alert(error);
+    } finally {
+      setIsSaving(false);
     }
   });
 
@@ -113,7 +127,7 @@ const useItemRequest = () => {
     const getItemGroup = async () => {
       try {
         const response = await axios.get(`${getBaseUrl()}/itemgroup`);
-        console.log(response);
+
         if (response.data.code === 200) {
           setItemGroup(response.data.data);
         }
@@ -131,7 +145,7 @@ const useItemRequest = () => {
     const getAlluoms = async () => {
       try {
         const response = await axios.get(`${getBaseUrl()}/uoms`);
-        console.log(response);
+
         if (response.data.code === 200) {
           setUoms(response.data.data);
         }
@@ -144,6 +158,20 @@ const useItemRequest = () => {
     getAlluoms();
   }, []);
 
+  //Confirmation Modal
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleConfirm = () => {
+    handleSubmitData();
+    setIsModalOpen(false);
+  };
+
   return {
     form: {
       register,
@@ -154,7 +182,7 @@ const useItemRequest = () => {
       searchData,
       searchItem,
       isSaving,
-      doneSearching,
+      searching,
       fields,
       itemDescription,
       itemGroup,
@@ -162,6 +190,7 @@ const useItemRequest = () => {
       uoms,
       selectedItemGroup,
       proceed,
+      isModalOpen,
     },
     actions: {
       handleAddFields,
@@ -172,6 +201,9 @@ const useItemRequest = () => {
       setSelectedItemGroup,
       handleYesProceed,
       handleNotProceed,
+      handleOpenModal,
+      handleCloseModal,
+      handleConfirm,
     },
   };
 };

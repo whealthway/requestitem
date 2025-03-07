@@ -1,24 +1,26 @@
 import React from "react";
-import { CiSquarePlus } from "react-icons/ci";
-import Button from "../../../components/ui/Button";
-import TextField from "../../../components/ui/TextField";
-import Label from "../../../components/ui/Label";
-import RadioButton from "../../../components/ui/RadioButton";
-import SelectField from "../../../components/ui/SelectField";
+// import { CiSquarePlus } from "react-icons/ci";
+import {
+  Label,
+  TextField,
+  SelectField,
+  Button,
+  RadioButton,
+} from "../../../components/ui";
 import { Controller } from "react-hook-form";
 
 const ItemForm = ({ controller }) => {
   return (
     <>
       {/* Start of adding generic name and UOM */}
-      <div className="container m-4 p-4 border border-slate-300 rounded-md">
+      <div className="mx-4 p-8 border-2 border-gray-300 rounded-xl bg-slate-200">
         <div className="flex flex-row m-4">
-          <Label labelName={"Item Details"} />
+          <Label labelName={"Item Details"} isTitle={true} />
         </div>
-        <div className="flex flex-row m-4">
+        <div className="flex flex-row m-4 justify-start items-center">
           <Button
             type="button"
-            className={`sm:visible invisible ${
+            className={`sm:visible invisible${
               controller.states.fields.length === 5
                 ? "bg-gray-600"
                 : "hover:scale-105"
@@ -29,7 +31,7 @@ const ItemForm = ({ controller }) => {
             {" "}
             Add General Name and UOM
           </Button>
-          <Button
+          {/* <Button
             type="button"
             className={`sm:invisible visible`}
             onClick={controller.actions.handleAddFields}
@@ -43,12 +45,15 @@ const ItemForm = ({ controller }) => {
                   : "hover:scale-105"
               }`}
             />
-          </Button>
+          </Button> */}
         </div>
 
         {controller.states.fields.map((_, index) => (
-          <div className="flex flex-wrap justify-between gap-4 m-4 p-8 border border-gray-300">
-            <div className="row-span-2" key={`genericName${index + 1}`}>
+          <div
+            key={index}
+            className="flex flex-wrap justify-between gap-4 m-8 p-8 border-2 border-white rounded-2xl"
+          >
+            <div className="">
               <div>
                 <Label labelName={`Generic Name ${index + 1}`} />
               </div>
@@ -59,7 +64,7 @@ const ItemForm = ({ controller }) => {
                 />
               </div>
             </div>
-            <div className="row-span-2" key={`measurement${index + 1}`}>
+            <div>
               <div>
                 <Label labelName={`Measurement ${index + 1}`} />
               </div>
@@ -70,24 +75,15 @@ const ItemForm = ({ controller }) => {
                 />
               </div>
             </div>
-            <div className="row-span-2" key={`uom${index + 1}`}>
+            <div>
               <div>
-                <Label labelName={`Unit of Measure ${index + 1}`} />
+                <Label labelName={`Unit of measure ${index + 1}`} />
               </div>
               <div>
-                <Controller
+                <TextField
+                  register={controller.form.register}
                   name={`unitOfMeasure${index + 1}`}
-                  defaultValue={null}
-                  control={controller.form.control}
-                  render={({ field }) => (
-                    <SelectField
-                      field={field}
-                      data={controller.states.uoms}
-                      code_key="UOMCdoe"
-                      value_key="UOMName"
-                      placeholder="Select UOM"
-                    />
-                  )}
+                  placeholder="e.g. mg, g, ml, IU etc.."
                 />
               </div>
             </div>
@@ -97,8 +93,19 @@ const ItemForm = ({ controller }) => {
       {/* End of adding generic name and UOM  */}
 
       {/* Brandname, MFG, and Other Descriptors Sections */}
-      <div className="flex flex-wrap justify-between gap-4">
-        <div className="row-span-2">
+      <div className="flex flex-wrap p-4 mx-4 my-24 gap-4 justify-between">
+        <div className="">
+          <div>
+            <Label labelName={"Medicine Type/Receptacle"} />
+          </div>
+          <div>
+            <TextField
+              register={controller.form.register}
+              name="medicineType"
+            />
+          </div>
+        </div>
+        <div className="">
           <div>
             <Label labelName={"Brand Name"} />
           </div>
@@ -106,7 +113,7 @@ const ItemForm = ({ controller }) => {
             <TextField register={controller.form.register} name="brandName" />
           </div>
         </div>
-        <div className="row-span-2">
+        <div className="">
           <div>
             <Label labelName={"MFG"} />
           </div>
@@ -117,7 +124,7 @@ const ItemForm = ({ controller }) => {
                     {controller.states.errors.mfg?.message}
                   </p> */}
         </div>
-        <div className="row-span-2">
+        <div className="">
           <div>
             <Label labelName={"Other Descriptors"} />
           </div>
@@ -130,11 +137,33 @@ const ItemForm = ({ controller }) => {
         </div>
       </div>
       {/* End of Brandname, MFG, and Other Descriptors Sections */}
-
+      <div className="m-8">
+        <div>
+          <Label labelName="Inventory UOM" />
+        </div>
+        <div>
+          <Controller
+            name="inventoryUOM"
+            defaultValue={null}
+            control={controller.form.control}
+            render={({ field }) => (
+              <SelectField
+                field={field}
+                data={controller.states.uoms}
+                code_key="UOMCdoe"
+                value_key="UOMName"
+                placeholder="Select UOM"
+              />
+            )}
+          />
+        </div>
+      </div>
       {/* Radio button section */}
-      <div className="flex flex-wrap gap-8 my-8">
-        <Label labelName="Item Description:" />
-        <div className="flex gap-2 item-center content-center">
+      <div className="flex flex-wrap gap-8 m-8 items-center">
+        <div>
+          <Label labelName="Item Information:" isTitle={true} />
+        </div>
+        <div className="flex gap-2 item-center items-center">
           <RadioButton
             register={controller.form.register}
             handleRadioChange={controller.actions.handleRadioChange}
@@ -142,9 +171,9 @@ const ItemForm = ({ controller }) => {
             name="purchaseable"
             value="purchaseable"
           />
-          <label htmlFor="purchaseable">Purchaseable</label>
+          <Label labelName="Purchaseable" />
         </div>
-        <div className="flex gap-2 item-center content-center">
+        <div className="flex gap-2 item-center items-center">
           <RadioButton
             register={controller.form.register}
             handleRadioChange={controller.actions.handleRadioChange}
@@ -152,9 +181,9 @@ const ItemForm = ({ controller }) => {
             name="sellable"
             value="sellable"
           />
-          <label htmlFor="sellable">Sellable</label>
+          <Label labelName="Sellable" />
         </div>
-        <div className="flex gap-2 item-center content-center">
+        <div className="flex gap-2 item-center items-center">
           <RadioButton
             register={controller.form.register}
             handleRadioChange={controller.actions.handleRadioChange}
@@ -162,7 +191,7 @@ const ItemForm = ({ controller }) => {
             name="inventoryItem"
             value="inventoryItem"
           />
-          <label htmlFor="inventoryItem">Inventory Item</label>
+          <Label labelName="Inventory Item" />
         </div>
       </div>
       {/* End of Radio button section */}

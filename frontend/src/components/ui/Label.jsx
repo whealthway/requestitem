@@ -1,8 +1,8 @@
 import React from "react";
 
-const Label = ({ labelName }) => {
+const Label = ({ labelName, isTitle }) => {
   return (
-    <label className="text-[14px] md:text-[16px] lg:text-[18px]">
+    <label className={`${isTitle ? "font-bold text-[24px] " : "text-[21px] "}`}>
       {labelName}
     </label>
   );

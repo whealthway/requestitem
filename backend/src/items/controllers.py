@@ -25,34 +25,44 @@ def create_item_controller():
         request_item = dict(request.get_json())
         data = request_item['data']
 
-        generic_name, measurement, uom, item_name = '', '', '', ''
+        generic_name, uom, measurement, uom_code, item_name, uom_name = '', '', '', '', '', ''
+        print(data['unitOfMeasure1'])
+        # generic name + generic name + ... [Brand Name] measure uom/measure uom receptacle other descriptor mfg
         itemNameCount = data['itemNameCount']
         for x in range(1, itemNameCount + 1):
-            generic_name += f"{data[f"genericName{x}"]}{'+' if x < itemNameCount else ''}"
-            item_name    += f"{data[f"genericName{x}"]} "
+            generic_name += f"{data[f"genericName{x}"]} {'+ ' if x < itemNameCount else ''}"
+            # item_name    += f"{data[f"genericName{x}"] }"
+            uom          += f"{data[f"measurement{x}"]} {data[f"unitOfMeasure{x}"]}{'/' if x < itemNameCount else ''}"
             measurement  += f"{data[f"measurement{x}"]}{'+' if x < itemNameCount else ''}"
-            item_name    += f"{data[f"measurement{x}"]}"
-            uom          += f"{data[f"unitOfMeasure{x}"]}{'+' if x < itemNameCount else ''}"
-            item_name    += f"{data[f"unitOfMeasure{x}"]} {'+' if x < itemNameCount else ''} "
+            # item_name    += f"{data[f"measurement{x}"] }"
+            uom_code     += f"{data[f"unitOfMeasure{x}"]}{'+' if x < itemNameCount else ''}"
+            uom_name     += f"{data[f"unitOfMeasure{x}"]}{'+' if x < itemNameCount else ''}"
+            # item_name    += f"{data[f"unitOfMeasure{x}"]['label'] } {'+' if x < itemNameCount else ''} "
+
+
 
         new_item = Item (
             item_code         = data['itemCode'],
             date_requested    = datetime.fromisoformat(data['dateRequested'].replace("Z", "+00:00")),
             requested_by_id   = data['requestedById'],
             requested_by      = data['requestedBy'],
-            # item_group_code   = data['itemGroupCode'],
+            item_group_code   = data['itemGroupCode']['value'],
+            item_group_name   = data['itemGroupCode']['label'],
             qualimed_bu       = data['qualimedBu'],
-            # u_bb_code         = data['bizboxCode'],
-            item_name         = item_name + data['brandName'] + data['mfg'] + data['otherDescriptors'],
+            department        = data['department'],
+            u_bb_code         = data['bizboxCode'],
             generic_name      = generic_name,
             measurement       = measurement,
-            uom_code          = uom,
+            uom_code          = uom_code,
+            uom_name          = uom_name,
             brand_name        = data['brandName'],
+            medecine_type     = data['medicineType'],
             mfg               = data['mfg'],
             other_descriptors = data['otherDescriptors'],
             purchaseable      = data['purchaseable'],
             sellable          = data['sellable'],
             inventory_item    = data['inventoryItem'],
+            item_name         = f"{generic_name} [{data['brandName']}] {uom} {data['medicineType']} {data['otherDescriptors']} {data['mfg']}",
             # status            = data['status']
         )
 
@@ -99,14 +109,16 @@ def search_item():
 
     try:
         search_term = request.get_json()['searchItem'].lower()
+        print(f"Search Item = {search_term}")
         items = Item.query
 
         search_items = items.filter(func.lower(Item.item_name).like(f"%{search_term}%"))
-
         if search_items:
             json_data = [u.toDict() for u in search_items]
         else:
             json_data = []
+
+        print(f'Data: {json_data}')
             
         return jsonify({"code": 200, "data": json_data})
 
