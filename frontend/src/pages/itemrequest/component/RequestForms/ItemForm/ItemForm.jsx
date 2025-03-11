@@ -6,19 +6,20 @@ import {
   SelectField,
   Button,
   RadioButton,
-} from "../../../components/ui";
+} from "../../../../../components/ui";
 import { Controller } from "react-hook-form";
 
 const ItemForm = ({ controller }) => {
   return (
     <>
       {/* Start of adding generic name and UOM */}
-      <div className="mx-4 p-8 border-2 border-gray-300 rounded-xl bg-slate-200">
-        <div className="flex flex-row m-4">
+      <div className="mx-2 p-2 border-2 border-gray-300 rounded-xl bg-slate-200">
+        <div className="flex flex-row mx-4">
           <Label labelName={"Item Details"} isTitle={true} />
         </div>
-        <div className="flex flex-row m-4 justify-start items-center">
+        <div className="flex flex-row mx-4 my-2 justify-start items-center">
           <Button
+            buttonName="Add General Name and UOM"
             type="button"
             className={`sm:visible invisible${
               controller.states.fields.length === 5
@@ -27,31 +28,13 @@ const ItemForm = ({ controller }) => {
             }`}
             onClick={controller.actions.handleAddFields}
             disabled={controller.states.fields.length === 5 ? true : false}
-          >
-            {" "}
-            Add General Name and UOM
-          </Button>
-          {/* <Button
-            type="button"
-            className={`sm:invisible visible`}
-            onClick={controller.actions.handleAddFields}
-            disabled={controller.states.fields.length === 5 ? true : false}
-          >
-            {" "}
-            <CiSquarePlus
-              className={`h-10 w-10 sm:hidden rounded-md ${
-                controller.states.fields.length === 5
-                  ? "bg-gray-400 hover:disabled:transition-none"
-                  : "hover:scale-105"
-              }`}
-            />
-          </Button> */}
+          />
         </div>
 
         {controller.states.fields.map((_, index) => (
           <div
             key={index}
-            className="flex flex-wrap justify-between gap-4 m-8 p-8 border-2 border-white rounded-2xl"
+            className="flex flex-wrap justify-between mx-4 p-4 border-2 border-white rounded-2xl"
           >
             <div className="">
               <div>

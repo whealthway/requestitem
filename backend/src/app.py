@@ -10,8 +10,8 @@ def hello():
     return "Hello World!"
 
 # Applications Routes
-from .accounts import urls
-from .items  import urls
+from .api.bbtemp  import urls
+from .api.bizbox_masci import urls
 # from .items import urls
 
 if __name__ == "__main__":

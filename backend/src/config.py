@@ -1,24 +1,28 @@
 import os
-from sqlalchemy import URL
-class Config:
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-class DevelopmentConfig(Config):
-    DEVELOPMENT = True
-    DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.getenv("DEVELOPMENT_DATABASE_URL")
-class TestingConfig(Config):
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.getenv("TEST_DATABASE_URL")
-class StagingConfig(Config):
-    DEVELOPMENT = True
-    DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.getenv("STAGING_DATABASE_URL")
-class ProductionConfig(Config):
-    DEBUG = False
-    SQLALCHEMY_DATABASE_URI = connection_url = URL.create("mssql+pyodbc", query={"odbc_connect": os.getenv("PRODUCTION_DATABASE_URL")})
-config = {
-    "development": DevelopmentConfig,
-    "testing": TestingConfig,
-    "staging": StagingConfig,
-    "production": ProductionConfig
+from urllib.parse import quote_plus
+
+# Define database connection details
+DB_CREDENTIALS = {
+    "qreports": ("10.20.0.10", "57020", "Qreports", "sa", "B!Zb0x@DmInALI"),
+    "bbtemp": ("10.20.0.10", "57020", "BBTemp", "sa", "B!Zb0x@DmInALI"),
+    "bizbox_masci":("10.20.0.10", "57020", "BIZBOX_MASCI", "sa", "B!Zb0x@DmInALI"),
 }
+
+def create_db_uri(server, port, database, username, password):
+    params = quote_plus(
+        f"DRIVER=ODBC Driver 18 for SQL Server;"
+        f"SERVER={server},{port};"
+        f"DATABASE={database};"
+        f"UID={username};"
+        f"PWD={password};"
+        f"TrustServerCertificate=yes"
+    )
+    return f"mssql+pyodbc:///?odbc_connect={params}"
+
+# Generate URIs for each database
+SQLALCHEMY_BINDS = {name: create_db_uri(*config) for name, config in DB_CREDENTIALS.items()}
+
+# Flask Configurations
+class Config:
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_BINDS = SQLALCHEMY_BINDS

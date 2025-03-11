@@ -1,12 +1,7 @@
 import React from "react";
 import useItemRequest from "./useItemRequest";
 import { Controller } from "react-hook-form";
-import {
-  SearchTable,
-  ItemForm,
-  ProcedureForm,
-  ConfirmationModal,
-} from "./component";
+import { SearchTable, ConfirmationModal } from "./component";
 import {
   Label,
   TextField,
@@ -15,6 +10,8 @@ import {
   SecButton,
 } from "../../components/ui";
 
+import FORM_MODE from "../../constants/formPath";
+
 const CreateRequestItem = () => {
   const controller = useItemRequest();
 
@@ -22,6 +19,10 @@ const CreateRequestItem = () => {
     return <div>Loading...</div>;
   }
 
+  const form = FORM_MODE.find(
+    (a) => a.ItemGrpCode === controller.states.selectedItemGroup
+  );
+  console.log(form);
   return (
     <>
       {/* Search and Table Section */}
@@ -30,12 +31,12 @@ const CreateRequestItem = () => {
           <Label labelName={"Search item"} />
           <input
             onChange={controller.actions.handleChange}
-            className="text-[12px] p-[8px] h-[32px] w-[100%] md:h-[56px] md:w-[300px] md:p-[16px] md:text-[18px] lg:text-[20px] lg:p-[20px] lg:w-[400px] lg:h-[64px] outline-none border border-gray-300 shadow-lg rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out"
+            className="p-2 text-[18px] h-12 w-auto border border-gray-400 rounded-md outline-none focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out shadow-lg shadow-slate-300"
           />
           <Button
             buttonName={"Search"}
             onClick={controller.actions.handleSearchItem}
-            disabled={false}
+            disabled={controller.states.searching}
           />
         </div>
         <div className="">
@@ -44,6 +45,7 @@ const CreateRequestItem = () => {
               <>
                 <SearchTable
                   data={controller.states.searchData}
+                  itemGroups={controller.states.itemGroup}
                   rowsPerPage={10}
                 />
                 <div className="flex flex-wrap justify-start md:justify-end items-center space-x-4 space-y-4 m-4 p-4 ">
@@ -66,7 +68,7 @@ const CreateRequestItem = () => {
                   </div>
                 </div>
               </>
-            ) : (
+            ) : controller.states.isSearchBtnClick ? (
               <>
                 <div className="flex flex-wrap justify-start md:justify-center items-center space-x-4 space-y-4 m-4 p-4 ">
                   <p className="text-red-500 font-semibold text-[21px]">
@@ -83,9 +85,12 @@ const CreateRequestItem = () => {
                   </div>
                 </div>
               </>
+            ) : (
+              ""
             )
           ) : (
             ""
+            // <div>Loading..</div>
           )}
         </div>
       </div>
@@ -96,13 +101,18 @@ const CreateRequestItem = () => {
         <form
           id
           onSubmit={controller.actions.handleSubmitData}
-          className="my-16 bg-slate-100 p-8 border-y-4 border-x-2 border-gray-300 rounded-xl"
+          className="my-4 bg-slate-100 p-4 border-y-4 border-x-2 border-gray-300 rounded-xl"
         >
-          <Label labelName="Item Request Form" isTitle={true} />
+          <Label
+            labelName={
+              form?.FormName ? form.FormName + " Request Form" : "Request Form"
+            }
+            isTitle={true}
+          />
           <hr className="border-2 border-gray-300 my-2" />
           <div>
             {/* Defaul fields if the user want's to continue */}
-            <div className="flex flex-wrap p-4 mx-4 my-8 gap-4 justify-between">
+            <div className="flex flex-wrap p-4 mx-4 my-4 gap-4 justify-start">
               <div>
                 <div>
                   <Label labelName={"Item Group"} />
@@ -129,31 +139,6 @@ const CreateRequestItem = () => {
               </div>
               <div>
                 <div>
-                  <Label labelName={"Qualimed BU"} />
-                </div>
-                <div>
-                  <TextField
-                    register={controller.form.register}
-                    name="qualimedBu"
-                  />
-                  {/* <p className="text-red-500 text-sm">
-                      {controller.states.errors.qualimedBu?.message}
-                    </p> */}
-                </div>
-              </div>
-              <div>
-                <div>
-                  <Label labelName={"Department"} />
-                </div>
-                <div>
-                  <TextField
-                    register={controller.form.register}
-                    name="department"
-                  />
-                </div>
-              </div>
-              <div>
-                <div>
                   <Label labelName={"BizBox Code"} />
                 </div>
                 <div>
@@ -168,30 +153,41 @@ const CreateRequestItem = () => {
 
             {/* Subforms depending on the selected item group */}
             <div>
-              {controller.states.selectedItemGroup === "" ? (
-                ""
-              ) : controller.states.selectedItemGroup !== "116" ? (
-                <ItemForm controller={controller} />
-              ) : (
-                <ProcedureForm controller={controller} />
-              )}
+              {controller.states.selectedItemGroup === ""
+                ? ""
+                : form?.FormPath({ controller: controller })}
             </div>
             {/* Subforms depending on the selected item group */}
-
-            <div className="flex col-span-4 m-4 item-center justify-end">
-              <Button
-                type="button"
-                buttonName={`${
-                  controller.states.isSaving ? "Processing..." : "Submit"
-                }`}
-                disabled={controller.states.isSaving}
-                onClick={controller.actions.handleOpenModal}
-              />
-              <ConfirmationModal
-                isOpen={controller.states.isModalOpen}
-                onClose={controller.actions.handleCloseModal}
-                onConfirm={controller.actions.handleConfirm}
-              />
+            <div className="flex justify-end">
+              <div className="flex col-span-4 m-4 item-center">
+                <Button
+                  type="button"
+                  buttonName="Cancel"
+                  disabled={controller.states.isSaving}
+                  onClick={controller.actions.handleOpenModal}
+                  className="bg-gray-400"
+                />
+                <ConfirmationModal
+                  isOpen={controller.states.isModalOpen}
+                  onClose={controller.actions.handleCloseModal}
+                  onConfirm={controller.actions.handleConfirm}
+                />
+              </div>
+              <div className="flex col-span-4 m-4 item-center justify-end">
+                <Button
+                  type="button"
+                  buttonName={`${
+                    controller.states.isSaving ? "Processing..." : "Submit"
+                  }`}
+                  disabled={controller.states.isSaving}
+                  onClick={controller.actions.handleOpenModal}
+                />
+                <ConfirmationModal
+                  isOpen={controller.states.isModalOpen}
+                  onClose={controller.actions.handleCloseModal}
+                  onConfirm={controller.actions.handleConfirm}
+                />
+              </div>
             </div>
           </div>
         </form>

@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField, Label } from "../../../components/ui";
+import { TextField, Label } from "../../../../../components/ui";
 
 const ProcedureForm = () => {
   return (

@@ -1,8 +1,8 @@
 // src/confirmationModal.js
 import React from "react";
-import { Label, TextField, SecButton } from "../../../components/ui";
+import { Label, TextField, SecButton } from "../../../../components/ui";
 
-const confirmationModal = ({ isOpen, onClose, onConfirm }) => {
+const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
 
   return (
@@ -28,4 +28,4 @@ const confirmationModal = ({ isOpen, onClose, onConfirm }) => {
   );
 };
 
-export default confirmationModal;
+export default ConfirmationModal;

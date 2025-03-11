@@ -13,7 +13,7 @@ const SecButton = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`text-[21px] p-4 w-auto ${
+      className={`text-[18px] py-2 px-4 w-auto ${
         btnColor ? btnColor : "bg-red-400"
       } rounded-md hover:scale-105`}
     >

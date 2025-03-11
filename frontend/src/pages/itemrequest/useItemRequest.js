@@ -16,8 +16,12 @@ const useItemRequest = () => {
   } = useForm();
 
   const [searchItem, setSearchItem] = useState({ searchItem: "" });
+  const [searchDataSAP, setSearchDataSAP] = useState([]);
+  const [searchDataAA, setSearchDataAA] = useState([]);
+  const [searchCurrent, setSearchCurrent] = useState([]);
   const [searchData, setSearchData] = useState([]);
-  const [searching, setSearching] = useState(true);
+  const [searching, setSearching] = useState(false);
+  const [isSearchBtnClick, setIsSearchBtnClick] = useState(false);
 
   const [proceed, setProceed] = useState(false);
 
@@ -44,20 +48,38 @@ const useItemRequest = () => {
   // Search API
   const handleSearchItem = async () => {
     try {
-      const response = await axios.post(
-        `${getBaseUrl()}/items/search`,
-        searchItem
-      );
+      setSearching(true);
+      setIsSearchBtnClick(true);
+      // Run both requests in parallel
+      const [sapResponse, aaResponse, irResponse] = await Promise.all([
+        axios.post(`${getBaseUrl()}/bbtemp/searchItemSAP`, searchItem),
+        axios.post(`${getBaseUrl()}/bbtemp/searchItemAA`, searchItem),
+        axios.post(`${getBaseUrl()}/bbtemp/items`, searchItem),
+      ]);
 
-      if (response.data.code === 200) {
-        setSearchData(response.data.data);
+      // Process SAP response
+      if (sapResponse.data.code === 200) {
+        setSearchDataSAP(sapResponse.data.data);
       } else {
-        alert(response.data.message);
+        alert(sapResponse.data.message);
+      }
+
+      // Process AA response
+      if (aaResponse.data.code === 200) {
+        setSearchDataAA(aaResponse.data.data);
+      } else {
+        alert(aaResponse.data.message);
+      }
+
+      // Process IR response
+      if (irResponse.data.code === 200) {
+        setSearchCurrent(irResponse.data.data);
+      } else {
+        alert(irResponse.data.message);
       }
     } catch (error) {
       Swal.fire({
-        title: `Unexpected error: ${error}`,
-        text: "",
+        title: `Unexpected error: ${error.message || error}`,
         icon: "error",
         confirmButtonColor: "#3085d6",
         confirmButtonText: "Okay",
@@ -65,6 +87,7 @@ const useItemRequest = () => {
     } finally {
       setSearching(false);
       setProceed(false);
+      setIsSearchBtnClick(false);
     }
   };
 
@@ -126,7 +149,7 @@ const useItemRequest = () => {
   useEffect(() => {
     const getItemGroup = async () => {
       try {
-        const response = await axios.get(`${getBaseUrl()}/itemgroup`);
+        const response = await axios.get(`${getBaseUrl()}/bbtemp/itemgroup`);
 
         if (response.data.code === 200) {
           setItemGroup(response.data.data);
@@ -144,7 +167,7 @@ const useItemRequest = () => {
   useEffect(() => {
     const getAlluoms = async () => {
       try {
-        const response = await axios.get(`${getBaseUrl()}/uoms`);
+        const response = await axios.get(`${getBaseUrl()}/bbtemp/uoms`);
 
         if (response.data.code === 200) {
           setUoms(response.data.data);
@@ -157,6 +180,10 @@ const useItemRequest = () => {
     };
     getAlluoms();
   }, []);
+
+  useEffect(() => {
+    setSearchData([...searchDataSAP, ...searchDataAA, ...searchCurrent]);
+  }, [searchDataSAP, searchDataAA, searchCurrent]);
 
   //Confirmation Modal
   const handleOpenModal = () => {
@@ -172,6 +199,11 @@ const useItemRequest = () => {
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+    reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedItemGroup]);
+
   return {
     form: {
       register,
@@ -179,6 +211,7 @@ const useItemRequest = () => {
     },
     states: {
       // errors,
+      isSearchBtnClick,
       searchData,
       searchItem,
       isSaving,

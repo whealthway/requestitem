@@ -6,7 +6,7 @@ from sqlalchemy.orm import validates
 from sqlalchemy.orm import sessionmaker
 
 
-from .. import db # from __init__.py
+from ... import db # from __init__.py
 
 # ----------------------------------------------- #
 
@@ -79,3 +79,50 @@ class SAPUOM(db.Model):
     
     def __repr__(self):
         return "<%r>" % self.UOMAbs
+    
+class iwItems(db.Model):
+
+    __tablename__ = 'iwItems'
+
+    PK_iwItems  = db.Column(db.NVARCHAR(20), primary_key = True)
+    itemdesc = db.Column(db.NVARCHAR(500))
+
+    def toDict(self):
+        return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
+    
+    def __repr__(self):
+        return "<%r>" % self.PK_iwItems
+
+class SAP_UOM(db.Model):
+    __bind_key__ = "bbtemp"
+    __tablename__ = "SAP_UOM"
+
+    UOMAbs  = db.Column(db.NVARCHAR(20), primary_key = True)
+    UOMCdoe = db.Column(db.NVARCHAR(20))
+    UOMName = db.Column(db.NVARCHAR(50))
+
+    def toDict(self):
+        return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
+    
+    def __repr__(self):
+        return "<%r>" % self.UOMAbs
+
+class QReportsModel(db.Model):
+    __bind_key__ = "qreports"
+    __tablename__ = "another_table"
+
+    id = db.Column(db.Integer, primary_key=True)
+    report_data = db.Column(db.String(255))
+
+class BizboxMasciModel(db.Model):
+    __bind_key__ = "bizbox_masci"
+    __tablename__ = 'iwItems'
+
+    PK_iwItems  = db.Column(db.NVARCHAR(20), primary_key = True)
+    itemdesc = db.Column(db.NVARCHAR(500))
+
+    def toDict(self):
+        return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
+    
+    def __repr__(self):
+        return "<%r>" % self.PK_iwItems
