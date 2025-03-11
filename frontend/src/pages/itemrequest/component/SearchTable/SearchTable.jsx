@@ -1,7 +1,7 @@
 // src/PaginatedTable.js
 import React, { useState, useEffect } from "react";
 
-const SearchTable = ({ data, rowsPerPage }) => {
+const SearchTable = ({ data, itemGroups, rowsPerPage }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / rowsPerPage);
 
@@ -16,37 +16,44 @@ const SearchTable = ({ data, rowsPerPage }) => {
     setCurrentPage(1);
   }, [data]);
 
+  console.log(itemGroups);
   return (
     <div className="w-[100%] p-4 m-4">
       <table className="w-[100%] border border-gray-300">
         <thead className="static">
           <tr className="bg-[#35314c] text-white">
-            <th className="py-2 px-4 border"></th>
-            <th className="py-2 px-4 border">Request By</th>
-            <th className="py-2 px-4 border">BizBox Code</th>
-            <th className="py-2 px-4 border">Qualimed BU</th>
-            <th className="py-2 px-4 border">Item Group</th>
-            <th className="py-2 px-4 border">Item Details</th>
-            <th className="py-2 px-4 border">Unit of Measure</th>
+            <th className="py-1 px-2 border"></th>
+            <th className="py-1 px-2 border">Data Source</th>
+            <th className="py-1 px-2 border">Code</th>
+            <th className="py-1 px-2 border">Item Group</th>
+            <th className="py-1 px-2 border">Item Description</th>
+            <th className="py-1 px-2 border">Requestor Details</th>
           </tr>
         </thead>
         <tbody>
           {currentData.map((item, index) => (
             <tr
               key={index}
-              className={`${
-                index % 2 !== 0 ? "bg-gray-100" : ""
-              } text-[14px] h-16`}
+              className={`${index % 2 !== 0 ? "bg-gray-100" : ""} text-[14px`}
             >
-              <td className="py-2 px-4 border">
+              <td className="py-1 px-2 border">
                 {currentPage === 1 ? index + 1 : currentPage * 10 + index + 1}
               </td>
-              <td className="py-2 px-4 border">{item.requested_by}</td>
-              <td className="py-2 px-4 border">{item.u_bb_code}</td>
-              <td className="py-2 px-4 border">{item.qualimed_bu}</td>
-              <td className="py-2 px-4 border">{item.item_group_name}</td>
-              <td className="py-2 px-4 border">{item.item_name}</td>
-              <td className="py-2 px-4 border">{item.uom_desc}</td>
+              <td className="py-1 px-2 border">{item?.data_source}</td>
+              <td className="py-1 px-2 border">
+                {item?.SAP_Code || item?.CODE}
+              </td>
+              <td className="py-1 px-2 border">
+                {item?.data_source === "SAP Item"
+                  ? "SAP - " +
+                    itemGroups.find((i) => i.ItemGrpCode === item?.ItemGroup)
+                      .ItemGrpName
+                  : ""}
+              </td>
+              <td className="py-1 px-2 border">
+                {item?.Description || item?.DESCRIPTION || item?.item_name}
+              </td>
+              <td className="py-1 px-2 border">{item?.qualimed_bu}</td>
             </tr>
           ))}
         </tbody>

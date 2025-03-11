@@ -3,7 +3,7 @@ from sqlalchemy import or_, func
 from datetime import datetime
 
 from .. import db
-from .models import Item, SAPOITBItemGrp, SAPUOM
+from .models import Item, SAPOITBItemGrp, SAPUOM, iwItems
 
 # ----------------------------------------------- #
 
@@ -14,6 +14,13 @@ from .models import Item, SAPOITBItemGrp, SAPUOM
 
 def list_all_items_controller():
     items = Item.query.all()
+    response = []
+    for item in items: response.append(item.toDict())
+
+    return jsonify({"code": 200, "data":response})
+
+def list_all_iwItems_items_controller():
+    items = iwItems.query.all()
     response = []
     for item in items: response.append(item.toDict())
 

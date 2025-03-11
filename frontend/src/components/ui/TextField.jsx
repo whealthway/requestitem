@@ -17,9 +17,7 @@ const TextField = ({
       name={name}
       value={value}
       onChange={onchange}
-      className={`${
-        value ? "bg-gray-500" : ""
-      }p-2 text-[21px] h-11 w-80 border border-gray-400 rounded-md outline-none focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out shadow-lg shadow-slate-300`}
+      className="p-2 text-[18px] h-12 w-auto border border-gray-400 rounded-md outline-none focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out shadow-lg shadow-slate-300"
     ></input>
   );
 };
