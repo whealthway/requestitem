@@ -1,15 +1,14 @@
 import React from "react";
-// import { CiSquarePlus } from "react-icons/ci";
 import {
   Label,
   TextField,
   SelectField,
   Button,
-  RadioButton,
 } from "../../../../../components/ui";
 import { Controller } from "react-hook-form";
+import ITEM_INFO from "../../../../../constants/itemInfo";
 
-const ItemForm = ({ controller }) => {
+const ItemForm = ({ controller, itemNameCount }) => {
   return (
     <>
       {/* Start of adding generic name and UOM */}
@@ -31,81 +30,103 @@ const ItemForm = ({ controller }) => {
           />
         </div>
 
-        {controller.states.fields.map((_, index) => (
-          <div
-            key={index}
-            className="flex flex-wrap justify-between mx-4 p-4 border-2 border-white rounded-2xl"
-          >
-            <div className="">
-              <div>
-                <Label labelName={`Generic Name ${index + 1}`} />
+        <div className="flex flex-wrap justify-start mx-4 p-4 gap-1 border-2 border-white rounded-2xl content-center items-center">
+          {controller.states.fields.map((_, index) => (
+            <>
+              <div className="flex flex-wrap mx-2 gap-4">
+                <div className="">
+                  <div>
+                    <Label
+                      labelName={`Generic Name ${index + 1}`}
+                      className="text-red-500 font-semibold"
+                    />
+                  </div>
+                  <div>
+                    <TextField
+                      register={controller.form.register}
+                      name={`genericName${index + 1}`}
+                    />
+                  </div>
+                </div>
+                <div className="">
+                  <div>
+                    <Label
+                      labelName={`Dose ${index + 1}`}
+                      className="text-green-800 font-semibold"
+                    />
+                  </div>
+                  <div>
+                    <TextField
+                      register={controller.form.register}
+                      name={`dose${index + 1}`}
+                      className="w-32"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <Label
+                      labelName={`Dosage ${index + 1}`}
+                      className="text-green-800 font-semibold"
+                    />
+                  </div>
+                  <div>
+                    <TextField
+                      register={controller.form.register}
+                      name={`dosage${index + 1}`}
+                      placeholder="e.g. mg, g, ml, IU etc.."
+                      className="w-32"
+                    />
+                  </div>
+                </div>
               </div>
               <div>
-                <TextField
-                  register={controller.form.register}
-                  name={`genericName${index + 1}`}
-                />
+                <div className="">
+                  <p className="text-[21px] font-bold">
+                    {itemNameCount - 1 !== index - 1 ? "+" : ""}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div>
-              <div>
-                <Label labelName={`Measurement ${index + 1}`} />
-              </div>
-              <div>
-                <TextField
-                  register={controller.form.register}
-                  name={`measurement${index + 1}`}
-                />
-              </div>
-            </div>
-            <div>
-              <div>
-                <Label labelName={`Unit of measure ${index + 1}`} />
-              </div>
-              <div>
-                <TextField
-                  register={controller.form.register}
-                  name={`unitOfMeasure${index + 1}`}
-                  placeholder="e.g. mg, g, ml, IU etc.."
-                />
-              </div>
-            </div>
-          </div>
-        ))}
+            </>
+          ))}
+        </div>
       </div>
       {/* End of adding generic name and UOM  */}
 
       {/* Brandname, MFG, and Other Descriptors Sections */}
-      <div className="flex flex-wrap p-4 mx-4 my-24 gap-4 justify-between">
+      <div className="flex flex-wrap m-4 gap-4 justify-start">
+        <div className="">
+          <div className="mx-2">
+            <div>
+              <Label labelName={"Brand Name"} className="" />
+            </div>
+            <div>
+              <TextField register={controller.form.register} name="brandName" />
+            </div>
+          </div>
+        </div>
         <div className="">
           <div>
-            <Label labelName={"Medicine Type/Receptacle"} />
+            <Label labelName={"Dosage Form"} />
           </div>
           <div>
             <TextField
               register={controller.form.register}
-              name="medicineType"
+              name="dosageForm"
+              placeholder=""
             />
           </div>
         </div>
         <div className="">
           <div>
-            <Label labelName={"Brand Name"} />
+            <Label labelName={"Manufacturer"} />
           </div>
           <div>
-            <TextField register={controller.form.register} name="brandName" />
+            <TextField
+              register={controller.form.register}
+              name="manufacturer"
+            />
           </div>
-        </div>
-        <div className="">
-          <div>
-            <Label labelName={"MFG"} />
-          </div>
-          <div>
-            <TextField register={controller.form.register} name="mfg" />
-          </div>
-          {/* <p className="text-red-500 text-sm">
-                    {controller.states.errors.mfg?.message}
-                  </p> */}
         </div>
         <div className="">
           <div>
@@ -118,64 +139,56 @@ const ItemForm = ({ controller }) => {
             />
           </div>
         </div>
-      </div>
-      {/* End of Brandname, MFG, and Other Descriptors Sections */}
-      <div className="m-8">
         <div>
-          <Label labelName="Inventory UOM" />
+          <div>
+            <Label labelName="Inventory UOM" />
+          </div>
+          <div>
+            <Controller
+              name="inventoryUOM"
+              defaultValue={null}
+              control={controller.form.control}
+              render={({ field }) => (
+                <SelectField
+                  field={field}
+                  data={controller.states.uoms}
+                  code_key="UOMCdoe"
+                  value_key="UOMName"
+                  placeholder="Select UOM"
+                />
+              )}
+            />
+          </div>
         </div>
-        <div>
-          <Controller
-            name="inventoryUOM"
-            defaultValue={null}
-            control={controller.form.control}
-            render={({ field }) => (
-              <SelectField
-                field={field}
-                data={controller.states.uoms}
-                code_key="UOMCdoe"
-                value_key="UOMName"
-                placeholder="Select UOM"
-              />
-            )}
-          />
-        </div>
+        {/* End of Brandname, MFG, and Other Descriptors Sections */}
       </div>
       {/* Radio button section */}
       <div className="flex flex-wrap gap-8 m-8 items-center">
         <div>
           <Label labelName="Item Information:" isTitle={true} />
         </div>
-        <div className="flex gap-2 item-center items-center">
-          <RadioButton
-            register={controller.form.register}
-            handleRadioChange={controller.actions.handleRadioChange}
-            itemDescription={controller.states.itemDescription}
-            name="purchaseable"
-            value="purchaseable"
-          />
-          <Label labelName="Purchaseable" />
-        </div>
-        <div className="flex gap-2 item-center items-center">
-          <RadioButton
-            register={controller.form.register}
-            handleRadioChange={controller.actions.handleRadioChange}
-            itemDescription={controller.states.itemDescription}
-            name="sellable"
-            value="sellable"
-          />
-          <Label labelName="Sellable" />
-        </div>
-        <div className="flex gap-2 item-center items-center">
-          <RadioButton
-            register={controller.form.register}
-            handleRadioChange={controller.actions.handleRadioChange}
-            itemDescription={controller.states.itemDescription}
-            name="inventoryItem"
-            value="inventoryItem"
-          />
-          <Label labelName="Inventory Item" />
-        </div>
+        {ITEM_INFO.map((item, index) => (
+          <>
+            <div className="flex gap-2 item-center items-center" key={index}>
+              <Controller
+                key={item.name}
+                name={`checkboxes[${item.name}]`}
+                control={controller.form.control}
+                render={({ field }) => (
+                  <>
+                    <input
+                      type="checkbox"
+                      {...field}
+                      checked={field.value || false}
+                      className="h-6 w-6"
+                    />
+                    <Label labelName={item.label} />
+                  </>
+                )}
+              />
+            </div>
+          </>
+        ))}
       </div>
       {/* End of Radio button section */}
     </>

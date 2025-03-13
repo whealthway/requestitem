@@ -24,8 +24,10 @@ const SearchTable = ({ data, itemGroups, rowsPerPage }) => {
           <tr className="bg-[#35314c] text-white">
             <th className="py-1 px-2 border"></th>
             <th className="py-1 px-2 border">Data Source</th>
-            <th className="py-1 px-2 border">Code</th>
-            <th className="py-1 px-2 border">Item Group</th>
+            <th className="py-1 px-2 border">BIZBOX CODE</th>
+            <th className="py-1 px-2 border">SAP CODE</th>
+            <th className="py-1 px-2 border">AA CODE</th>
+            <th className="py-1 px-2 border">AA ITEM MASTER CODE</th>
             <th className="py-1 px-2 border">Item Description</th>
             <th className="py-1 px-2 border">Requestor Details</th>
           </tr>
@@ -40,20 +42,12 @@ const SearchTable = ({ data, itemGroups, rowsPerPage }) => {
                 {currentPage === 1 ? index + 1 : currentPage * 10 + index + 1}
               </td>
               <td className="py-1 px-2 border">{item?.data_source}</td>
-              <td className="py-1 px-2 border">
-                {item?.SAP_Code || item?.CODE}
-              </td>
-              <td className="py-1 px-2 border">
-                {item?.data_source === "SAP Item"
-                  ? "SAP - " +
-                    itemGroups.find((i) => i.ItemGrpCode === item?.ItemGroup)
-                      .ItemGrpName
-                  : ""}
-              </td>
-              <td className="py-1 px-2 border">
-                {item?.Description || item?.DESCRIPTION || item?.item_name}
-              </td>
-              <td className="py-1 px-2 border">{item?.qualimed_bu}</td>
+              <td className="py-1 px-2 border">{item?.bb_code}</td>
+              <td className="py-1 px-2 border">{item?.sap_code}</td>
+              <td className="py-1 px-2 border">{item?.aa_order_item}</td>
+              <td className="py-1 px-2 border">{item?.aa_item_master}</td>
+              <td className="py-1 px-2 border">{item?.description}</td>
+              <td className="py-1 px-2 border">{item?.requestor_details}</td>
             </tr>
           ))}
         </tbody>

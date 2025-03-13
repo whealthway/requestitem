@@ -1,4 +1,4 @@
-from sqlalchemy import inspect
+from sqlalchemy import inspect, create_engine, text
 from ... import db # from __init__.py
 
 # ----------------------------------------------- #
@@ -11,9 +11,15 @@ class iwItems(db.Model):
 
     PK_iwItems  = db.Column(db.NVARCHAR(20), primary_key = True)
     itemdesc = db.Column(db.NVARCHAR(500))
+    # unit = ''
+    # bigunit = ''
+    # conversion = '' #qty
 
     def toDict(self):
         return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
     
     def __repr__(self):
         return "<%r>" % self.PK_iwItems
+
+
+

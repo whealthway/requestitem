@@ -1,0 +1,24 @@
+item master - all inventory items, some all of all item are chargeable to patient
+order item - chargeable to patient
+drug master - all medicine are item master
+
+Removed Fields:
+Requested By
+Qualimed
+Department
+
+Revision 1
+1. Search result should be came from SAP, AA, and Current Request
+--reference database and table ( /BBTemp/SAP_OITM_MASCI_11152024, /BBTemp/SAP_OITM_MASCI_11152024, /Qreports/SAP_ItemRequest)
+2. Requesting of item can be Manually or thru searching bizbox code to automatically generate/populate data in the fields.
+--reference database and table (BIZBOX_MASCI/iwItems)
+3. Create a button for searching the inputted bizbox code.'
+4. Make all the fields fit in the screen.
+5. Change the label name to medical terminology
+
+Revison 1.1
+dose - 400
+dosage - mg
+dosage form (receptacle) -> tablet, capsule (dropdown)
+invertory item -> intenvtorable
+Manufacturer

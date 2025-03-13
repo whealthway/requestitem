@@ -1,5 +1,4 @@
 import React from "react";
-import useItemRequest from "./useItemRequest";
 import { Controller } from "react-hook-form";
 import { SearchTable, ConfirmationModal } from "./component";
 import {
@@ -8,9 +7,12 @@ import {
   SelectField,
   Button,
   SecButton,
+  RadioButton,
 } from "../../components/ui";
-
+import useItemRequest from "./useItemRequest";
 import FORM_MODE from "../../constants/formPath";
+import BU_BRANCH from "../../constants/buBranch";
+import { BizBoxForm } from "./component/RequestForms";
 
 const CreateRequestItem = () => {
   const controller = useItemRequest();
@@ -46,24 +48,24 @@ const CreateRequestItem = () => {
                 <SearchTable
                   data={controller.states.searchData}
                   itemGroups={controller.states.itemGroup}
-                  rowsPerPage={10}
+                  rowsPerPage={15}
                 />
                 <div className="flex flex-wrap justify-start md:justify-end items-center space-x-4 space-y-4 m-4 p-4 ">
                   <div>
                     <Label labelName="Do you want to proceed creating an item?" />
-                  </div>
-                  <div className="">
-                    <SecButton
-                      onClick={controller.actions.handleYesProceed}
-                      buttonName="Yes"
-                      btnColor="bg-blue-400"
-                    />
                   </div>
                   <div>
                     <SecButton
                       btnColor="bg-gray-500"
                       onClick={controller.actions.handleNotProceed}
                       buttonName="No"
+                    />
+                  </div>
+                  <div className="">
+                    <SecButton
+                      onClick={controller.actions.handleYesProceed}
+                      buttonName="Yes"
+                      btnColor="bg-blue-400"
                     />
                   </div>
                 </div>
@@ -111,51 +113,100 @@ const CreateRequestItem = () => {
           />
           <hr className="border-2 border-gray-300 my-2" />
           <div>
-            {/* Defaul fields if the user want's to continue */}
             <div className="flex flex-wrap p-4 mx-4 my-4 gap-4 justify-start">
-              <div>
-                <div>
-                  <Label labelName={"Item Group"} />
-                </div>
-                <div>
-                  <Controller
-                    name="itemGroupCode"
-                    defaultValue={null}
-                    control={controller.form.control}
-                    render={({ field }) => (
-                      <SelectField
-                        field={field}
-                        data={controller.states.itemGroup}
-                        code_key="ItemGrpCode"
-                        value_key="ItemGrpName"
-                        placeholder="Select Item Group"
-                        setSelectedItemGroup={
-                          controller.actions.setSelectedItemGroup
-                        }
+              <RadioButton
+                handleRadioChange={controller.actions.handleRadioChange}
+                requestMethod={controller.states.requestMethod}
+                name="manual"
+                value="manual"
+              />
+              <Label labelName="Manual" />
+              <RadioButton
+                handleRadioChange={controller.actions.handleRadioChange}
+                requestMethod={controller.states.requestMethod}
+                name="bizbox"
+                value="bizbox"
+              />
+              <Label labelName="Bizbox" />
+            </div>
+            <div className="flex flex-wrap p-4 mx-4 my-4 gap-4 justify-start">
+              {/* Defaul fields if the user want's to continue */}
+              {controller.states.requestMethod === "manual" ? (
+                <>
+                  <div>
+                    <div>
+                      <Label labelName={"Item Group"} />
+                    </div>
+                    <div>
+                      <Controller
+                        name="itemGroupCode"
+                        defaultValue={null}
+                        control={controller.form.control}
+                        render={({ field }) => (
+                          <SelectField
+                            field={field}
+                            data={controller.states.itemGroup}
+                            code_key="ItemGrpCode"
+                            value_key="ItemGrpName"
+                            placeholder="Select Item Group"
+                            setSelectedItemGroup={
+                              controller.actions.setSelectedItemGroup
+                            }
+                          />
+                        )}
                       />
-                    )}
-                  />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-wrap my-4 gap-4 justify-start">
+                  <div>
+                    <Label labelName={"BizBox Code"} />
+                  </div>
+                  <div>
+                    <TextField
+                      register={controller.form.register}
+                      name="bizboxCode"
+                    />
+                  </div>
+                  <div className="flex items-end">
+                    <Controller
+                      name="buBranch"
+                      defaultValue={null}
+                      control={controller.form.control}
+                      render={({ field }) => (
+                        <SelectField
+                          field={field}
+                          data={BU_BRANCH}
+                          code_key="code"
+                          value_key="name"
+                          placeholder="Search"
+                          setSelectedItemGroup={
+                            controller.actions.setSelectedItemGroup
+                          }
+                        />
+                      )}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <div>
-                  <Label labelName={"BizBox Code"} />
-                </div>
-                <div>
-                  <TextField
-                    register={controller.form.register}
-                    name="bizboxCode"
-                  />
-                </div>
-              </div>
+              )}
             </div>
             {/* End of defaul fields if the user want's to continue */}
 
             {/* Subforms depending on the selected item group */}
             <div>
-              {controller.states.selectedItemGroup === ""
-                ? ""
-                : form?.FormPath({ controller: controller })}
+              {controller.states.selectedItemGroup === "" ? (
+                controller.states.requestMethod === "bizbox" ? (
+                  <BizBoxForm controller={controller} />
+                ) : (
+                  ""
+                )
+              ) : (
+                form?.FormPath({
+                  controller: controller,
+                  itemNameCount: controller.states.itemNameCount,
+                })
+              )}
             </div>
             {/* Subforms depending on the selected item group */}
             <div className="flex justify-end">

@@ -5,6 +5,7 @@ import getBaseUrl from "../../utils/baseUrl";
 import Swal from "sweetalert2";
 import { yupResolver } from "@hookform/resolvers/yup";
 import itemRequestSchema from "../../yup/itemRequestSchema";
+import handleSearch from "../../hooks/useSearch";
 
 const useItemRequest = () => {
   const {
@@ -13,7 +14,11 @@ const useItemRequest = () => {
     reset,
     control,
     // formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      checkboxes: [],
+    },
+  });
 
   const [searchItem, setSearchItem] = useState({ searchItem: "" });
   const [searchDataSAP, setSearchDataSAP] = useState([]);
@@ -26,18 +31,26 @@ const useItemRequest = () => {
   const [proceed, setProceed] = useState(false);
 
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
-  const [fields, setFields] = useState([]);
+  const [fields, setFields] = useState([
+    { field1: "", field2: "", field3: "" },
+  ]);
   const [itemNameCount, setItemNameCount] = useState(0);
 
   const [itemGroup, setItemGroup] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [uoms, setUoms] = useState([]);
-  const [itemDescription, setItemDescription] = useState("");
+  const [requestMethod, setRequestMethod] = useState("");
 
   const [isSaving, setIsSaving] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
+  };
 
   const handleChange = (e) => {
     setSearchItem({
@@ -45,38 +58,32 @@ const useItemRequest = () => {
     });
   };
 
-  // Search API
   const handleSearchItem = async () => {
     try {
       setSearching(true);
       setIsSearchBtnClick(true);
       // Run both requests in parallel
-      const [sapResponse, aaResponse, irResponse] = await Promise.all([
-        axios.post(`${getBaseUrl()}/bbtemp/searchItemSAP`, searchItem),
-        axios.post(`${getBaseUrl()}/bbtemp/searchItemAA`, searchItem),
-        axios.post(`${getBaseUrl()}/bbtemp/items`, searchItem),
+      const [spResponse] = await Promise.all([
+        // axios.post(`${getBaseUrl()}/bbtemp/items`, searchItem),
+        axios.post(
+          `${getBaseUrl()}/bizbox_masci/callSP/itemSearch`,
+          searchItem
+        ),
       ]);
 
-      // Process SAP response
-      if (sapResponse.data.code === 200) {
-        setSearchDataSAP(sapResponse.data.data);
+      // SP Response
+      if (spResponse.data.code === 200) {
+        setSearchDataSAP(spResponse.data.data);
       } else {
-        alert(sapResponse.data.message);
-      }
-
-      // Process AA response
-      if (aaResponse.data.code === 200) {
-        setSearchDataAA(aaResponse.data.data);
-      } else {
-        alert(aaResponse.data.message);
+        alert(spResponse.data.message);
       }
 
       // Process IR response
-      if (irResponse.data.code === 200) {
-        setSearchCurrent(irResponse.data.data);
-      } else {
-        alert(irResponse.data.message);
-      }
+      // if (irResponse.data.code === 200) {
+      //   setSearchCurrent(irResponse.data.data);
+      // } else {
+      //   alert(irResponse.data.message);
+      // }
     } catch (error) {
       Swal.fire({
         title: `Unexpected error: ${error.message || error}`,
@@ -108,7 +115,8 @@ const useItemRequest = () => {
   };
 
   const handleRadioChange = (event) => {
-    setItemDescription(event.target.value);
+    setRequestMethod(event.target.value);
+    setSelectedItemGroup("");
   };
 
   // Create API
@@ -122,22 +130,23 @@ const useItemRequest = () => {
         requestedById: "Test-requestedById",
         requestedBy: "Test-requestedBy",
         itemNameCount: itemNameCount,
-        sellable: data.sellable === itemDescription,
-        purchaseable: data.purchaseable === itemDescription,
-        inventoryItem: data.inventoryItem === itemDescription,
+        sellable: data.checkboxes["sellable"] || false,
+        purchaseable: data.checkboxes["purchaseable"] || false,
+        inventoryItem: data.checkboxes["inventorable"] || false,
       };
+      delete data.checkboxes;
       console.log(data);
-      const response = await axios.post(`${getBaseUrl()}/items`, {
-        data: data,
-      });
-      setIsSaving(true);
+      //   const response = await axios.post(`${getBaseUrl()}/items`, {
+      //     data: data,
+      //   });
+      //   setIsSaving(true);
 
-      if (response.data.code === 200) {
-        reset();
-        setFields([]);
-      } else {
-        alert(response.data.message);
-      }
+      //   if (response.data.code === 200) {
+      //     reset();
+      //     setFields([]);
+      //   } else {
+      //     alert(response.data.message);
+      //   }
     } catch (error) {
       alert(error);
     } finally {
@@ -147,38 +156,12 @@ const useItemRequest = () => {
 
   // Get all API
   useEffect(() => {
-    const getItemGroup = async () => {
-      try {
-        const response = await axios.get(`${getBaseUrl()}/bbtemp/itemgroup`);
-
-        if (response.data.code === 200) {
-          setItemGroup(response.data.data);
-        }
-      } catch (error) {
-        alert(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getItemGroup();
+    handleSearch("/bbtemp/itemgroup", "GET", "", setLoading, setItemGroup);
   }, []);
 
   //Get all UOMS
   useEffect(() => {
-    const getAlluoms = async () => {
-      try {
-        const response = await axios.get(`${getBaseUrl()}/bbtemp/uoms`);
-
-        if (response.data.code === 200) {
-          setUoms(response.data.data);
-        }
-      } catch (error) {
-        alert(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getAlluoms();
+    handleSearch("/bbtemp/uoms", "GET", "", setLoading, setUoms);
   }, []);
 
   useEffect(() => {
@@ -217,13 +200,15 @@ const useItemRequest = () => {
       isSaving,
       searching,
       fields,
-      itemDescription,
+      requestMethod,
       itemGroup,
       loading,
       uoms,
       selectedItemGroup,
       proceed,
       isModalOpen,
+      itemNameCount,
+      isChecked,
     },
     actions: {
       handleAddFields,
@@ -237,6 +222,7 @@ const useItemRequest = () => {
       handleOpenModal,
       handleCloseModal,
       handleConfirm,
+      handleCheckboxChange,
     },
   };
 };
