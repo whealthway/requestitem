@@ -4,6 +4,7 @@ import GroceryForm from "./GroceryForm";
 import OfficeSupplyForm from "./OfficeSupplyForm";
 import LabSupplyForm from "./LabSupplyForm";
 import MedicalSupplyForm from "./MedicalSupplyForm";
+import BizBoxForm from "./BizboxForm/BizBoxForm";
 
 export {
   ItemForm,
@@ -12,4 +13,5 @@ export {
   OfficeSupplyForm,
   LabSupplyForm,
   MedicalSupplyForm,
+  BizBoxForm,
 };

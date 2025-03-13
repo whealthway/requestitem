@@ -20,7 +20,7 @@ const SelectField = ({
       "&:hover": {
         borderColor: "rgb(59, 130, 246)",
       },
-      width: "auto",
+      width: "270px",
       height: "3rem",
     }),
     option: (provided, state) => ({
@@ -31,6 +31,10 @@ const SelectField = ({
         backgroundColor: "rgb(219, 234, 254)",
         color: "black",
       },
+    }),
+    dropdownIndicator: (provided) => ({
+      ...provided,
+      display: "none",
     }),
   };
 
@@ -54,6 +58,9 @@ const SelectField = ({
       placeholder={placeholder}
       // className="text-[18px] h-12 w-auto shadow-lg shadow-slate-300 rounded-full"
       styles={customStyles}
+      components={{
+        IndicatorSeparator: () => null,
+      }}
     />
   );
 };

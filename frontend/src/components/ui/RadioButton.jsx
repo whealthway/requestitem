@@ -1,19 +1,12 @@
 import React from "react";
 
-const RadioButton = ({
-  register,
-  name,
-  value,
-  itemDescription,
-  handleRadioChange,
-}) => {
+const RadioButton = ({ handleRadioChange, requestMethod, name, value }) => {
   return (
     <input
-      {...register(name)}
       type="radio"
       id={value}
       value={value}
-      checked={itemDescription === value}
+      checked={requestMethod === value}
       onChange={handleRadioChange}
       className="h-6 w-6 text-[21px]"
     />
