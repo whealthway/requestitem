@@ -1,8 +1,8 @@
 // src/confirmationModal.js
 import React from "react";
-import { Label, TextField, SecButton } from "../../../../components/ui";
+import { Label, SecButton } from "../../../../components/ui";
 
-const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
+const ConfirmationModal = ({ isSubmit, isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
 
   return (
@@ -12,7 +12,11 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
           <Label labelName="Confirm Item Request" isTitle={true} />
         </div>
         <div className="flex justify-center items-center m-4 p-2">
-          <Label labelName="Are you sure you want to save item request?" />
+          {isSubmit ? (
+            <Label labelName="Are you sure you want to save item request?" />
+          ) : (
+            <Label labelName="Are you sure you want to cancel item request? All your inputted data will be remove." />
+          )}
         </div>
 
         <div className="flex justify-end space-x-4">

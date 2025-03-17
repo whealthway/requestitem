@@ -11,7 +11,7 @@ class iwItems(db.Model):
 
     PK_iwItems  = db.Column(db.NVARCHAR(20), primary_key = True)
     itemdesc = db.Column(db.NVARCHAR(500))
-    # unit = ''
+    FK_mscPrintCategory = db.Column(db.NVARCHAR(500))
     # bigunit = ''
     # conversion = '' #qty
 

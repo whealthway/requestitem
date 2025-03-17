@@ -1,4 +1,4 @@
-import ItemForm from "./ItemForm";
+import GeneralAndPharmacyMedicineForm from "./GeneralAndPharmacyMedicineForm";
 import ProcedureForm from "./ProcedureForm";
 import GroceryForm from "./GroceryForm";
 import OfficeSupplyForm from "./OfficeSupplyForm";
@@ -7,7 +7,7 @@ import MedicalSupplyForm from "./MedicalSupplyForm";
 import BizBoxForm from "./BizboxForm/BizBoxForm";
 
 export {
-  ItemForm,
+  GeneralAndPharmacyMedicineForm,
   ProcedureForm,
   GroceryForm,
   OfficeSupplyForm,
