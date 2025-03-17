@@ -14,11 +14,12 @@ const Button = ({
       type={type}
       onClick={onClick} // add function pointed to API
       disabled={disabled}
-      className={`px-4 py-2 text-[18px] h-12 w-auto ${
-        !disabled ? "bg-[#1976d2] hover:scale-105" : "bg-gray-400"
-      } text-[#d9e8f8] outline-none border-solid shadow-md shadow-gray-500 rounded-md items-center ${className} `}
+      className={`flex gap-2 font-semibold px-4 py-2 text-[18px] h-12 w-auto rounded-lg ${
+        !disabled ? "bg-[#1976d2] hover:scale-105" : "bg-gray-300"
+      } text-[#d9e8f8] smooth outline-none border-gray-300 border-solid shadow-md shadow-blue-200 items-center ${className} `}
       hidden={hidden}
     >
+      {children}
       {buttonName}
     </button>
   );

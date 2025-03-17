@@ -7,8 +7,16 @@ import {
 } from "../../../../../components/ui";
 import { Controller } from "react-hook-form";
 import ITEM_INFO from "../../../../../constants/itemInfo";
+import useGeneralAndPharmacyMedicineForm from "./useGeneralAndPharmacyMedicineForm";
 
-const ItemForm = ({ controller, itemNameCount }) => {
+const GeneralAndPharmacyMedicineForm = ({
+  register,
+  control,
+  uoms,
+  setValue,
+}) => {
+  const controller = useGeneralAndPharmacyMedicineForm({ setValue });
+
   return (
     <>
       {/* Start of adding generic name and UOM */}
@@ -33,7 +41,7 @@ const ItemForm = ({ controller, itemNameCount }) => {
         <div className="flex flex-wrap justify-start mx-4 p-4 gap-1 border-2 border-white rounded-2xl content-center items-center">
           {controller.states.fields.map((_, index) => (
             <>
-              <div className="flex flex-wrap mx-2 gap-4">
+              <div key={index} className="flex flex-wrap mx-2 gap-4">
                 <div className="">
                   <div>
                     <Label
@@ -43,7 +51,7 @@ const ItemForm = ({ controller, itemNameCount }) => {
                   </div>
                   <div>
                     <TextField
-                      register={controller.form.register}
+                      register={register}
                       name={`genericName${index + 1}`}
                     />
                   </div>
@@ -57,7 +65,7 @@ const ItemForm = ({ controller, itemNameCount }) => {
                   </div>
                   <div>
                     <TextField
-                      register={controller.form.register}
+                      register={register}
                       name={`dose${index + 1}`}
                       className="w-32"
                     />
@@ -72,7 +80,7 @@ const ItemForm = ({ controller, itemNameCount }) => {
                   </div>
                   <div>
                     <TextField
-                      register={controller.form.register}
+                      register={register}
                       name={`dosage${index + 1}`}
                       placeholder="e.g. mg, g, ml, IU etc.."
                       className="w-32"
@@ -83,7 +91,7 @@ const ItemForm = ({ controller, itemNameCount }) => {
               <div>
                 <div className="">
                   <p className="text-[21px] font-bold">
-                    {itemNameCount - 1 !== index - 1 ? "+" : ""}
+                    {controller.states.fields.length - 1 !== index ? "+" : ""}
                   </p>
                 </div>
               </div>
@@ -101,7 +109,7 @@ const ItemForm = ({ controller, itemNameCount }) => {
               <Label labelName={"Brand Name"} className="" />
             </div>
             <div>
-              <TextField register={controller.form.register} name="brandName" />
+              <TextField register={register} name="brandName" />
             </div>
           </div>
         </div>
@@ -110,11 +118,7 @@ const ItemForm = ({ controller, itemNameCount }) => {
             <Label labelName={"Dosage Form"} />
           </div>
           <div>
-            <TextField
-              register={controller.form.register}
-              name="dosageForm"
-              placeholder=""
-            />
+            <TextField register={register} name="dosageForm" placeholder="" />
           </div>
         </div>
         <div className="">
@@ -122,10 +126,7 @@ const ItemForm = ({ controller, itemNameCount }) => {
             <Label labelName={"Manufacturer"} />
           </div>
           <div>
-            <TextField
-              register={controller.form.register}
-              name="manufacturer"
-            />
+            <TextField register={register} name="manufacturer" />
           </div>
         </div>
         <div className="">
@@ -133,10 +134,7 @@ const ItemForm = ({ controller, itemNameCount }) => {
             <Label labelName={"Other Descriptors"} />
           </div>
           <div>
-            <TextField
-              register={controller.form.register}
-              name="otherDescriptors"
-            />
+            <TextField register={register} name="otherDescriptors" />
           </div>
         </div>
         <div>
@@ -147,18 +145,19 @@ const ItemForm = ({ controller, itemNameCount }) => {
             <Controller
               name="inventoryUOM"
               defaultValue={null}
-              control={controller.form.control}
+              control={control}
               render={({ field }) => (
                 <SelectField
                   field={field}
-                  data={controller.states.uoms}
-                  code_key="UOMCdoe"
-                  value_key="UOMName"
+                  data={uoms}
+                  code_key="uom_code"
+                  value_key="uom_name"
                   placeholder="Select UOM"
                 />
               )}
             />
           </div>
+          <input {...register("itemNameCount")} type="number" hidden />
         </div>
         {/* End of Brandname, MFG, and Other Descriptors Sections */}
       </div>
@@ -173,7 +172,7 @@ const ItemForm = ({ controller, itemNameCount }) => {
               <Controller
                 key={item.name}
                 name={`checkboxes[${item.name}]`}
-                control={controller.form.control}
+                control={control}
                 render={({ field }) => (
                   <>
                     <input
@@ -195,4 +194,4 @@ const ItemForm = ({ controller, itemNameCount }) => {
   );
 };
 
-export default ItemForm;
+export default GeneralAndPharmacyMedicineForm;

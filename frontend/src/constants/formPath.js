@@ -1,5 +1,5 @@
 import {
-  ItemForm,
+  GeneralAndPharmacyMedicineForm,
   MedicalSupplyForm,
   LabSupplyForm,
   OfficeSupplyForm,
@@ -9,7 +9,7 @@ import {
 const FORM_MODE = [
   {
     ItemGrpCode: "100",
-    FormPath: (props) => <ItemForm {...props} />,
+    FormPath: () => <div>Item</div>,
     FormName: "Item",
   },
   {
@@ -44,7 +44,14 @@ const FORM_MODE = [
   },
   {
     ItemGrpCode: "107",
-    FormPath: () => <div>General and Pharmacy Medicine</div>,
+    FormPath: ({ controller }) => (
+      <GeneralAndPharmacyMedicineForm
+        register={controller.form.register}
+        control={controller.form.control}
+        uoms={controller.states.uoms}
+        setValue={controller.form.setValue}
+      />
+    ),
     FormName: "",
   },
   {

@@ -4,30 +4,35 @@ from sqlalchemy import func, text, create_engine
 from ... import db
 
 # ----------------------------------------------- #
-def get_all_iwItems_controller():
-    items = iwItems.query.all()
-    response = []
-    for item in items: response.append(item.toDict())
+# def get_all_iwItems_controller():
+#     items = iwItems.query.all()
+#     response = []
+#     for item in items: response.append(item.toDict())
 
-    return jsonify({"code": 200, "data":response})
+#     return jsonify({"code": 200, "data":response})
 
-def find_iwItems_controller():
-    bb_code = request.get_json()['bizboxCode'].lower()
+def find_bizbox_code_details_controller():
+    bb_code = request.get_json()['bbCode'].lower()
     print(bb_code)
 
     items = iwItems.query
     # item = iwItems.query.get({"PK_iwItems": bb_code})
-    results = items.filter(func.lower(iwItems.PK_iwItems).like(bb_code))
-
+    results = items.filter(func.lower(iwItems.PK_iwItems) == bb_code).first()
+    print(results.toDict())
     if results:
-        json_data = [u.toDict() for u in results]
+        result_dict = results.toDict()
+        json_data = {
+            'bb_code': result_dict['PK_iwItems'],
+            'item_group': result_dict['FK_mscPrintCategory'],
+            'item_description': result_dict['itemdesc']
+        }
     else:
-        json_data = []
+        json_data = {}
 
-    return jsonify({"code": 200, "data":json_data[0]})
+    return jsonify({"code": 200, "data":json_data})
 
 
-def call_stored_procedure():
+def call_stored_procedure_controller():
     searchItem = request.get_json()['searchItem'].lower()
     print(searchItem)
     try:

@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import getBaseUrl from "../../utils/baseUrl";
-import Swal from "sweetalert2";
 import { yupResolver } from "@hookform/resolvers/yup";
 import itemRequestSchema from "../../yup/itemRequestSchema";
 import handleSearch from "../../hooks/useSearch";
+import { useAsyncError } from "react-router-dom";
 
 const useItemRequest = () => {
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     control,
     // formState: { errors },
   } = useForm({
@@ -19,44 +20,26 @@ const useItemRequest = () => {
       checkboxes: [],
     },
   });
-
   const [searchItem, setSearchItem] = useState({ searchItem: "" });
-  const [searchDataSAP, setSearchDataSAP] = useState([]);
-  const [searchDataAA, setSearchDataAA] = useState([]);
-  const [searchCurrent, setSearchCurrent] = useState([]);
   const [searchData, setSearchData] = useState([]);
+  const [hasData, setHasData] = useState(true);
   const [searching, setSearching] = useState(false);
   const [isSearchBtnClick, setIsSearchBtnClick] = useState(false);
 
   const [proceed, setProceed] = useState(false);
 
-  const [selectedItemGroup, setSelectedItemGroup] = useState("");
-  const [fields, setFields] = useState([
-    { field1: "", field2: "", field3: "" },
-  ]);
-  const [itemNameCount, setItemNameCount] = useState(0);
+  const [selectedItemGroup, setSelectedItemGroup] = useState();
 
   const [itemGroup, setItemGroup] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [uoms, setUoms] = useState([]);
-  const [requestMethod, setRequestMethod] = useState("");
+  const [requestMethod, setRequestMethod] = useState("manual");
 
   const [isSaving, setIsSaving] = useState(false);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = (event) => {
-    setIsChecked(event.target.checked);
-  };
-
-  const handleChange = (e) => {
-    setSearchItem({
-      searchItem: e.target.value,
-    });
-  };
+  const [submit, setSubmit] = useState(false);
 
   const handleSearchItem = async () => {
     try {
@@ -73,7 +56,11 @@ const useItemRequest = () => {
 
       // SP Response
       if (spResponse.data.code === 200) {
-        setSearchDataSAP(spResponse.data.data);
+        if (spResponse.data.data.length > 0) {
+          setSearchData(spResponse.data.data);
+        } else {
+          setHasData(false);
+        }
       } else {
         alert(spResponse.data.message);
       }
@@ -85,12 +72,7 @@ const useItemRequest = () => {
       //   alert(irResponse.data.message);
       // }
     } catch (error) {
-      Swal.fire({
-        title: `Unexpected error: ${error.message || error}`,
-        icon: "error",
-        confirmButtonColor: "#3085d6",
-        confirmButtonText: "Okay",
-      });
+      alert(error);
     } finally {
       setSearching(false);
       setProceed(false);
@@ -100,18 +82,11 @@ const useItemRequest = () => {
 
   const handleYesProceed = () => {
     setProceed(true);
-    setSearching(true);
   };
 
   const handleNotProceed = () => {
     setProceed(false);
-    setSearching(true);
     setSearchItem({ searchItem: "" });
-  };
-
-  const handleAddFields = () => {
-    setFields([...fields, { field1: "", field2: "", field3: "" }]);
-    setItemNameCount(itemNameCount + 1);
   };
 
   const handleRadioChange = (event) => {
@@ -129,7 +104,6 @@ const useItemRequest = () => {
         dateRequested: date.toISOString(),
         requestedById: "Test-requestedById",
         requestedBy: "Test-requestedBy",
-        itemNameCount: itemNameCount,
         sellable: data.checkboxes["sellable"] || false,
         purchaseable: data.checkboxes["purchaseable"] || false,
         inventoryItem: data.checkboxes["inventorable"] || false,
@@ -164,22 +138,23 @@ const useItemRequest = () => {
     handleSearch("/bbtemp/uoms", "GET", "", setLoading, setUoms);
   }, []);
 
-  useEffect(() => {
-    setSearchData([...searchDataSAP, ...searchDataAA, ...searchCurrent]);
-  }, [searchDataSAP, searchDataAA, searchCurrent]);
-
   //Confirmation Modal
-  const handleOpenModal = () => {
+  const handleCancelButton = () => {
     setIsModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleSubmitButton = () => {
+    setSubmit(true);
+    setIsModalOpen(true);
   };
 
   const handleConfirm = () => {
-    handleSubmitData();
+    submit ? handleSubmitData() : setProceed(false);
     setIsModalOpen(false);
+  };
+
+  const handleCloseModal = () => {
+    reset();
   };
 
   useEffect(() => {
@@ -190,39 +165,38 @@ const useItemRequest = () => {
   return {
     form: {
       register,
+      setValue,
       control,
     },
     states: {
       // errors,
-      isSearchBtnClick,
       searchData,
       searchItem,
-      isSaving,
-      searching,
-      fields,
       requestMethod,
       itemGroup,
       loading,
       uoms,
+      hasData,
       selectedItemGroup,
       proceed,
       isModalOpen,
-      itemNameCount,
-      isChecked,
+      isSaving,
+      searching,
+      isSearchBtnClick,
+      submit,
     },
     actions: {
-      handleAddFields,
       handleSearchItem,
-      handleSubmitData,
-      handleChange,
       handleRadioChange,
-      setSelectedItemGroup,
       handleYesProceed,
       handleNotProceed,
-      handleOpenModal,
+      handleSubmitButton,
+      handleCancelButton,
       handleCloseModal,
       handleConfirm,
-      handleCheckboxChange,
+      handleSubmitData,
+      setSearchItem,
+      setSelectedItemGroup,
     },
   };
 };
