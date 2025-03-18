@@ -1,12 +1,7 @@
-import React from 'react'
+import React from "react";
 
-const Grid = ({style, children}) => {
-  console.log(style)
-  return (
-    <div className={`${style}`}>
-      {children}
-    </div>
-  )
-}
+const Grid = ({ style, children }) => {
+  return <div className={`${style}`}>{children}</div>;
+};
 
-export default Grid
+export default Grid;

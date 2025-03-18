@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import itemRequestSchema from "../../yup/itemRequestSchema";
 import handleSearch from "../../hooks/useSearch";
 import { useAsyncError } from "react-router-dom";
+import dataTransform from "../../data-mapping/dataTransformer";
 
 const useItemRequest = () => {
   const {
@@ -87,6 +88,7 @@ const useItemRequest = () => {
   const handleNotProceed = () => {
     setProceed(false);
     setSearchItem({ searchItem: "" });
+    setSearchData([]);
   };
 
   const handleRadioChange = (event) => {
@@ -98,6 +100,8 @@ const useItemRequest = () => {
   const handleSubmitData = handleSubmit(async (data) => {
     try {
       const date = new Date();
+      // console.log(data["itemGroupCode"].value);
+      // const newData = dataTransform(data["itemGroupCode"].value, data);
       data = {
         ...data,
         itemCode: "Test-ItemCode1",
@@ -138,7 +142,11 @@ const useItemRequest = () => {
     handleSearch("/bbtemp/uoms", "GET", "", setLoading, setUoms);
   }, []);
 
-  //Confirmation Modal
+  const handleBackToSearch = () => {
+    setSearchData([]);
+    setProceed(false);
+    setHasData(true);
+  };
   const handleCancelButton = () => {
     setIsModalOpen(true);
   };
@@ -151,6 +159,12 @@ const useItemRequest = () => {
   const handleConfirm = () => {
     submit ? handleSubmitData() : setProceed(false);
     setIsModalOpen(false);
+    setHasData(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setHasData(true);
   };
 
   const handleCloseModal = () => {
@@ -194,7 +208,9 @@ const useItemRequest = () => {
       handleCancelButton,
       handleCloseModal,
       handleConfirm,
+      handleCancel,
       handleSubmitData,
+      handleBackToSearch,
       setSearchItem,
       setSelectedItemGroup,
     },

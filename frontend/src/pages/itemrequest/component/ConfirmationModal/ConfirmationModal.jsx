@@ -2,7 +2,13 @@
 import React from "react";
 import { Label, SecButton } from "../../../../components/ui";
 
-const ConfirmationModal = ({ isSubmit, isOpen, onClose, onConfirm }) => {
+const ConfirmationModal = ({
+  isSubmit,
+  isOpen,
+  onClose,
+  onConfirm,
+  onCancel,
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -20,7 +26,7 @@ const ConfirmationModal = ({ isSubmit, isOpen, onClose, onConfirm }) => {
         </div>
 
         <div className="flex justify-end space-x-4">
-          <SecButton btnColor="bg-gray-300" onClick={onClose}>
+          <SecButton btnColor="bg-gray-300" onClick={onCancel}>
             Cancel
           </SecButton>
           <SecButton btnColor="bg-blue-400" onClick={onConfirm}>

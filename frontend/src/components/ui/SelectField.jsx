@@ -15,14 +15,14 @@ const SelectField = ({
     control: (provided, state) => ({
       ...provided,
       padding: "",
-      borderRadius: "0 5px 5px 0", // Rounded corners
+      borderRadius: "5px", // Rounded corners
       borderWidth: "1px",
       borderColor: state.isFocused ? "rgb(59, 130, 246)" : "rgb(209, 213, 219)", // Focus color
       boxShadow: state.isFocused ? "0 0 5px rgba(59, 130, 246, 0.5)" : "none",
       "&:hover": {
         borderColor: "rgb(59, 130, 246)",
       },
-      width: width || "270px",
+      width: "270px",
       height: height || "3rem",
     }),
     option: (provided, state) => ({
@@ -33,6 +33,7 @@ const SelectField = ({
         backgroundColor: "rgb(219, 234, 254)",
         color: "black",
       },
+      width: "270px",
     }),
     // dropdownIndicator: (provided) => ({
     //   ...provided,

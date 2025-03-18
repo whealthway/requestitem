@@ -1,10 +1,5 @@
-import {
-  GeneralAndPharmacyMedicineForm,
-  MedicalSupplyForm,
-  LabSupplyForm,
-  OfficeSupplyForm,
-  GroceryForm,
-} from "../pages/itemrequest/component/RequestForms";
+import { GeneralAndPharmacyMedicineForm } from "../pages/itemrequest/component/RequestForms";
+import SuppliesForm from "../pages/itemrequest/component/RequestForms/SuppliesForm";
 
 const FORM_MODE = [
   {
@@ -14,22 +9,50 @@ const FORM_MODE = [
   },
   {
     ItemGrpCode: "101",
-    FormPath: (props) => <MedicalSupplyForm {...props} />,
+    FormPath: ({ controller }) => (
+      <SuppliesForm
+        register={controller.form.register}
+        control={controller.form.control}
+        uoms={controller.states.uoms}
+        setValue={controller.form.setValue}
+      />
+    ),
     FormName: "Medical Supply",
   },
   {
     ItemGrpCode: "102",
-    FormPath: (props) => <LabSupplyForm {...props} />,
+    FormPath: ({ controller }) => (
+      <SuppliesForm
+        register={controller.form.register}
+        control={controller.form.control}
+        uoms={controller.states.uoms}
+        setValue={controller.form.setValue}
+      />
+    ),
     FormName: "Lab Supply",
   },
   {
     ItemGrpCode: "104",
-    FormPath: (props) => <OfficeSupplyForm {...props} />,
+    FormPath: ({ controller }) => (
+      <SuppliesForm
+        register={controller.form.register}
+        control={controller.form.control}
+        uoms={controller.states.uoms}
+        setValue={controller.form.setValue}
+      />
+    ),
     FormName: "Office Supply",
   },
   {
     ItemGrpCode: "103",
-    FormPath: () => <div>Image Supply Form</div>,
+    FormPath: ({ controller }) => (
+      <SuppliesForm
+        register={controller.form.register}
+        control={controller.form.control}
+        uoms={controller.states.uoms}
+        setValue={controller.form.setValue}
+      />
+    ),
     FormName: "Image Supply",
   },
   {
@@ -52,7 +75,7 @@ const FORM_MODE = [
         setValue={controller.form.setValue}
       />
     ),
-    FormName: "",
+    FormName: "General and Pharmacy Medicine",
   },
   {
     ItemGrpCode: "108",
@@ -66,8 +89,15 @@ const FORM_MODE = [
   },
   {
     ItemGrpCode: "110",
-    FormPath: () => <div>Marketing Supplies</div>,
-    FormName: "",
+    FormPath: ({ controller }) => (
+      <SuppliesForm
+        register={controller.form.register}
+        control={controller.form.control}
+        uoms={controller.states.uoms}
+        setValue={controller.form.setValue}
+      />
+    ),
+    FormName: "Marketing Supplies",
   },
   {
     ItemGrpCode: "111",
@@ -76,8 +106,15 @@ const FORM_MODE = [
   },
   {
     ItemGrpCode: "112",
-    FormPath: () => <div>Dental Supplies</div>,
-    FormName: "",
+    FormPath: ({ controller }) => (
+      <SuppliesForm
+        register={controller.form.register}
+        control={controller.form.control}
+        uoms={controller.states.uoms}
+        setValue={controller.form.setValue}
+      />
+    ),
+    FormName: "Dental Supplies",
   },
   {
     ItemGrpCode: "113",
@@ -86,8 +123,15 @@ const FORM_MODE = [
   },
   {
     ItemGrpCode: "114",
-    FormPath: () => <div>Uniform Supplies</div>,
-    FormName: "",
+    FormPath: ({ controller }) => (
+      <SuppliesForm
+        register={controller.form.register}
+        control={controller.form.control}
+        uoms={controller.states.uoms}
+        setValue={controller.form.setValue}
+      />
+    ),
+    FormName: "Uniform Supplies",
   },
   {
     ItemGrpCode: "115",
@@ -131,8 +175,15 @@ const FORM_MODE = [
   },
   {
     ItemGrpCode: "134",
-    FormPath: () => <div>Laboratory</div>,
-    FormName: "",
+    FormPath: ({ controller }) => (
+      <SuppliesForm
+        register={controller.form.register}
+        control={controller.form.control}
+        uoms={controller.states.uoms}
+        setValue={controller.form.setValue}
+      />
+    ),
+    FormName: "Lab Supplies",
   },
   {
     ItemGrpCode: "135",
@@ -191,8 +242,15 @@ const FORM_MODE = [
   },
   {
     ItemGrpCode: "145",
-    FormPath: () => <div>Derma Supplies</div>,
-    FormName: "",
+    FormPath: ({ controller }) => (
+      <SuppliesForm
+        register={controller.form.register}
+        control={controller.form.control}
+        uoms={controller.states.uoms}
+        setValue={controller.form.setValue}
+      />
+    ),
+    FormName: "Derma Supplies",
   },
   {
     ItemGrpCode: "146",
@@ -321,7 +379,14 @@ const FORM_MODE = [
   },
   {
     ItemGrpCode: "161",
-    FormPath: (props) => <GroceryForm {...props} />,
+    FormPath: ({ controller }) => (
+      <SuppliesForm
+        register={controller.form.register}
+        control={controller.form.control}
+        uoms={controller.states.uoms}
+        setValue={controller.form.setValue}
+      />
+    ),
     FormName: "Grocery",
   },
 ];

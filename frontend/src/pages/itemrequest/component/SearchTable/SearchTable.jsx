@@ -42,7 +42,7 @@ const SearchTable = ({ data, itemGroups }) => {
       height: "",
     }),
   };
-  console.log(itemGroups);
+
   return (
     <div className="w-[100%] p-8 my-2 text-[16px] text-[#67757C] bg-white rounded-md  border-2 border-l-4 border-l-red-500">
       <table className="w-[100%] border border-gray-300">
