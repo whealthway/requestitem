@@ -24,7 +24,6 @@ const CreateRequestItem = () => {
   const form = FORM_MODE.find(
     (a) => a.ItemGrpCode === controller.states.selectedItemGroup
   );
-  console.log(form);
   return (
     <div className="text-[#495057]">
       {/* Search and Table Section */}
@@ -127,10 +126,11 @@ const CreateRequestItem = () => {
               form?.FormName ? form.FormName + " Request Form" : "Request Form"
             }
             isTitle={true}
+            className="text-[18px] font-semibold"
           />
           <hr className="border-2 border-gray-300 my-2" />
           <div>
-            <div className="flex flex-wrap p-4 mx-4 my-4 gap-4 justify-start">
+            <div className="flex flex-wrap pt-2 px-2 mx-4 my-4 gap-4 justify-start">
               <RadioButton
                 handleRadioChange={controller.actions.handleRadioChange}
                 requestMethod={controller.states.requestMethod}
@@ -146,15 +146,15 @@ const CreateRequestItem = () => {
               />
               <Label labelName="Bizbox" />
             </div>
-            <div className="flex flex-col p-4 mx-4 my-4 gap-4 justify-start">
+            <div className="flex flex-wrap p-1 mx-4 my-4 gap-4 justify-start">
               {/* Defaul fields if the user want's to continue */}
               {controller.states.requestMethod === "manual" ? (
                 <>
-                  <div>
+                  <div className="flex flex-col p-4 gap-4 w-full justify-start border rounded-md border-l-4 border-l-red-300">
                     <div>
-                      <Label labelName={"Item Group"} />
+                      <Label labelName={"SAP Item Group"} isTitle={true} />
                     </div>
-                    <div>
+                    <div className="w-[270px]">
                       <Controller
                         name="itemGroupCode"
                         defaultValue={null}
@@ -182,26 +182,36 @@ const CreateRequestItem = () => {
               )}
             </div>
             {/* End of defaul fields if the user want's to continue */}
-            <div className="flex justify-end">
-              <div className="flex col-span-4 m-4 item-center">
-                <Button
-                  type="button"
-                  buttonName="Cancel"
-                  onClick={controller.actions.handleCancelButton}
-                  className="bg-gray-400 shadow-gray-300"
-                />
+            {controller.states.selectedItemGroup ? (
+              <div className="flex justify-end">
+                <div className="flex col-span-4 m-4 item-center">
+                  <Button
+                    type="button"
+                    buttonName="Cancel"
+                    onClick={controller.actions.handleCancelButton}
+                    className="bg-gray-400 shadow-gray-300"
+                  />
+                </div>
+                <div className="flex col-span-4 m-4 item-center justify-end">
+                  <Button
+                    type="button"
+                    buttonName={`${
+                      controller.states.isSaving ? "Processing..." : "Submit"
+                    }`}
+                    disabled={controller.states.isSaving}
+                    onClick={controller.actions.handleSubmitButton}
+                  />
+                </div>
               </div>
+            ) : (
               <div className="flex col-span-4 m-4 item-center justify-end">
                 <Button
                   type="button"
-                  buttonName={`${
-                    controller.states.isSaving ? "Processing..." : "Submit"
-                  }`}
-                  disabled={controller.states.isSaving}
-                  onClick={controller.actions.handleSubmitButton}
+                  buttonName="Back to Search"
+                  onClick={controller.actions.handleBackToSearch}
                 />
               </div>
-            </div>
+            )}
           </div>
         </form>
       ) : (
@@ -212,6 +222,7 @@ const CreateRequestItem = () => {
         isOpen={controller.states.isModalOpen}
         onClose={controller.actions.handleCloseModal}
         onConfirm={controller.actions.handleConfirm}
+        onCancel={controller.actions.handleCancel}
       />
     </div>
   );

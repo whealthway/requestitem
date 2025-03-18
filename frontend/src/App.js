@@ -4,7 +4,7 @@ import Header from "./components/ui/Header";
 // import ItemRequest from "./pages/itemrequest/ItemRequest";
 function App() {
   return (
-    <div className="bg-[#eef5f9] font-poppins h-screen">
+    <div className="bg-[#eef5f9] font-poppins h-auto 2xl:h-screen">
       <Header />
       <link rel="stylesheet" href="index.css" />
       <link rel="preconnect" href="https://fonts.googleapis.com" />

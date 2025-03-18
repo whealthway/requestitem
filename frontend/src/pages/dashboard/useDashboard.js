@@ -20,10 +20,8 @@ const useDashboard = () => {
   const getAllItem = async () => {
     try {
       const response = await axios.get(`${getBaseUrl()}/items`);
-      console.log(response);
       if (response.data.code === 200) {
         setAllItems(response.data.data);
-        console.log(allItems);
       }
     } catch (error) {
       alert(error);
@@ -37,7 +35,6 @@ const useDashboard = () => {
         `${getBaseUrl()}/items/search`,
         searchItem
       );
-      console.log("Response:", response.data);
       setSearchData(response.data.data);
       setIsSearching(true);
     } catch (error) {
