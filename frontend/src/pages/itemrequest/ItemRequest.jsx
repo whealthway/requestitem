@@ -25,7 +25,7 @@ const CreateRequestItem = () => {
     (a) => a.ItemGrpCode === controller.states.selectedItemGroup
   );
   return (
-    <div className="text-[#495057]">
+    <div className="text-[#495057] w-">
       {/* Search and Table Section */}
       <div className="justify-center">
         {!controller.states.proceed && (
@@ -91,8 +91,8 @@ const CreateRequestItem = () => {
               ) : (
                 !controller.states.hasData && (
                   <>
-                    <div className="flex flex-wrap justify-start md:justify-center items-center space-x-4 space-y-4 m-4 p-4 ">
-                      <p className="text-red-500 font-semibold text-[21px]">
+                    <div className="flex flex-wrap justify-start md:justify-center items-center my-2 ">
+                      <p className="text-red-500 font-semibold text-[18px]">
                         No data found!
                       </p>
                     </div>
@@ -117,7 +117,7 @@ const CreateRequestItem = () => {
       {/* Form remain hidden till the user want's to proceed */}
       {controller.states.proceed ? (
         <form
-          id
+          id="requestId"
           onSubmit={controller.actions.handleSubmitData}
           className="bg-inherit p-4 border-2 border-l-4 border-l-red-500 border-gray-300 rounded-xl"
         >
@@ -156,7 +156,7 @@ const CreateRequestItem = () => {
                     </div>
                     <div className="w-[270px]">
                       <Controller
-                        name="itemGroupCode"
+                        name={"itemGroupCode"}
                         defaultValue={null}
                         control={controller.form.control}
                         render={({ field }) => (
@@ -165,8 +165,8 @@ const CreateRequestItem = () => {
                             data={controller.states.itemGroup}
                             code_key="item_group_code"
                             value_key="item_group_name"
-                            placeholder="Select Item Group"
                             setState={controller.actions.setSelectedItemGroup}
+                            placeholder="Select Item Group"
                           />
                         )}
                       />
