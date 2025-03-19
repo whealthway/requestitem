@@ -15,6 +15,7 @@ const FORM_MODE = [
         control={controller.form.control}
         uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        reset={controller.form.reset}
       />
     ),
     FormName: "Medical Supply",
@@ -27,6 +28,7 @@ const FORM_MODE = [
         control={controller.form.control}
         uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        reset={controller.form.reset}
       />
     ),
     FormName: "Lab Supply",
@@ -39,6 +41,7 @@ const FORM_MODE = [
         control={controller.form.control}
         uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        reset={controller.form.reset}
       />
     ),
     FormName: "Office Supply",
@@ -51,6 +54,7 @@ const FORM_MODE = [
         control={controller.form.control}
         uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        reset={controller.form.reset}
       />
     ),
     FormName: "Image Supply",
@@ -73,6 +77,7 @@ const FORM_MODE = [
         control={controller.form.control}
         uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        unregister={controller.form.unregister}
       />
     ),
     FormName: "General and Pharmacy Medicine",
@@ -95,6 +100,7 @@ const FORM_MODE = [
         control={controller.form.control}
         uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        reset={controller.form.reset}
       />
     ),
     FormName: "Marketing Supplies",
@@ -112,6 +118,7 @@ const FORM_MODE = [
         control={controller.form.control}
         uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        reset={controller.form.reset}
       />
     ),
     FormName: "Dental Supplies",
@@ -129,6 +136,7 @@ const FORM_MODE = [
         control={controller.form.control}
         uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        reset={controller.form.reset}
       />
     ),
     FormName: "Uniform Supplies",
@@ -181,6 +189,7 @@ const FORM_MODE = [
         control={controller.form.control}
         uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        reset={controller.form.reset}
       />
     ),
     FormName: "Lab Supplies",
@@ -248,6 +257,7 @@ const FORM_MODE = [
         control={controller.form.control}
         uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        reset={controller.form.reset}
       />
     ),
     FormName: "Derma Supplies",
@@ -385,9 +395,10 @@ const FORM_MODE = [
         control={controller.form.control}
         uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        reset={controller.form.reset}
       />
     ),
-    FormName: "Grocery",
+    FormName: "Grocery Supply",
   },
 ];
 

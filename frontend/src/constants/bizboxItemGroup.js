@@ -1,7 +1,6 @@
 import {
+  SuppliesForm,
   GeneralAndPharmacyMedicineForm,
-  LabSupplyForm,
-  OfficeSupplyForm,
 } from "../pages/itemrequest/component/RequestForms";
 
 const BIZBOX_ITEM_GROUP = [
@@ -13,7 +12,7 @@ const BIZBOX_ITEM_GROUP = [
   {
     ItemGrpCode: "LAB",
     FormPath: ({ controller }) => (
-      <LabSupplyForm
+      <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
         uoms={controller.states.uoms}
@@ -57,7 +56,7 @@ const BIZBOX_ITEM_GROUP = [
   {
     ItemGrpCode: "SUP",
     FormPath: ({ controller }) => (
-      <OfficeSupplyForm
+      <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
         uoms={controller.states.uoms}

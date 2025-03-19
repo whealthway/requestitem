@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
-const BUSearchButton = ({ setBU, setItemGroup }) => {
+const BUSearchButton = ({ setBU }) => {
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = (bu) => {
     setBU(bu);
     setIsOpen(false);
-    setItemGroup(bu);
   };
   return (
     <div className="relative">
       {/* Button */}
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`flex gap-2 font-semibold px-4 py-2 text-[18px] h-12 w-32 text-[#d9e8f8] smooth outline-none border-gray-300 border-solid shadow-md shadow-blue-200 items-center justify-center  ${
           isOpen ? "bg-[#117a8b]" : "bg-[#028ee1]"

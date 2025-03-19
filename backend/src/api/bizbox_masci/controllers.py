@@ -13,21 +13,19 @@ from ... import db
 
 def find_bizbox_code_details_controller():
     bb_code = request.get_json()['bbCode'].lower()
-    print(bb_code)
 
     items = iwItems.query
     # item = iwItems.query.get({"PK_iwItems": bb_code})
     results = items.filter(func.lower(iwItems.PK_iwItems) == bb_code).first()
-    print(results.toDict())
     if results:
         result_dict = results.toDict()
-        json_data = {
+        json_data =[ {
             'bb_code': result_dict['PK_iwItems'],
             'item_group': result_dict['FK_mscPrintCategory'],
             'item_description': result_dict['itemdesc']
-        }
+        }]
     else:
-        json_data = {}
+        json_data = []
 
     return jsonify({"code": 200, "data":json_data})
 

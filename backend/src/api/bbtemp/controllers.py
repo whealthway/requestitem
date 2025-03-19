@@ -1,10 +1,10 @@
 from flask import request, jsonify
 from sqlalchemy import func, literal
-from .models import SAPOITBItemGrp, SAPUOM, SAP_OITM_MASCI_11152024, AA_ORDERITEM_PROD_11182024, Item
-import re
-
-
+from .models import SAPOITBItemGrp ,SAPUOM, Item
+from ... import db
+from datetime import datetime
 # def tranform_search_result(search_result):
+
 def search_item_request_controller():
     try:
         search_term = request.get_json()['searchItem'].lower()
@@ -51,6 +51,32 @@ def get_all_uoms_controller():
         })
 
     return jsonify({"code": 200, "data":data})
+
+
+def create_item_controller():
+    supplies_item_group_code = ['101', '102', '104', '103', '110', '112', '114', '134', '145', '161']
+    try:
+        request_item = dict(request.get_json())
+        data = request_item['data']
+
+        new_item = Item (
+            requested_date      = datetime.fromisoformat(data['requestedDate'].replace("Z", "+00:00")),
+            requested_by        = data['requestedBy'],
+            sap_item_group_code = data['sapItemGroupCode'],
+            department          = data['department'],
+            item_description    = data['itemDescription'],
+            purchaseable        = data['purchaseable'],
+            sellable            = data['sellable'],
+            inventorable        = data['inventoryItem'],
+        )
+
+        db.session.add(new_item)
+        db.session.commit()
+
+        return jsonify({"code": 200, "message": "Item created successfully"})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"code":400, "message": f"Unexpected error occur: {e}"})
 
 
 # def get_search_items_sap_controls():

@@ -2,9 +2,8 @@ import React from "react";
 import { Controller } from "react-hook-form";
 import { Label, SelectField, TextField } from "../../../../../components/ui";
 import ITEM_INFO from "../../../../../constants/itemInfo";
-import STERILITY from "../../../../../constants/sterile";
 
-const LabSupplyForm = ({ register, control, uoms }) => {
+const SuppliesForm = ({ register, control, uoms }) => {
   return (
     <div className="my-1 p-4 w-full justify-start border rounded-md border-l-4 border-l-red-300">
       <div className="">
@@ -26,7 +25,7 @@ const LabSupplyForm = ({ register, control, uoms }) => {
           <div className="">
             <TextField
               register={register}
-              name="specialFeatures"
+              name="itemDescription"
               className="w-full"
             />
           </div>
@@ -81,30 +80,28 @@ const LabSupplyForm = ({ register, control, uoms }) => {
           <Label labelName="Item Information:" isTitle={true} />
         </div>
         {ITEM_INFO.map((item, index) => (
-          <>
-            <div className="flex gap-2 item-center items-center" key={index}>
-              <Controller
-                key={item.name}
-                name={`checkboxes[${item.name}]`}
-                control={control}
-                render={({ field }) => (
-                  <>
-                    <input
-                      type="checkbox"
-                      {...field}
-                      checked={field.value || false}
-                      className="h-6 w-6"
-                    />
-                    <Label labelName={item.label} />
-                  </>
-                )}
-              />
-            </div>
-          </>
+          <div className="flex gap-2 item-center items-center" key={index}>
+            <Controller
+              key={index}
+              name={`checkboxes[${item.name}]`}
+              control={control}
+              render={({ field }) => (
+                <>
+                  <input
+                    type="checkbox"
+                    {...field}
+                    checked={field.value || false}
+                    className="h-6 w-6"
+                  />
+                  <Label labelName={item.label} />
+                </>
+              )}
+            />
+          </div>
         ))}
       </div>
     </div>
   );
 };
 
-export default LabSupplyForm;
+export default SuppliesForm;

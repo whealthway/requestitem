@@ -7,10 +7,14 @@ import itemRequestSchema from "../../yup/itemRequestSchema";
 import handleSearch from "../../hooks/useSearch";
 import { useAsyncError } from "react-router-dom";
 import dataTransform from "../../data-mapping/dataTransformer";
+import UnexpectedError from "../../components/custom/UnexpectedError";
+import showNoDataAlert from "../../components/custom/ShowNoDataAlert";
+import SuccessRequest from "../../components/custom/SuccessRequest";
 
 const useItemRequest = () => {
   const {
     register,
+    unregister,
     handleSubmit,
     reset,
     setValue,
@@ -61,6 +65,7 @@ const useItemRequest = () => {
           setSearchData(spResponse.data.data);
         } else {
           setHasData(false);
+          showNoDataAlert();
         }
       } else {
         alert(spResponse.data.message);
@@ -73,7 +78,7 @@ const useItemRequest = () => {
       //   alert(irResponse.data.message);
       // }
     } catch (error) {
-      alert(error);
+      UnexpectedError(error);
     } finally {
       setSearching(false);
       setProceed(false);
@@ -99,34 +104,23 @@ const useItemRequest = () => {
   // Create API
   const handleSubmitData = handleSubmit(async (data) => {
     try {
-      const date = new Date();
-      // console.log(data["itemGroupCode"].value);
-      // const newData = dataTransform(data["itemGroupCode"].value, data);
-      data = {
-        ...data,
-        itemCode: "Test-ItemCode1",
-        dateRequested: date.toISOString(),
-        requestedById: "Test-requestedById",
-        requestedBy: "Test-requestedBy",
-        sellable: data.checkboxes["sellable"] || false,
-        purchaseable: data.checkboxes["purchaseable"] || false,
-        inventoryItem: data.checkboxes["inventorable"] || false,
-      };
-      delete data.checkboxes;
-      console.log(data);
-      //   const response = await axios.post(`${getBaseUrl()}/items`, {
-      //     data: data,
-      //   });
-      //   setIsSaving(true);
+      console.log("DATA: " + JSON.stringify(data));
+      const newData = dataTransform(selectedItemGroup.toLowerCase(), data);
+      delete data["checkboxes"];
+      console.log(newData);
+      // const response = await axios.post(`${getBaseUrl()}/bbtemp/create-item`, {
+      //   data: newData,
+      // });
+      // setIsSaving(true);
 
-      //   if (response.data.code === 200) {
-      //     reset();
-      //     setFields([]);
-      //   } else {
-      //     alert(response.data.message);
-      //   }
+      // if (response.data.code === 200) {
+      //   reset();
+      //   SuccessRequest();
+      // } else {
+      //   alert(response.data.message);
+      // }
     } catch (error) {
-      alert(error);
+      UnexpectedError({ error });
     } finally {
       setIsSaving(false);
     }
@@ -179,7 +173,9 @@ const useItemRequest = () => {
   return {
     form: {
       register,
+      unregister,
       setValue,
+      reset,
       control,
     },
     states: {
@@ -218,3 +214,5 @@ const useItemRequest = () => {
 };
 
 export default useItemRequest;
+
+// Need to use redux for state management and API management to avoid above 250 lines of codes (future improvement - refactoring)

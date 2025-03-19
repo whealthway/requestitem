@@ -8,14 +8,19 @@ import {
 import { Controller } from "react-hook-form";
 import ITEM_INFO from "../../../../../constants/itemInfo";
 import useGeneralAndPharmacyMedicineForm from "./useGeneralAndPharmacyMedicineForm";
+import { MdDelete } from "react-icons/md";
 
 const GeneralAndPharmacyMedicineForm = ({
   register,
   control,
   uoms,
   setValue,
+  unregister,
 }) => {
-  const controller = useGeneralAndPharmacyMedicineForm({ setValue });
+  const controller = useGeneralAndPharmacyMedicineForm({
+    setValue,
+    unregister,
+  });
 
   return (
     <div className="flex flex-col my-1 p-4 w-full justify-start border rounded-md border-l-4 border-l-red-300">
@@ -46,7 +51,7 @@ const GeneralAndPharmacyMedicineForm = ({
             <Label labelName={"Other Descriptors"} />
           </div>
           <div>
-            <TextField register={register} name="otherDescriptors" />
+            <TextField register={register} name="otherDescription" />
           </div>
         </div>
       </div>
@@ -56,7 +61,7 @@ const GeneralAndPharmacyMedicineForm = ({
         <Label labelName="Specification" isTitle={true} />
       </div>
       <div className="flex flex-wrap gap-6 mt-4">
-        <div className="mx-2 p-2 border-2 border-gray-300 rounded-xl bg-slate-200">
+        <div className="mx-2 p-2 border-2 w-full border-gray-300 rounded-xl bg-slate-200">
           <div className="flex flex-row mx-4">
             <Label labelName={"Item Details"} isTitle={true} />
           </div>
@@ -74,34 +79,38 @@ const GeneralAndPharmacyMedicineForm = ({
             />
           </div>
           <div className="flex flex-wrap justify-start mx-4 p-4 gap-1 border-2 border-white rounded-2xl content-center items-center">
-            {controller.states.fields.map((_, index) => (
-              <>
-                <div key={index} className="flex flex-wrap mx-2 gap-4">
+            {controller.states.fields.map((field, index) => (
+              <div key={field.id}>
+                <div className="flex flex-wrap mx-2 my-2 gap-6">
+                  <div className="flex items-end text-[18px] font-semibold">
+                    {index + 1}.
+                  </div>
                   <div className="">
                     <div>
                       <Label
-                        labelName={`Generic Name ${index + 1}`}
-                        className="text-red-500 font-semibold"
+                        labelName={`Generic Name`}
+                        // className="text-red-500 font-semibold"
                       />
                     </div>
                     <div>
                       <TextField
                         register={register}
-                        name={`genericName${index + 1}`}
+                        name={`genericName${field.id}`}
+                        className="w-32"
                       />
                     </div>
                   </div>
                   <div className="">
                     <div>
                       <Label
-                        labelName={`Dose ${index + 1}`}
-                        className="text-green-800 font-semibold"
+                        labelName={`Dose`}
+                        // className="text-green-800 font-semibold"
                       />
                     </div>
                     <div>
                       <TextField
                         register={register}
-                        name={`dose${index + 1}`}
+                        name={`dose${field.id}`}
                         className="w-32"
                       />
                     </div>
@@ -109,33 +118,39 @@ const GeneralAndPharmacyMedicineForm = ({
                   <div>
                     <div>
                       <Label
-                        labelName={`Dosage ${index + 1}`}
-                        className="text-green-800 font-semibold"
+                        labelName={`Dosage`}
+                        // className="text-green-800 font-semibold"
                       />
                     </div>
                     <div>
                       <TextField
                         register={register}
-                        name={`dosage${index + 1}`}
+                        name={`dosage${field.id}`}
                         placeholder="e.g. mg, g, ml, IU etc.."
                         className="w-32"
                       />
                     </div>
                   </div>
-                </div>
-                <div>
-                  <div className="">
-                    <p className="text-[21px] font-bold">
-                      {controller.states.fields.length - 1 !== index ? "+" : ""}
-                    </p>
+                  <div className="flex items-end">
+                    {index + 1 !== 1 ? (
+                      <button
+                        onClick={() =>
+                          controller.actions.handleRemoveFields(field.id)
+                        }
+                      >
+                        <MdDelete className="w-12 h-12 text-red-500" />
+                      </button>
+                    ) : (
+                      <div className="w-12 h-12"></div>
+                    )}
                   </div>
                 </div>
-              </>
+              </div>
             ))}
           </div>
         </div>
       </div>
-      <div className="flex flex-wrap mt-6 mb-4 pb-3 border-b-4 rounded-sm">
+      <div className="flex flex-wrap mt-6 mb-4 pb-3 mx-4 border-b-4 rounded-sm">
         <div className="flex flex-wrap items-center justify-start gap-4">
           <div className="">
             <div>
@@ -147,7 +162,7 @@ const GeneralAndPharmacyMedicineForm = ({
           </div>
           <div>
             <div>
-              <Label labelName="Inventory UOM" />
+              <Label labelName="Packaging Type" />
             </div>
             <div>
               <Controller
@@ -176,26 +191,24 @@ const GeneralAndPharmacyMedicineForm = ({
           <Label labelName="Item Information:" isTitle={true} />
         </div>
         {ITEM_INFO.map((item, index) => (
-          <>
-            <div className="flex gap-2 item-center items-center" key={index}>
-              <Controller
-                key={item.name}
-                name={`checkboxes[${item.name}]`}
-                control={control}
-                render={({ field }) => (
-                  <>
-                    <input
-                      type="checkbox"
-                      {...field}
-                      checked={field.value || false}
-                      className="h-6 w-6"
-                    />
-                    <Label labelName={item.label} />
-                  </>
-                )}
-              />
-            </div>
-          </>
+          <div className="flex gap-2 item-center items-center" key={index}>
+            <Controller
+              key={item.name}
+              name={`checkboxes[${item.name}]`}
+              control={control}
+              render={({ field }) => (
+                <>
+                  <input
+                    type="checkbox"
+                    {...field}
+                    checked={field.value || false}
+                    className="h-6 w-6"
+                  />
+                  <Label labelName={item.label} />
+                </>
+              )}
+            />
+          </div>
         ))}
       </div>
       {/* End of Radio button section */}

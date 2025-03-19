@@ -6,3 +6,6 @@ class QualimedBU(Enum):
     STAROSA = 3
     BULACAN = 4
     ILOILO = 5
+
+class SUPPLIES(Enum):
+    pass

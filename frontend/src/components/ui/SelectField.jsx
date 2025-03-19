@@ -8,8 +8,6 @@ const SelectField = ({
   value_key,
   setState = () => {},
   placeholder,
-  width,
-  height,
 }) => {
   const customStyles = {
     control: (provided, state) => ({
@@ -23,7 +21,7 @@ const SelectField = ({
         borderColor: "rgb(59, 130, 246)",
       },
       width: "270px",
-      height: height || "3rem",
+      height: "3rem",
     }),
     option: (provided, state) => ({
       ...provided,
@@ -48,18 +46,19 @@ const SelectField = ({
     };
   });
 
+  const handleOnchage = (field, selectedOption) => {
+    field.onChange(selectedOption);
+    setState(selectedOption.value);
+  };
+
   return (
     <Select
       {...field}
       value={options.label}
       options={options}
-      onChange={(selectedOption) => {
-        field.onChange(selectedOption);
-        setState(selectedOption.value);
-      }}
+      onChange={(selectedOption) => handleOnchage(field, selectedOption)}
       isSearchable
       placeholder={placeholder}
-      // className="text-[18px] h-12 w-auto shadow-lg shadow-slate-300 rounded-full"
       styles={customStyles}
       components={{
         IndicatorSeparator: () => null,
