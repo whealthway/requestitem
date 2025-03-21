@@ -6,9 +6,9 @@ import os
 from .config import Config
 # from db import db
 
-db = SQLAlchemy()
-migrate = Migrate()
 
+migrate = Migrate()
+db = SQLAlchemy()
 
 def create_app(config_mode):
     

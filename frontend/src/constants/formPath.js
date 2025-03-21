@@ -13,9 +13,10 @@ const FORM_MODE = [
       <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
         reset={controller.form.reset}
+        errors={controller.form.errors}
+        uoms={controller.states.uoms}
       />
     ),
     FormName: "Medical Supply",
@@ -26,9 +27,10 @@ const FORM_MODE = [
       <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
         reset={controller.form.reset}
+        errors={controller.form.errors}
+        uoms={controller.states.uoms}
       />
     ),
     FormName: "Lab Supply",
@@ -39,9 +41,10 @@ const FORM_MODE = [
       <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
         reset={controller.form.reset}
+        errors={controller.form.errors}
+        uoms={controller.states.uoms}
       />
     ),
     FormName: "Office Supply",
@@ -52,9 +55,10 @@ const FORM_MODE = [
       <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
         reset={controller.form.reset}
+        errors={controller.form.errors}
+        uoms={controller.states.uoms}
       />
     ),
     FormName: "Image Supply",
@@ -75,9 +79,11 @@ const FORM_MODE = [
       <GeneralAndPharmacyMedicineForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
         unregister={controller.form.unregister}
+        uoms={controller.states.uoms}
+        errors={controller.form.errors}
+        showError={controller.states.showError}
       />
     ),
     FormName: "General and Pharmacy Medicine",
@@ -98,9 +104,10 @@ const FORM_MODE = [
       <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
         reset={controller.form.reset}
+        errors={controller.form.errors}
+        uoms={controller.states.uoms}
       />
     ),
     FormName: "Marketing Supplies",
@@ -116,9 +123,10 @@ const FORM_MODE = [
       <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
         reset={controller.form.reset}
+        errors={controller.form.errors}
+        uoms={controller.states.uoms}
       />
     ),
     FormName: "Dental Supplies",
@@ -134,9 +142,10 @@ const FORM_MODE = [
       <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
         reset={controller.form.reset}
+        errors={controller.form.errors}
+        uoms={controller.states.uoms}
       />
     ),
     FormName: "Uniform Supplies",
@@ -187,9 +196,10 @@ const FORM_MODE = [
       <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
         reset={controller.form.reset}
+        errors={controller.form.errors}
+        uoms={controller.states.uoms}
       />
     ),
     FormName: "Lab Supplies",
@@ -255,9 +265,10 @@ const FORM_MODE = [
       <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
         reset={controller.form.reset}
+        errors={controller.form.errors}
+        uoms={controller.states.uoms}
       />
     ),
     FormName: "Derma Supplies",
@@ -393,9 +404,10 @@ const FORM_MODE = [
       <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
         reset={controller.form.reset}
+        errors={controller.form.errors}
+        uoms={controller.states.uoms}
       />
     ),
     FormName: "Grocery Supply",

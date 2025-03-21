@@ -8,12 +8,14 @@ const SelectField = ({
   value_key,
   setState = () => {},
   placeholder,
+  fieldState,
+  errorName,
 }) => {
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
       padding: "",
-      borderRadius: "5px", // Rounded corners
+      borderRadius: "5px",
       borderWidth: "1px",
       borderColor: state.isFocused ? "rgb(59, 130, 246)" : "rgb(209, 213, 219)", // Focus color
       boxShadow: state.isFocused ? "0 0 5px rgba(59, 130, 246, 0.5)" : "none",
@@ -52,18 +54,24 @@ const SelectField = ({
   };
 
   return (
-    <Select
-      {...field}
-      value={options.label}
-      options={options}
-      onChange={(selectedOption) => handleOnchage(field, selectedOption)}
-      isSearchable
-      placeholder={placeholder}
-      styles={customStyles}
-      components={{
-        IndicatorSeparator: () => null,
-      }}
-    />
+    <>
+      <Select
+        {...field}
+        value={options.label}
+        options={options}
+        onChange={(selectedOption) => handleOnchage(field, selectedOption)}
+        isSearchable
+        placeholder={placeholder}
+        styles={customStyles}
+        components={{
+          IndicatorSeparator: () => null,
+        }}
+      />
+      {/* <p style={{ color: "red" }}>{fieldState[options.label]?.message}</p> */}
+      {fieldState?.error && (
+        <p style={{ color: "red" }}>{fieldState?.error?.message}</p>
+      )}
+    </>
   );
 };
 

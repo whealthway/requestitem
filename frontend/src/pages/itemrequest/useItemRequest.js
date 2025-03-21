@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import getBaseUrl from "../../utils/baseUrl";
-import { yupResolver } from "@hookform/resolvers/yup";
-import itemRequestSchema from "../../yup/itemRequestSchema";
 import handleSearch from "../../hooks/useSearch";
-import { useAsyncError } from "react-router-dom";
 import dataTransform from "../../data-mapping/dataTransformer";
 import UnexpectedError from "../../components/custom/UnexpectedError";
 import showNoDataAlert from "../../components/custom/ShowNoDataAlert";
@@ -18,18 +15,15 @@ const useItemRequest = () => {
     handleSubmit,
     reset,
     setValue,
+    watch,
     control,
-    // formState: { errors },
-  } = useForm({
-    defaultValues: {
-      checkboxes: [],
-    },
-  });
-  const [searchItem, setSearchItem] = useState({ searchItem: "" });
+    formState: { errors },
+  } = useForm();
+  const [searchItem, setSearchItem] = useState("");
   const [searchData, setSearchData] = useState([]);
   const [hasData, setHasData] = useState(true);
   const [searching, setSearching] = useState(false);
-  const [isSearchBtnClick, setIsSearchBtnClick] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const [proceed, setProceed] = useState(false);
 
@@ -49,40 +43,43 @@ const useItemRequest = () => {
   const handleSearchItem = async () => {
     try {
       setSearching(true);
-      setIsSearchBtnClick(true);
-      // Run both requests in parallel
-      const [spResponse] = await Promise.all([
-        // axios.post(`${getBaseUrl()}/bbtemp/items`, searchItem),
-        axios.post(
-          `${getBaseUrl()}/bizbox_masci/callSP/itemSearch`,
-          searchItem
-        ),
-      ]);
 
-      // SP Response
-      if (spResponse.data.code === 200) {
-        if (spResponse.data.data.length > 0) {
-          setSearchData(spResponse.data.data);
+      if (searchItem !== "") {
+        setShowError(false);
+        const [irResponse, spResponse] = await Promise.all([
+          axios.post(`${getBaseUrl()}/bbtemp/searchItemSAP`, {
+            searchItem: searchItem,
+          }),
+          axios.post(`${getBaseUrl()}/bizbox_masci/callSP/itemSearch`, {
+            searchItem: searchItem,
+          }),
+        ]);
+
+        // SP Response
+        if (spResponse.data.code === 200) {
+          if (spResponse.data.data.length > 0) {
+            // setSearchData(spResponse.data.data);
+          } else {
+            setHasData(false);
+            showNoDataAlert();
+          }
         } else {
-          setHasData(false);
-          showNoDataAlert();
+          alert(spResponse.data.message);
         }
+        if (irResponse.data.code === 200) {
+          // setSearchData(irResponse.data.data);
+        } else {
+          alert(irResponse.data.message);
+        }
+        setSearchData([...irResponse.data.data, ...spResponse.data.data]);
       } else {
-        alert(spResponse.data.message);
+        setShowError(true);
       }
-
-      // Process IR response
-      // if (irResponse.data.code === 200) {
-      //   setSearchCurrent(irResponse.data.data);
-      // } else {
-      //   alert(irResponse.data.message);
-      // }
     } catch (error) {
       UnexpectedError(error);
     } finally {
       setSearching(false);
       setProceed(false);
-      setIsSearchBtnClick(false);
     }
   };
 
@@ -99,26 +96,33 @@ const useItemRequest = () => {
   const handleRadioChange = (event) => {
     setRequestMethod(event.target.value);
     setSelectedItemGroup("");
+    reset();
   };
 
   // Create API
   const handleSubmitData = handleSubmit(async (data) => {
     try {
-      console.log("DATA: " + JSON.stringify(data));
-      const newData = dataTransform(selectedItemGroup.toLowerCase(), data);
-      delete data["checkboxes"];
-      console.log(newData);
-      // const response = await axios.post(`${getBaseUrl()}/bbtemp/create-item`, {
-      //   data: newData,
-      // });
-      // setIsSaving(true);
-
-      // if (response.data.code === 200) {
-      //   reset();
-      //   SuccessRequest();
-      // } else {
-      //   alert(response.data.message);
-      // }
+      console.log(JSON.stringify(data));
+      if (false) {
+        setShowError(true);
+      } else {
+        const newData = dataTransform(selectedItemGroup.toLowerCase(), data);
+        console.log(newData);
+        setShowError(false);
+        const response = await axios.post(
+          `${getBaseUrl()}/bbtemp/create-item-request`,
+          {
+            data: newData,
+          }
+        );
+        setIsSaving(true);
+        if (response.data.code === 200) {
+          reset();
+          SuccessRequest();
+        } else {
+          alert(response.data.message);
+        }
+      }
     } catch (error) {
       UnexpectedError({ error });
     } finally {
@@ -157,6 +161,7 @@ const useItemRequest = () => {
   };
 
   const handleCancel = () => {
+    reset();
     setIsModalOpen(false);
     setHasData(true);
   };
@@ -166,7 +171,9 @@ const useItemRequest = () => {
   };
 
   useEffect(() => {
-    reset();
+    reset(
+      { itemGroupCode: watch("itemGroupCode") } // Preserve 'country' field
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedItemGroup]);
 
@@ -177,23 +184,23 @@ const useItemRequest = () => {
       setValue,
       reset,
       control,
+      errors,
     },
     states: {
-      // errors,
-      searchData,
-      searchItem,
-      requestMethod,
       itemGroup,
-      loading,
       uoms,
+      searchItem,
+      searching,
+      searchData,
       hasData,
+      requestMethod,
       selectedItemGroup,
       proceed,
-      isModalOpen,
-      isSaving,
-      searching,
-      isSearchBtnClick,
       submit,
+      showError,
+      isSaving,
+      loading,
+      isModalOpen,
     },
     actions: {
       handleSearchItem,

@@ -19,7 +19,7 @@ const ConfirmationModal = ({
         </div>
         <div className="flex justify-center items-center m-4 p-2">
           {isSubmit ? (
-            <Label labelName="Are you sure you want to save item request?" />
+            <Label labelName="Are you sure you want to save request item?" />
           ) : (
             <Label labelName="Are you sure you want to cancel item request? All your inputted data will be remove." />
           )}
