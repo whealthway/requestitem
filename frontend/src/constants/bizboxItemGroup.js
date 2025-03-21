@@ -15,8 +15,10 @@ const BIZBOX_ITEM_GROUP = [
       <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        reset={controller.form.reset}
+        errors={controller.form.errors}
+        uoms={controller.states.uoms}
       />
     ),
     FormName: "Laboratory Supply",
@@ -27,8 +29,11 @@ const BIZBOX_ITEM_GROUP = [
       <GeneralAndPharmacyMedicineForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        unregister={controller.form.unregister}
+        uoms={controller.states.uoms}
+        errors={controller.form.errors}
+        showError={controller.states.showError}
       />
     ),
     FormName: "Medicine",
@@ -59,8 +64,10 @@ const BIZBOX_ITEM_GROUP = [
       <SuppliesForm
         register={controller.form.register}
         control={controller.form.control}
-        uoms={controller.states.uoms}
         setValue={controller.form.setValue}
+        reset={controller.form.reset}
+        errors={controller.form.errors}
+        uoms={controller.states.uoms}
       />
     ),
     FormName: "",

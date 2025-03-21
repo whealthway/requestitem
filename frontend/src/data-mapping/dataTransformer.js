@@ -3,8 +3,10 @@ import FORM_MODE from "../constants/formPath";
 const transformMedicineData = (data) => {
   let genericName = "";
   let dosage = "";
+  console.log(data["itemNameCount"]);
   for (let i = 1; i <= data["itemNameCount"]; i++) {
     if (Object.hasOwn(data, `genericName${i}`)) {
+      console.log("HASOWNPROPERTY");
       if (data[`genericName${i}`].trim().length > 0) {
         genericName += ` ${data[`genericName${i}`]} `;
         dosage += ` ${data[`dose${i}`]} ${data[`dosage${i}`]} `;
@@ -18,23 +20,30 @@ const transformMedicineData = (data) => {
 
   const medicineName = `${genericName} (${data["brandName"]}) [${data["manufacturer"]}] ${dosage} ${data["dosageForm"]} ${data["otherDescription"]} `;
 
-  return medicineName;
+  return [medicineName, genericName, dosage];
 };
 
 const dataTransform = (itemGroup, data) => {
-  const date = new Date();
+  const sapItemGroup = data["itemGroupCode"]?.value
+    ? {
+        sapItemGroupCode: data["itemGroupCode"]?.value,
+        sapItemGroupName: data["itemGroupCode"]?.label,
+      }
+    : { sapItemGroupCode: itemGroup, sapItemGroupName: itemGroup };
+
   let transformedData = {
-    requestedBy: "requestor",
-    requestedDate: date.toISOString(),
-    department: "department",
-    itemCode: "itemCode",
-    inventoryUOM: data[""],
-    sapItemGroupCode: itemGroup,
-    sellable: data.checkboxes["sellable"] || false,
-    purchaseable: data.checkboxes["purchaseable"] || false,
-    inventoryItem: data.checkboxes["inventorable"] || false,
+    createdBy: "user name",
+    department: "department name",
+    qualimedBU: "qbu name",
+    inventoryUOMCode: data["inventoryUOM"]?.value,
+    inventoryUOMName: data["inventoryUOM"]?.label,
+    ...sapItemGroup,
+    purchaseable: data.purchaseable ? 1 : 0,
+    sellable: data.sellable ? 1 : 0,
+    inventorable: data.inventorable ? 1 : 0,
+    status: "Pending",
   };
-  delete data["checkboxes"];
+  // delete data["checkboxes"];
   let suppliesCode = [];
 
   // eslint-disable-next-line array-callback-return
@@ -43,26 +52,27 @@ const dataTransform = (itemGroup, data) => {
       suppliesCode.push(item.ItemGrpCode);
     }
   });
-  console.log(suppliesCode);
   if (itemGroup === "med" || itemGroup === "107") {
+    const [medicineName, genericName, dosage] = transformMedicineData(data);
     transformedData = {
       ...transformedData,
-      itemDescription: transformMedicineData(data),
-      itemChunkDetails: {},
-      generalInformation: {},
-      specification: {
-        genericName: "",
-        doses: "",
-        dosage: "",
-        brand: "",
-        dosageForm: "",
-        packagingType: "",
+      itemDescription: medicineName,
+      detailedItem: {
+        genericName: genericName,
+        dosage: dosage,
+        brand: data["brand"],
+        dosageForm: data["dosageForm"],
+        packagingType: data["inventoryUOM"].label,
       },
     };
-  } else if (suppliesCode.includes(itemGroup)) {
+  } else if (suppliesCode.includes(itemGroup) || itemGroup === "sup") {
     transformedData = {
       ...transformedData,
-      ...data,
+      itemDescription: data["itemDescription"],
+      detailedItem: {
+        brand: data["brand"],
+        productCode: data["productCode"],
+      },
     };
   } else {
     console.log("DEFAULT");

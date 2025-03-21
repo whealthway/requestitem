@@ -16,6 +16,8 @@ const GeneralAndPharmacyMedicineForm = ({
   uoms,
   setValue,
   unregister,
+  errors,
+  showError,
 }) => {
   const controller = useGeneralAndPharmacyMedicineForm({
     setValue,
@@ -44,6 +46,7 @@ const GeneralAndPharmacyMedicineForm = ({
           </div>
           <div>
             <TextField register={register} name="manufacturer" />
+            <p style={{ color: "red" }}>{errors?.manufacturer?.message}</p>
           </div>
         </div>
         <div className="">
@@ -82,53 +85,62 @@ const GeneralAndPharmacyMedicineForm = ({
             {controller.states.fields.map((field, index) => (
               <div key={field.id}>
                 <div className="flex flex-wrap mx-2 my-2 gap-6">
-                  <div className="flex items-end text-[18px] font-semibold">
+                  <div className="flex items-center text-[18px] font-semibold">
                     {index + 1}.
                   </div>
                   <div className="">
                     <div>
-                      <Label
-                        labelName={`Generic Name`}
-                        // className="text-red-500 font-semibold"
-                      />
+                      <Label labelName={`Generic Name`} />
+                      <label className="text-red-500 font-semibold">*</label>
                     </div>
                     <div>
                       <TextField
                         register={register}
                         name={`genericName${field.id}`}
+                        isRequired={true}
+                        errorName="Generic Name is required"
                         className="w-32"
                       />
+                      <p style={{ color: "red" }}>
+                        {errors[`genericName${field.id}`]?.message}
+                      </p>
                     </div>
                   </div>
                   <div className="">
                     <div>
-                      <Label
-                        labelName={`Dose`}
-                        // className="text-green-800 font-semibold"
-                      />
+                      <Label labelName={`Dose`} />
+                      <label className="text-red-500 font-semibold">*</label>
                     </div>
                     <div>
                       <TextField
                         register={register}
                         name={`dose${field.id}`}
+                        isRequired={true}
+                        errorName="Dose is required"
                         className="w-32"
                       />
+                      <p style={{ color: "red" }}>
+                        {errors[`dose${field.id}`]?.message}
+                      </p>
                     </div>
                   </div>
                   <div>
                     <div>
-                      <Label
-                        labelName={`Dosage`}
-                        // className="text-green-800 font-semibold"
-                      />
+                      <Label labelName={`Dosage`} />
+                      <label className="text-red-500 font-semibold">*</label>
                     </div>
                     <div>
                       <TextField
                         register={register}
                         name={`dosage${field.id}`}
+                        isRequired={true}
+                        errorName="Dosage Name is required"
                         placeholder="e.g. mg, g, ml, IU etc.."
                         className="w-32"
                       />
+                      <p style={{ color: "red" }}>
+                        {errors[`dosage${field.id}`]?.message}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-end">
@@ -155,23 +167,33 @@ const GeneralAndPharmacyMedicineForm = ({
           <div className="">
             <div>
               <Label labelName={"Dosage Form"} />
+              <label className="text-red-500 font-semibold">*</label>
             </div>
             <div>
-              <TextField register={register} name="dosageForm" placeholder="" />
+              <TextField
+                register={register}
+                name="dosageForm"
+                isRequired={true}
+                errorName="Dosage Form Name is required"
+                placeholder=""
+              />
             </div>
+            <p style={{ color: "red" }}>{errors?.dosageForm?.message}</p>
           </div>
           <div>
             <div>
               <Label labelName="Packaging Type" />
+              <label className="text-red-500 font-semibold">*</label>
             </div>
             <div>
               <Controller
                 name="inventoryUOM"
-                defaultValue={null}
                 control={control}
-                render={({ field }) => (
+                rules={{ required: "Packaging is required" }}
+                render={({ field, fieldState }) => (
                   <SelectField
                     field={field}
+                    fieldState={fieldState}
                     data={uoms}
                     code_key="uom_code"
                     value_key="uom_name"
@@ -192,25 +214,17 @@ const GeneralAndPharmacyMedicineForm = ({
         </div>
         {ITEM_INFO.map((item, index) => (
           <div className="flex gap-2 item-center items-center" key={index}>
-            <Controller
-              key={item.name}
-              name={`checkboxes[${item.name}]`}
-              control={control}
-              render={({ field }) => (
-                <>
-                  <input
-                    type="checkbox"
-                    {...field}
-                    checked={field.value || false}
-                    className="h-6 w-6"
-                  />
-                  <Label labelName={item.label} />
-                </>
-              )}
+            <input
+              {...register(item.name)}
+              type="checkbox"
+              defaultChecked={true}
+              className="h-6 w-6"
             />
+            <Label labelName={item.label} />
           </div>
         ))}
       </div>
+      {showError && <p style={{ color: "red" }}>Choose atleast one</p>}
       {/* End of Radio button section */}
     </div>
   );

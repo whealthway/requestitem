@@ -5,7 +5,6 @@ const useGeneralAndPharmacyMedicineForm = ({ setValue, unregister }) => {
   const [fields, setFields] = useState([
     { id: itemNameCount, field1: "", field2: "", field3: "" },
   ]);
-  console.log(fields);
   const handleAddFields = () => {
     setFields([
       ...fields,
@@ -21,16 +20,15 @@ const useGeneralAndPharmacyMedicineForm = ({ setValue, unregister }) => {
     unregister(`dosage${id}`);
   };
 
+  setValue("itemNameCount", itemNameCount);
   useEffect(() => {
     setValue("itemNameCount", itemNameCount);
-    console.log(itemNameCount);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemNameCount]);
 
   return {
     states: {
       fields,
-      itemNameCount,
     },
     actions: {
       handleAddFields,

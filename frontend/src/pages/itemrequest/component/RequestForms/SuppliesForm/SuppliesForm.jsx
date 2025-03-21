@@ -3,7 +3,7 @@ import { Controller } from "react-hook-form";
 import { Label, SelectField, TextField } from "../../../../../components/ui";
 import ITEM_INFO from "../../../../../constants/itemInfo";
 
-const SuppliesForm = ({ register, control, uoms }) => {
+const SuppliesForm = ({ register, control, errors, uoms }) => {
   return (
     <div className="my-1 p-4 w-full justify-start border rounded-md border-l-4 border-l-red-300">
       <div className="">
@@ -27,7 +27,10 @@ const SuppliesForm = ({ register, control, uoms }) => {
               register={register}
               name="itemDescription"
               className="w-full"
+              isRequired={true}
+              errorName="Item Description is required"
             />
+            <p style={{ color: "red" }}>{errors?.itemDescription?.message}</p>
           </div>
         </div>
         <div className="">
@@ -38,9 +41,11 @@ const SuppliesForm = ({ register, control, uoms }) => {
             name="inventoryUOM"
             defaultValue={null}
             control={control}
-            render={({ field }) => (
+            rules={{ required: "Packaging is required" }}
+            render={({ field, fieldState }) => (
               <SelectField
                 field={field}
+                fieldState={fieldState}
                 data={uoms}
                 code_key="uom_code"
                 value_key="uom_name"
@@ -81,22 +86,13 @@ const SuppliesForm = ({ register, control, uoms }) => {
         </div>
         {ITEM_INFO.map((item, index) => (
           <div className="flex gap-2 item-center items-center" key={index}>
-            <Controller
-              key={index}
-              name={`checkboxes[${item.name}]`}
-              control={control}
-              render={({ field }) => (
-                <>
-                  <input
-                    type="checkbox"
-                    {...field}
-                    checked={field.value || false}
-                    className="h-6 w-6"
-                  />
-                  <Label labelName={item.label} />
-                </>
-              )}
+            <input
+              {...register(item.name)}
+              type="checkbox"
+              defaultChecked={true}
+              className="h-6 w-6"
             />
+            <Label labelName={item.label} />
           </div>
         ))}
       </div>

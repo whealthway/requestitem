@@ -30,18 +30,17 @@ const CreateRequestItem = () => {
       <div className="justify-center">
         {!controller.states.proceed && (
           <>
-            <div className="w-fit p-8 bg-white border-2 space-y-2 border-[#dfdfdf] border-l-4 border-l-red-600 rounded-md">
+            <div className="w-fit p-8 bg-white border-2 border-[#dfdfdf] border-l-4 border-l-red-600 rounded-md">
               <div className="flex justify-start my-1">
                 <label className=" text-[#455A64]  text-[18px]">
-                  SAP AA BB Search
+                  SAP AA BB Search{" "}
+                  <label className="text-red-500 font-semibold">*</label>
                 </label>
               </div>
               <div className="flex items-center">
                 <input
                   onChange={(e) =>
-                    controller.actions.setSearchItem({
-                      searchItem: e.target.value,
-                    })
+                    controller.actions.setSearchItem(e.target.value.trim())
                   }
                   className="p-2 text-[18px] h-12 w-96 border border-gray-300 rounded-l-md outline-none focus:ring-4 focus:ring-[#cadeff] transition duration-200 ease-in-out"
                 />
@@ -58,6 +57,14 @@ const CreateRequestItem = () => {
                   {!controller.states.searching ? <FaSearch /> : <Loading />}
                 </Button>
               </div>
+              {controller.states.showError && (
+                <p
+                  role="alert"
+                  className="text-red-500 text-[14px] font-semibold"
+                >
+                  Required
+                </p>
+              )}
             </div>
 
             <div className="">
