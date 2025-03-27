@@ -2,12 +2,8 @@ import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import getBaseUrl from "../../utils/baseUrl";
 
-const BUSearchButton = ({ setBUSearch }) => {
+const BUSubmitButton = ({ buttonName, disabled, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const handleClick = (bu) => {
-    setBUSearch(bu);
-    setIsOpen(false);
-  };
   return (
     <div className="relative">
       {/* Button */}
@@ -16,18 +12,18 @@ const BUSearchButton = ({ setBUSearch }) => {
         onClick={() => setIsOpen(!isOpen)}
         className={`flex gap-2 font-semibold px-4 py-2 text-[18px] h-12 w-32 text-[#d9e8f8] smooth outline-none border-gray-300 border-solid shadow-md shadow-blue-200 items-center justify-center  ${
           isOpen ? "bg-[#117a8b]" : "bg-[#028ee1]"
-        }  transition rounded-r-lg`}
+        }  transition rounded-lg`}
+        disabled={disabled}
       >
-        <FaSearch className="w-4 h-4" />
-        Search
+        {buttonName}
       </button>
       {/* Dropdown */}{" "}
       {isOpen && (
-        <div className="absolute left-0 mt-2 w-32 bg-white shadow-lg rounded-md border">
+        <div className="absolute left-0 mt-1 w-32 bg-white shadow-lg rounded-md border">
           <div>
             <button
               onClick={() =>
-                handleClick(`${getBaseUrl()}/bizbox-masci/find-bb-code-desc`)
+                onSubmit(`${getBaseUrl()}/bbtemp-masci/create-item-request`)
               }
               className="w-full  px-4 py-2 text-gray-800 hover:bg-blue-300 text-start"
             >
@@ -37,7 +33,7 @@ const BUSearchButton = ({ setBUSearch }) => {
           <div>
             <button
               onClick={() =>
-                handleClick(`${getBaseUrl()}/bizbox-str/find-bb-code-desc`)
+                onSubmit(`${getBaseUrl()}/bbtemp-str/create-item-request`)
               }
               className="w-full px-4 py-2 text-gray-800 hover:bg-blue-300 text-start"
             >
@@ -47,7 +43,7 @@ const BUSearchButton = ({ setBUSearch }) => {
           <div>
             <button
               onClick={() =>
-                handleClick(`${getBaseUrl()}/bizbox-dmmc/find-bb-code-desc`)
+                onSubmit(`${getBaseUrl()}/bbtemp-dmmc/create-item-request`)
               }
               className="w-full px-4 py-2 text-gray-800 hover:bg-blue-300 text-start"
             >
@@ -57,7 +53,7 @@ const BUSearchButton = ({ setBUSearch }) => {
           <div>
             <button
               onClick={() =>
-                handleClick(`${getBaseUrl()}/bizbox-sjdm/find-bb-code-desc`)
+                onSubmit(`${getBaseUrl()}/bbtemp-sjdm/create-item-request`)
               }
               className="w-full px-4 py-2 text-gray-800 hover:bg-blue-300 text-start"
             >
@@ -67,7 +63,7 @@ const BUSearchButton = ({ setBUSearch }) => {
           <div>
             <button
               onClick={() =>
-                handleClick(`${getBaseUrl()}/bizbox-pmvi/find-bb-code-desc`)
+                onSubmit(`${getBaseUrl()}/bbtemp-pmvi/create-item-request`)
               }
               className="w-full px-4 py-2 text-gray-800 hover:bg-blue-300 text-start"
             >
@@ -80,4 +76,4 @@ const BUSearchButton = ({ setBUSearch }) => {
   );
 };
 
-export default BUSearchButton;
+export default BUSubmitButton;

@@ -26,45 +26,12 @@ const GeneralAndPharmacyMedicineForm = ({
 
   return (
     <div className="flex flex-col my-1 p-4 w-full justify-start border rounded-md border-l-4 border-l-red-300">
-      <div>
-        <Label labelName="General Information" isTitle={true} />
-      </div>
-      <div className="flex flex-wrap gap-6 my-4 pb-3 border-b-4 rounded-sm">
-        <div className="">
-          <div className="mx-2">
-            <div>
-              <Label labelName={"Brand Name"} className="" />
-            </div>
-            <div>
-              <TextField register={register} name="brandName" />
-            </div>
-          </div>
-        </div>
-        <div className="">
-          <div>
-            <Label labelName={"Manufacturer"} />
-          </div>
-          <div>
-            <TextField register={register} name="manufacturer" />
-            <p style={{ color: "red" }}>{errors?.manufacturer?.message}</p>
-          </div>
-        </div>
-        <div className="">
-          <div>
-            <Label labelName={"Other Descriptors"} />
-          </div>
-          <div>
-            <TextField register={register} name="otherDescription" />
-          </div>
-        </div>
-      </div>
-
       {/* Start of adding generic name and UOM */}
       <div>
         <Label labelName="Specification" isTitle={true} />
       </div>
-      <div className="flex flex-wrap gap-6 mt-4">
-        <div className="mx-2 p-2 border-2 w-full border-gray-300 rounded-xl bg-slate-200">
+      <div className="flex flex-wrap max-w-fit gap-6 mt-4">
+        <div className="flex flex-col mx-2 p-2 border-2 border-gray-300 rounded-xl bg-slate-200">
           <div className="flex flex-row mx-4">
             <Label labelName={"Item Details"} isTitle={true} />
           </div>
@@ -81,80 +48,88 @@ const GeneralAndPharmacyMedicineForm = ({
               disabled={controller.states.fields.length === 5 ? true : false}
             />
           </div>
-          <div className="flex flex-wrap justify-start mx-4 p-4 gap-1 border-2 border-white rounded-2xl content-center items-center">
+          <div className="flex flex-wrap justify-start p-4 gap-4 content-center items-center">
             {controller.states.fields.map((field, index) => (
-              <div key={field.id}>
-                <div className="flex flex-wrap mx-2 my-2 gap-6">
-                  <div className="flex items-center text-[18px] font-semibold">
-                    {index + 1}.
-                  </div>
-                  <div className="">
+              <div key={field.id} className="border-2 border-white pl-2 ">
+                <div className="flex flex-wrap ml-2 my-2">
+                  <div className="flex flex-row">
                     <div>
-                      <Label labelName={`Generic Name`} />
-                      <label className="text-red-500 font-semibold">*</label>
+                      <div className="">
+                        <div>
+                          <Label labelName={`Generic Name`} />
+                          <label className="text-red-500 font-semibold">
+                            *
+                          </label>
+                        </div>
+                        <div>
+                          <TextField
+                            register={register}
+                            name={`genericName${field.id}`}
+                            isRequired={true}
+                            errorName="Generic Name is required"
+                            className="w-32"
+                          />
+                          <p style={{ color: "red" }}>
+                            {errors[`genericName${field.id}`]?.message}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="">
+                        <div>
+                          <Label labelName={`Dose`} />
+                          <label className="text-red-500 font-semibold">
+                            *
+                          </label>
+                        </div>
+                        <div>
+                          <TextField
+                            register={register}
+                            name={`dose${field.id}`}
+                            isRequired={true}
+                            errorName="Dose is required"
+                            className="w-32"
+                          />
+                          <p style={{ color: "red" }}>
+                            {errors[`dose${field.id}`]?.message}
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        <div>
+                          <Label labelName={`Dosage`} />
+                          <label className="text-red-500 font-semibold">
+                            *
+                          </label>
+                        </div>
+                        <div>
+                          <TextField
+                            register={register}
+                            name={`dosage${field.id}`}
+                            isRequired={true}
+                            errorName="Dosage Name is required"
+                            placeholder="e.g. mg, g, ml, IU etc.."
+                            className="w-32"
+                          />
+                          <p style={{ color: "red" }}>
+                            {errors[`dosage${field.id}`]?.message}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <TextField
-                        register={register}
-                        name={`genericName${field.id}`}
-                        isRequired={true}
-                        errorName="Generic Name is required"
-                        className="w-32"
-                      />
-                      <p style={{ color: "red" }}>
-                        {errors[`genericName${field.id}`]?.message}
-                      </p>
+
+                    <div className="flex items-start">
+                      {index + 1 !== 1 ? (
+                        <button
+                          onClick={() =>
+                            controller.actions.handleRemoveFields(field.id)
+                          }
+                        >
+                          <MdDelete className="w-8 h-8 text-red-500" />
+                        </button>
+                      ) : (
+                        <div className="w-8 h-8"></div>
+                      )}
                     </div>
-                  </div>
-                  <div className="">
-                    <div>
-                      <Label labelName={`Dose`} />
-                      <label className="text-red-500 font-semibold">*</label>
-                    </div>
-                    <div>
-                      <TextField
-                        register={register}
-                        name={`dose${field.id}`}
-                        isRequired={true}
-                        errorName="Dose is required"
-                        className="w-32"
-                      />
-                      <p style={{ color: "red" }}>
-                        {errors[`dose${field.id}`]?.message}
-                      </p>
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <Label labelName={`Dosage`} />
-                      <label className="text-red-500 font-semibold">*</label>
-                    </div>
-                    <div>
-                      <TextField
-                        register={register}
-                        name={`dosage${field.id}`}
-                        isRequired={true}
-                        errorName="Dosage Name is required"
-                        placeholder="e.g. mg, g, ml, IU etc.."
-                        className="w-32"
-                      />
-                      <p style={{ color: "red" }}>
-                        {errors[`dosage${field.id}`]?.message}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-end">
-                    {index + 1 !== 1 ? (
-                      <button
-                        onClick={() =>
-                          controller.actions.handleRemoveFields(field.id)
-                        }
-                      >
-                        <MdDelete className="w-12 h-12 text-red-500" />
-                      </button>
-                    ) : (
-                      <div className="w-12 h-12"></div>
-                    )}
                   </div>
                 </div>
               </div>
@@ -207,7 +182,38 @@ const GeneralAndPharmacyMedicineForm = ({
 
         <input {...register("itemNameCount")} type="number" hidden />
       </div>
-
+      <div>
+        <Label labelName="General Information" isTitle={true} />
+      </div>
+      <div className="flex flex-wrap gap-6 my-4 pb-3 border-b-4 rounded-sm">
+        <div className="">
+          <div className="mx-2">
+            <div>
+              <Label labelName={"Brand Name"} className="" />
+            </div>
+            <div>
+              <TextField register={register} name="brandName" />
+            </div>
+          </div>
+        </div>
+        <div className="">
+          <div>
+            <Label labelName={"Manufacturer"} />
+          </div>
+          <div>
+            <TextField register={register} name="manufacturer" />
+            <p style={{ color: "red" }}>{errors?.manufacturer?.message}</p>
+          </div>
+        </div>
+        <div className="">
+          <div>
+            <Label labelName={"Other Descriptors"} />
+          </div>
+          <div>
+            <TextField register={register} name="otherDescription" />
+          </div>
+        </div>
+      </div>
       <div className="flex flex-wrap gap-8 my-4 items-center">
         <div>
           <Label labelName="Item Information:" isTitle={true} />

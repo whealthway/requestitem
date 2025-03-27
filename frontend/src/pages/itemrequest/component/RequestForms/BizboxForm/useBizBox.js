@@ -7,17 +7,15 @@ const useBizBox = () => {
   const [bbCode, setBbCode] = useState("");
   const [bbCodeData, setBbCodeData] = useState([]);
   const [hasData, setHasData] = useState(true);
-  const [buBranch, setBuBranch] = useState("");
+  const [buBranchSearch, setBuBranchSearch] = useState("");
 
   useEffect(() => {
-    if (buBranch === "") {
-      setBbCodeData([]);
+    if (buBranchSearch === "") {
+      // setBbCodeData([]);
     } else {
+      console.log(buBranchSearch);
       const handleBizboxSearch = async () => {
-        const response = await axios.post(
-          `${getBaseUrl()}/bizbox_masci/findBbcodeDesc`,
-          { bbCode: bbCode }
-        );
+        const response = await axios.post(buBranchSearch, { bbCode: bbCode });
 
         if (response.data.code === 200) {
           if (response.data.data.length > 0) {
@@ -33,21 +31,21 @@ const useBizBox = () => {
         }
       };
       handleBizboxSearch();
-      setBuBranch("");
+      setBuBranchSearch("");
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [buBranch]);
+  }, [buBranchSearch]);
   return {
     states: {
-      buBranch,
+      buBranchSearch,
       bbCode,
       bbCodeData,
       hasData,
     },
     actions: {
       setBbCode,
-      setBuBranch,
+      setBuBranchSearch,
     },
   };
 };

@@ -38,6 +38,8 @@ const useItemRequest = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [buApi, setBUApi] = useState("");
+
   const [submit, setSubmit] = useState(false);
 
   const handleSearchItem = async () => {
@@ -47,10 +49,10 @@ const useItemRequest = () => {
       if (searchItem !== "") {
         setShowError(false);
         const [irResponse, spResponse] = await Promise.all([
-          axios.post(`${getBaseUrl()}/bbtemp/searchItemSAP`, {
+          axios.post(`${getBaseUrl()}/bbtemp-masci/search-item-sap`, {
             searchItem: searchItem,
           }),
-          axios.post(`${getBaseUrl()}/bizbox_masci/callSP/itemSearch`, {
+          axios.post(`${getBaseUrl()}/bizbox-masci/callSP/item-search`, {
             searchItem: searchItem,
           }),
         ]);
@@ -109,12 +111,9 @@ const useItemRequest = () => {
         const newData = dataTransform(selectedItemGroup.toLowerCase(), data);
         console.log(newData);
         setShowError(false);
-        const response = await axios.post(
-          `${getBaseUrl()}/bbtemp/create-item-request`,
-          {
-            data: newData,
-          }
-        );
+        const response = await axios.post(buApi, {
+          data: newData,
+        });
         setIsSaving(true);
         if (response.data.code === 200) {
           reset();
@@ -132,12 +131,18 @@ const useItemRequest = () => {
 
   // Get all API
   useEffect(() => {
-    handleSearch("/bbtemp/itemgroup", "GET", "", setLoading, setItemGroup);
+    handleSearch(
+      "/bbtemp-masci/item-group",
+      "GET",
+      "",
+      setLoading,
+      setItemGroup
+    );
   }, []);
 
   //Get all UOMS
   useEffect(() => {
-    handleSearch("/bbtemp/uoms", "GET", "", setLoading, setUoms);
+    handleSearch("/bbtemp-masci/uoms", "GET", "", setLoading, setUoms);
   }, []);
 
   const handleBackToSearch = () => {
@@ -146,10 +151,12 @@ const useItemRequest = () => {
     setHasData(true);
   };
   const handleCancelButton = () => {
+    setSubmit(false);
     setIsModalOpen(true);
   };
 
-  const handleSubmitButton = () => {
+  const handleSubmitButton = (api) => {
+    setBUApi(api);
     setSubmit(true);
     setIsModalOpen(true);
   };
@@ -216,6 +223,7 @@ const useItemRequest = () => {
       handleBackToSearch,
       setSearchItem,
       setSelectedItemGroup,
+      setBUApi,
     },
   };
 };

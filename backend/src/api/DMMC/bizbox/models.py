@@ -1,12 +1,12 @@
 from sqlalchemy import inspect, create_engine, text
-from ... import db # from __init__.py
+from .... import db # from __init__.py
 
 # ----------------------------------------------- #
 
 # SQL Datatype Objects => https://docs.sqlalchemy.org/en/14/core/types.html
 class iwItems(db.Model):
-
-    __bind_key__ = "bizbox_masci"
+    
+    __bind_key__ = "bizbox_dmmc"
     __tablename__ = 'iwItems'
 
     PK_iwItems  = db.Column(db.NVARCHAR(20), primary_key = True)
@@ -20,6 +20,3 @@ class iwItems(db.Model):
     
     def __repr__(self):
         return "<%r>" % self.PK_iwItems
-
-
-

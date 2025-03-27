@@ -1,61 +1,125 @@
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import getBaseUrl from "../../utils/baseUrl";
+import UnexpectedError from "../../components/custom/UnexpectedError";
+import showNoDataAlert from "../../components/custom/ShowNoDataAlert";
+import { UPDATE_API } from "../../utils/endPoint";
+import SuccessRequest from "../../components/custom/SuccessRequest";
 
 const useDashboard = () => {
-  const [allItems, setAllItems] = useState([]);
+  const {
+    register,
+    unregister,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    control,
+    formState: { errors },
+  } = useForm();
+  const [searchItem, setSearchItem] = useState("");
   const [searchData, setSearchData] = useState([]);
-  const [searchItem, setSearchItem] = useState({
-    searchItem: "",
-  });
-  const [isSearching, setIsSearching] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [hasData, setHasData] = useState(true);
+  const [searching, setSearching] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [buSearch, setBuSearch] = useState("");
+  const [buSubmit, setBuSubmit] = useState("");
 
-  const handleChange = (e) => {
-    setSearchItem({
-      searchItem: e.target.value,
-    });
-  };
+  useEffect(() => {
+    if (buSearch === "") {
+      // setSearchData([]);
+    } else {
+      const handleSearchItem = async () => {
+        try {
+          setSearching(true);
+          console.log("busearch: " + buSearch);
+          if (searchItem !== "") {
+            setShowError(false);
+            const [irResponse, spResponse] = await Promise.all([
+              axios.post(buSearch, {
+                searchItem: searchItem,
+              }),
+              axios.post(`${getBaseUrl()}/bizbox-masci/callSP/item-search`, {
+                searchItem: searchItem,
+              }),
+            ]);
 
-  const getAllItem = async () => {
+            // SP Response
+            if (spResponse.data.code === 200) {
+              if (spResponse.data.data.length > 0) {
+                // setSearchData(spResponse.data.data);
+              } else {
+                setHasData(false);
+                showNoDataAlert();
+              }
+            } else {
+              alert(spResponse.data.message);
+            }
+            if (irResponse.data.code === 200) {
+              // setSearchData(irResponse.data.data);
+            } else {
+              alert(irResponse.data.message);
+            }
+            setSearchData([...irResponse.data.data, ...spResponse.data.data]);
+          } else {
+            setShowError(true);
+          }
+        } catch (error) {
+          UnexpectedError(error);
+        } finally {
+          // setBuSearch("");
+          setSearching(false);
+        }
+      };
+      handleSearchItem();
+      setBuSearch("");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [buSearch]);
+
+  const handleSubmitData = handleSubmit(async (data) => {
     try {
-      const response = await axios.get(`${getBaseUrl()}/items`);
+      console.log(UPDATE_API[buSubmit]);
+      const response = await axios.post(UPDATE_API[buSubmit], {
+        data: data,
+      });
+
       if (response.data.code === 200) {
-        setAllItems(response.data.data);
+        reset();
+        SuccessRequest();
+      } else {
+        alert(response.data.message);
       }
+      setBuSearch(buSearch);
     } catch (error) {
-      alert(error);
+      UnexpectedError(error);
     }
-  };
-  getAllItem();
-  // Search API
-  const handleSearchItem = async () => {
-    try {
-      const response = await axios.post(
-        `${getBaseUrl()}/items/search`,
-        searchItem
-      );
-      setSearchData(response.data.data);
-      setIsSearching(true);
-    } catch (error) {
-      alert(error);
-    } finally {
-      setIsSearching(false);
-    }
-  };
+  });
 
   return {
-    state: {
-      allItems,
-      searchData,
+    form: {
+      register,
+      unregister,
+      setValue,
+      reset,
+      control,
+      errors,
+    },
+    states: {
       searchItem,
-      isSearching,
-      isLoading,
+      searching,
+      searchData,
+      hasData,
+      showError,
+      buSearch,
     },
     actions: {
-      handleSearchItem,
-      handleChange,
-      getAllItem,
+      // handleSearchItem,
+      setSearchItem,
+      setBuSearch,
+      handleSubmitData,
+      setBuSubmit,
     },
   };
 };

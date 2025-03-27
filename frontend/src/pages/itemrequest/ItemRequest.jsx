@@ -13,6 +13,8 @@ import FORM_MODE from "../../constants/formPath";
 import { BizBoxForm } from "./component/RequestForms";
 import { FaSearch } from "react-icons/fa";
 import Loading from "../../components/custom/Loading";
+import BUSearchButton from "../../components/custom/BUSearchButton";
+import BUSubmitButton from "../../components/custom/BUSubmitButton";
 
 const CreateRequestItem = () => {
   const controller = useItemRequest();
@@ -200,13 +202,21 @@ const CreateRequestItem = () => {
                   />
                 </div>
                 <div className="flex col-span-4 m-4 item-center justify-end">
-                  <Button
+                  {/* <Button
                     type="button"
                     buttonName={`${
                       controller.states.isSaving ? "Processing..." : "Submit"
                     }`}
                     disabled={controller.states.isSaving}
                     onClick={controller.actions.handleSubmitButton}
+                  /> */}
+                  <BUSubmitButton
+                    buttonName={`${
+                      controller.states.isSaving ? "Processing..." : "Submit"
+                    }`}
+                    disabled={controller.states.isSaving}
+                    onSubmit={controller.actions.handleSubmitButton}
+                    // setBUSearch={controller.actions.setBUApi}
                   />
                 </div>
               </div>

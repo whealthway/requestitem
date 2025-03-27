@@ -2,6 +2,7 @@ import React from "react";
 import { Controller } from "react-hook-form";
 import { Label, SelectField, TextField } from "../../../../../components/ui";
 import ITEM_INFO from "../../../../../constants/itemInfo";
+import Tooltip from "../../../../../components/custom/Tooltip";
 
 const SuppliesForm = ({ register, control, errors, uoms }) => {
   return (
@@ -10,17 +11,26 @@ const SuppliesForm = ({ register, control, errors, uoms }) => {
         <Label
           labelName="Specification"
           isTitle={true}
-          className="text-[18px]"
+          className="text-[18px] text-re"
         />
       </div>
-      <div className="flex flex-col gap-2 my-4 pb-3 border-b-4 rounded-sm">
+      <div className="flex flex-wrap items-end gap-2 my-4 pb-3 border-b-4 rounded-sm">
         <div className="w-[50%]">
-          <div>
-            <Label labelName="Item Description* " />
-            <label className="text-[12px] text-red-500 font-semibold italic">
+          <div className="flex flex-row justify-start gap-2 ">
+            <div>
+              <Label labelName="Item Description" />
+              <label className="text-red-500">*</label>
+            </div>
+            <div>
+              <Tooltip
+                toolTipContent="example input: STICKER ON SINTRA, 3MM, MATTEFINISH, CUT SIZE
+              9.2CM X 24.6CM"
+              />
+            </div>
+            {/* <label className="text-[12px] text-red-500 font-semibold italic">
               (example input: STICKER ON SINTRA, 3MM, MATTEFINISH, CUT SIZE
               9.2CM X 24.6CM)
-            </label>
+            </label> */}
           </div>
           <div className="">
             <TextField
@@ -35,24 +45,27 @@ const SuppliesForm = ({ register, control, errors, uoms }) => {
         </div>
         <div className="">
           <div>
-            <Label labelName="Packaging Type*" />
+            <Label labelName="Packaging Type" />
+            <label className="text-red-500">*</label>
           </div>
-          <Controller
-            name="inventoryUOM"
-            defaultValue={null}
-            control={control}
-            rules={{ required: "Packaging is required" }}
-            render={({ field, fieldState }) => (
-              <SelectField
-                field={field}
-                fieldState={fieldState}
-                data={uoms}
-                code_key="uom_code"
-                value_key="uom_name"
-                placeholder="Select UOM"
-              />
-            )}
-          />
+          <div className="w-[270px]">
+            <Controller
+              name="inventoryUOM"
+              defaultValue={null}
+              control={control}
+              rules={{ required: "Packaging is required" }}
+              render={({ field, fieldState }) => (
+                <SelectField
+                  field={field}
+                  fieldState={fieldState}
+                  data={uoms}
+                  code_key="uom_code"
+                  value_key="uom_name"
+                  placeholder="Select UOM"
+                />
+              )}
+            />
+          </div>
         </div>
       </div>
       <div className="">
@@ -89,7 +102,7 @@ const SuppliesForm = ({ register, control, errors, uoms }) => {
             <input
               {...register(item.name)}
               type="checkbox"
-              defaultChecked={true}
+              defaultChecked={false}
               className="h-6 w-6"
             />
             <Label labelName={item.label} />

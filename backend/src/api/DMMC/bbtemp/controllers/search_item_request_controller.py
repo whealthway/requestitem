@@ -14,7 +14,7 @@ def SearchItemRequestController():
                 item = u.toDict()
                 item['data_source'] = 'In-Progress Item'
                 json_data.append({
-                    "order_no"         : "",
+                    "id"               : item['item_id'],
                     "data_source"      : "Current Request",
                     "bb_code"          : item['bb_code'],
                     "sap_code"         : item['sap_code'],
