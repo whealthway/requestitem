@@ -1,11 +1,11 @@
 from sqlalchemy import inspect
-from ... import db
+from .... import db
 from datetime import datetime
 
 # ----------------------------------------------- #
 class SAP_ITEM_REQUESTS(db.Model):
 
-    __bind_key__ = "bbtemp"
+    __bind_key__ = "bbtemp_dmmc"
     __tablename__ = 'SAP_ITEM_REQUESTS'
 # Auto Generated Fields:
     item_id           = db.Column(db.Integer, autoincrement=True,primary_key=True)
@@ -42,66 +42,3 @@ class SAP_ITEM_REQUESTS(db.Model):
 
     def __repr__(self):
         return "<%r>" % self.item_id
-    
-class SAPOITBItemGrp(db.Model):
-
-    __bind_key__ = "bbtemp"
-    __tablename__ = 'SAP_OITB_ItemGrp'
-
-    RefNo       = db.Column(db.NVARCHAR(20), primary_key = True)
-    ItemGrpCode = db.Column(db.NVARCHAR(20))
-    ItemGrpName = db.Column(db.NVARCHAR(50))
-
-    def toDict(self):
-        return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
-        
-    def __repr__(self):
-        return "<%r>" % self.RefNo
-
-
-class SAPUOM(db.Model):
-
-    __bind_key__ = "bbtemp"
-    __tablename__ = 'SAP_UOM'
-
-    UOMAbs  = db.Column(db.NVARCHAR(20), primary_key = True)
-    UOMCdoe = db.Column(db.NVARCHAR(20))
-    UOMName = db.Column(db.NVARCHAR(50))
-
-    def toDict(self):
-        return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
-    
-    def __repr__(self):
-        return "<%r>" % self.UOMAbs
-
-class SAP_OITM_MASCI_11152024(db.Model):
-
-    __bind_key__ = "bbtemp"
-    __tablename__ = 'SAP_OITM_MASCI_11152024'
-    
-    RefNo       = db.Column(db.Integer, primary_key = True)
-    SAP_Code    = db.Column(db.NVARCHAR(20))
-    Description = db.Column(db.NVARCHAR(500))
-    ItemGroup   = db.Column(db.NVARCHAR(25))
-
-    def toDict(self):
-        return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
-    
-    def __repr__(self):
-        return "<%r>" % self.RefNo
-
-class AA_ORDERITEM_PROD_11182024(db.Model):
-
-    __bind_key__ = "bbtemp"
-    __tablename__ = 'AA_ORDERITEM_PROD_11182024'
-
-    ID          = db.Column(db.NVARCHAR(500), primary_key=True)
-    CODE        = db.Column(db.NVARCHAR(500))
-    DESCRIPTION = db.Column(db.NVARCHAR(500))
-
-
-    def toDict(self):
-        return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
-    
-    def __repr__(self):
-        return "<%r>" % self.ID

@@ -3,9 +3,17 @@ from urllib.parse import quote_plus
 
 # Define database connection details
 DB_CREDENTIALS = {
-    "qreports": ("10.20.0.10", "57020", "Qreports", "sa", "B!Zb0x@DmInALI"),
-    "bbtemp": ("10.20.0.10", "57020", "BBTemp", "sa", "B!Zb0x@DmInALI"),
     "bizbox_masci":("10.20.0.10", "57020", "BIZBOX_MASCI", "sa", "B!Zb0x@DmInALI"),
+    "qreports_masci": ("10.20.0.10", "57020", "Qreports", "sa", "B!Zb0x@DmInALI"),
+    "bbtemp_masci": ("10.20.0.10", "57020", "BBTemp", "sa", "B!Zb0x@DmInALI"),
+    "bizbox_str":("10.20.36.10", "53965", "BIZBOX_STR", "sa", "B!Zb0x@DmInALI"),
+    "bbtemp_str": ("10.20.36.10", "53965", "BBTemp", "sa", "B!Zb0x@DmInALI"),
+    "bizbox_sjdm":("10.20.24.10", "51996", "BIZBOX_SJDM", "sa", "B!Zb0x@DmInALI"),
+    "bbtemp_sjdm": ("10.20.24.10", "51996", "BBTemp", "sa", "B!Zb0x@DmInALI"),
+    "bizbox_dmmc":("10.20.10.10", "49878", "hs8_dmmc", "sa", "Admin@mis"),
+    "bbtemp_dmmc": ("10.20.10.10", "49878", "BBTemp", "sa", "Admin@mis"),
+    "bizbox_pmvi":("10.20.193.28", "57418", "BIZBOX_PROD", "sa", "B!Zb0x@DmInALI"),
+    "bbtemp_pmvi": ("10.20.193.28", "57418", "BBTemp", "sa", "B!Zb0x@DmInALI"),
 }
 
 def create_db_uri(server, port, database, username, password):

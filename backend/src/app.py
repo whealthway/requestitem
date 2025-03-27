@@ -10,8 +10,16 @@ def hello():
     return "Hello World!"
 
 # Applications Routes
-from .api.bbtemp  import urls
-from .api.bizbox_masci import urls
+from .api.MASCI.bbtemp import urls
+from .api.MASCI.bizbox import urls
+from .api.STR.bbtemp  import urls
+from .api.STR.bizbox import urls
+from .api.SJDM.bbtemp  import urls
+from .api.SJDM.bizbox import urls
+from .api.PMVI.bbtemp  import urls
+from .api.PMVI.bizbox import urls
+from .api.DMMC.bbtemp  import urls
+from .api.DMMC.bizbox import urls
 # from .items import urls
 
 if __name__ == "__main__":

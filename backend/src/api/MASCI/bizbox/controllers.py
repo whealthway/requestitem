@@ -1,7 +1,7 @@
 from flask import request, jsonify
-from .models import iwItems
+from .models import iwItems, MSC_BRANCHES
 from sqlalchemy import func, text
-from ... import db
+from .... import db
 
 def find_bizbox_code_details_controller():
     bb_code = request.get_json()['bbCode'].lower()
@@ -20,6 +20,18 @@ def find_bizbox_code_details_controller():
         json_data = []
 
     return jsonify({"code": 200, "data":json_data})
+def get_msc_branches_controller():
+    try: 
+        item_groups = MSC_BRANCHES.query.all()
+        data = []
+        for item_group in item_groups: 
+            item_group_dict = item_group.toDict()
+            data.append(item_group_dict)
+
+        return jsonify({"code": 200, "data": data})
+    
+    except Exception as e:
+        return jsonify({"code":400, "message": f"Unexpected error occur: {e}"})
 
 
 def call_stored_procedure_controller():
@@ -41,7 +53,7 @@ def call_stored_procedure_controller():
                         'sap_code':       item[3],
                         'aa_order_item':  item[4],
                         'aa_item_master': item[5],
-                        'description':    item[6]               
+                        'item_description':    item[6]               
                     }
                 )
 

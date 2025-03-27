@@ -1,51 +1,70 @@
 import React from "react";
-import Label from "../../components/ui/Label";
-import Button from "../../components/ui/Button";
-import useDashboard from "./useDashboard";
-import DashboardTable from "./dashboardtable/DashboardTable";
-import DashboardGraph from "./dashboardgraph/DashboardGraph";
+import useItemRequest from "./useDashboard";
+
+import SearchTable from "./component/SearchTable";
+import BURequestSearchButton from "../../components/custom/BURequestSearchButton";
 
 const Dashboard = () => {
-  const controller = useDashboard();
+  const controller = useItemRequest();
+
+  if (controller.states.loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div className="">
-      <div className="border border-gray-300 p-8 m-4">
-        <div className="text-[24px]">Dashboard</div>
-        <div>
-          <div className="flex flex-wrap sm:col-span-2 md:col-span-3 space-x-8 space-y-2 items-center">
-            <Label labelName={"Search item"} />
-            <input
-              onChange={controller.actions.handleChange}
-              className="text-[12px] p-[8px] h-[32px] w-[100%] md:h-[56px] md:w-[300px] md:p-[16px] md:text-[18px] lg:text-[20px] lg:p-[20px] lg:w-[400px] lg:h-[64px] outline-none border border-gray-300 shadow-lg rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out"
+    <>
+      <div className="w-fit p-8 bg-white border-2 border-[#dfdfdf] border-l-4 border-l-red-600 rounded-md">
+        <div className="flex justify-start my-1">
+          <label className=" text-[#455A64]  text-[18px]">
+            SAP AA BB Search{" "}
+            <label className="text-red-500 font-semibold">*</label>
+          </label>
+        </div>
+        <div className="flex items-center">
+          <input
+            onChange={(e) =>
+              controller.actions.setSearchItem(e.target.value.trim())
+            }
+            className="p-2 text-[18px] h-12 w-96 border border-gray-300 rounded-l-md outline-none focus:ring-4 focus:ring-[#cadeff] transition duration-200 ease-in-out"
+          />
+
+          <BURequestSearchButton
+            setBUSearch={controller.actions.setBuSearch}
+            setBuSubmit={controller.actions.setBuSubmit}
+            // onSearch={controller.actions.handleSearchItem}
+          />
+        </div>
+        {controller.states.showError && (
+          <p role="alert" className="text-red-500 text-[14px] font-semibold">
+            Required
+          </p>
+        )}
+      </div>
+
+      <div className="">
+        {controller.states.searchData.length !== 0 ? (
+          <>
+            <SearchTable
+              data={controller.states.searchData}
+              itemGroups={controller.states.buSearch}
+              rowsPerPage={15}
+              handleSubmitData={controller.actions.handleSubmitData}
+              register={controller.form.register}
             />
-            <Button
-              buttonName={"Search"}
-              onClick={controller.actions.handleSearchItem}
-            />
-          </div>
-          <div className="sm:col-span-2 md:col-span-3">
-            {controller.state.allItems.length !== 0 ? (
-              <DashboardTable
-                data={controller.state.allItems}
-                rowsPerPage={10}
-              />
-            ) : (
-              <div className="flex flex-wrap sm:col-span-2 text-red-400 text-[21px] md:col-span-3 space-x-8 space-y-2 content-center items-center">
-                No result
+          </>
+        ) : (
+          !controller.states.hasData && (
+            <>
+              <div className="flex flex-wrap justify-start md:justify-center items-center my-2 ">
+                <p className="text-red-500 font-semibold text-[18px]">
+                  No data found!
+                </p>
               </div>
-            )}
-          </div>
-        </div>
+            </>
+          )
+        )}
       </div>
-      <div className="border border-gray-300 p-8 m-4">
-        {/* GRAPH */}
-        <div className="text-[24px]">Graph</div>
-        <div>
-          <DashboardGraph />
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 

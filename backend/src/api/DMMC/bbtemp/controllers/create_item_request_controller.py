@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from .... import db
+from ..... import db
 import json
 from datetime import datetime
 from ..models import SAP_ITEM_REQUESTS
