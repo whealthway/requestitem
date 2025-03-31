@@ -11,7 +11,6 @@ import {
 import useItemRequest from "./useItemRequest";
 import FORM_MODE from "../../constants/formPath";
 import { BizBoxForm } from "./component/RequestForms";
-import { FaSearch } from "react-icons/fa";
 import Loading from "../../components/custom/Loading";
 import BUSearchButton from "../../components/custom/BUSearchButton";
 import BUSubmitButton from "../../components/custom/BUSubmitButton";
@@ -46,18 +45,26 @@ const CreateRequestItem = () => {
                   }
                   className="p-2 text-[18px] h-12 w-96 border border-gray-300 rounded-l-md outline-none focus:ring-4 focus:ring-[#cadeff] transition duration-200 ease-in-out"
                 />
-                <Button
-                  buttonName={
-                    !controller.states.searching
-                      ? "Search Item"
-                      : "Processing..."
-                  }
-                  onClick={controller.actions.handleSearchItem}
-                  className="rounded-r-md rounded-l-sm"
+                {!controller.states.searching ? (
+                  <BUSearchButton
+                    setBUSearch={controller.actions.setBuSearch}
+                    isBizbox={false}
+                  />
+                ) : (
+                  <Button
+                    buttonName="Processing..."
+                    disabled={controller.states.searching}
+                    className="rounded-r-md rounded-l-sm"
+                  >
+                    <Loading />
+                  </Button>
+                )}
+                {/* onClick={controller.actions.handleSearchItem}
+                  
                   disabled={controller.states.searching}
-                >
-                  {!controller.states.searching ? <FaSearch /> : <Loading />}
-                </Button>
+                
+                  {!controller.states.searching ? <FaSearch /> :} */}
+                {/* </Button> */}
               </div>
               {controller.states.showError && (
                 <p
@@ -237,7 +244,6 @@ const CreateRequestItem = () => {
       <ConfirmationModal
         isSubmit={controller.states.submit}
         isOpen={controller.states.isModalOpen}
-        onClose={controller.actions.handleCloseModal}
         onConfirm={controller.actions.handleConfirm}
         onCancel={controller.actions.handleCancel}
       />

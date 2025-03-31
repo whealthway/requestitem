@@ -16,6 +16,7 @@ def UpdateItemCodeController():
         items = SAP_ITEM_REQUESTS.query
 
         items.filter_by(item_id=data['itemId']).update({
+            "item_code"        : data['itemCode'],
             "sap_code"         : data['itemCode'],
             "aa_order_item"    : data['itemCode'],
             "aa_item_master"   : data['itemCode'],

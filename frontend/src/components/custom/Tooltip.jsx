@@ -28,7 +28,7 @@ const Tooltip = ({ toolTipContent }) => {
 
       {visible && (
         <div
-          className="absolute bg-white bottom-full left-1/2 -translate-x-1/2 mb-2 min-w-[150px] max-w-xs sm:max-w-sm px-3 py-2 text-[11px] text-red-500 rounded-lg shadow-lg z-50"
+          className="absolute bg-white bottom-full left-1/2 -translate-x-1/2 mb-2 font-semibold min-w-[150px] max-w-xs sm:max-w-sm px-3 py-2 text-[11px] text-blue-500 rounded-lg shadow-lg z-50"
           role="tooltip"
         >
           {toolTipContent}

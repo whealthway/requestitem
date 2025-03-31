@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { FaSearch } from "react-icons/fa";
 import getBaseUrl from "../../utils/baseUrl";
 
 const BUSubmitButton = ({ buttonName, disabled, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="relative">
+    <div className="relative inline-block">
       {/* Button */}
       <button
         type="button"
@@ -19,9 +18,10 @@ const BUSubmitButton = ({ buttonName, disabled, onSubmit }) => {
       </button>
       {/* Dropdown */}{" "}
       {isOpen && (
-        <div className="absolute left-0 mt-1 w-32 bg-white shadow-lg rounded-md border">
+        <div className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 mt-1 w-32 bg-white shadow-lg rounded-md border">
           <div>
             <button
+              type="button"
               onClick={() =>
                 onSubmit(`${getBaseUrl()}/bbtemp-masci/create-item-request`)
               }
@@ -32,6 +32,7 @@ const BUSubmitButton = ({ buttonName, disabled, onSubmit }) => {
           </div>
           <div>
             <button
+              type="button"
               onClick={() =>
                 onSubmit(`${getBaseUrl()}/bbtemp-str/create-item-request`)
               }
@@ -42,6 +43,7 @@ const BUSubmitButton = ({ buttonName, disabled, onSubmit }) => {
           </div>
           <div>
             <button
+              type="button"
               onClick={() =>
                 onSubmit(`${getBaseUrl()}/bbtemp-dmmc/create-item-request`)
               }
@@ -52,6 +54,7 @@ const BUSubmitButton = ({ buttonName, disabled, onSubmit }) => {
           </div>
           <div>
             <button
+              type="button"
               onClick={() =>
                 onSubmit(`${getBaseUrl()}/bbtemp-sjdm/create-item-request`)
               }
@@ -62,6 +65,7 @@ const BUSubmitButton = ({ buttonName, disabled, onSubmit }) => {
           </div>
           <div>
             <button
+              type="button"
               onClick={() =>
                 onSubmit(`${getBaseUrl()}/bbtemp-pmvi/create-item-request`)
               }
