@@ -31,7 +31,7 @@ const CREATE_API = {
 };
 
 const UPDATE_API = {
-  masci: `${getBaseUrl()}/bbtemp-masci/update-item-sap`,
+  masci: `${getBaseUrl()}/bbtemp-masci/update-item-request`,
   str: `${getBaseUrl()}/bbtemp-str/update-item-request`,
   sjdm: `${getBaseUrl()}/bbtemp-sjdm/update-item-request`,
   dmmc: `${getBaseUrl()}/bbtemp-dmmc/update-item-request`,

@@ -10,7 +10,7 @@ class SAP_ITEM_REQUESTS(db.Model):
 # Auto Generated Fields:
     item_id           = db.Column(db.Integer, autoincrement=True,primary_key=True)
 # Input by User Fields:
-    item_code           = db.Column(db.NVARCHAR(100))
+    item_code           = db.Column(db.NVARCHAR(100), unique=True)
     data_source         = db.Column(db.NVARCHAR(100))
     bb_code             = db.Column(db.NVARCHAR(100))
     sap_code            = db.Column(db.NVARCHAR(100))

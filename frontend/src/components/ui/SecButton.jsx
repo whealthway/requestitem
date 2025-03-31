@@ -2,10 +2,10 @@ import React from "react";
 
 const SecButton = ({
   type,
-  buttonName,
   btnColor,
   onClick,
   disabled,
+  buttonName,
   children,
 }) => {
   return (

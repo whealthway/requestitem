@@ -7,8 +7,13 @@ import dataTransform from "../../data-mapping/dataTransformer";
 import UnexpectedError from "../../components/custom/UnexpectedError";
 import showNoDataAlert from "../../components/custom/ShowNoDataAlert";
 import SuccessRequest from "../../components/custom/SuccessRequest";
+import { useSearchParams } from "react-router-dom";
+import { DATA_UPON_LOADING_API } from "../../utils/endPoint";
 
 const useItemRequest = () => {
+  const [searchParams] = useSearchParams();
+
+  console.log(searchParams.get("qualimed_bu"));
   const {
     register,
     unregister,
@@ -23,6 +28,7 @@ const useItemRequest = () => {
   const [searchData, setSearchData] = useState([]);
   const [hasData, setHasData] = useState(true);
   const [searching, setSearching] = useState(false);
+  const [buSearch, setBuSearch] = useState("");
   const [showError, setShowError] = useState(false);
 
   const [proceed, setProceed] = useState(false);
@@ -42,51 +48,63 @@ const useItemRequest = () => {
 
   const [submit, setSubmit] = useState(false);
 
-  const handleSearchItem = async () => {
-    try {
-      setSearching(true);
+  useEffect(() => {
+    if (buSearch === "") {
+    } else {
+      const handleSearchItem = async () => {
+        try {
+          setSearching(true);
 
-      if (searchItem !== "") {
-        setShowError(false);
-        const [irResponse, spResponse] = await Promise.all([
-          axios.post(`${getBaseUrl()}/bbtemp-masci/search-item-sap`, {
-            searchItem: searchItem,
-          }),
-          axios.post(`${getBaseUrl()}/bizbox-masci/callSP/item-search`, {
-            searchItem: searchItem,
-          }),
-        ]);
+          if (searchItem !== "") {
+            console.log("buSearch: " + buSearch);
+            setShowError(false);
+            const [irResponse, spResponse] = await Promise.all([
+              axios.post(buSearch, {
+                searchItem: searchItem,
+              }),
+              axios.post(`${getBaseUrl()}/bizbox-masci/callSP/item-search`, {
+                searchItem: searchItem,
+              }),
+            ]);
 
-        // SP Response
-        if (spResponse.data.code === 200) {
-          if (spResponse.data.data.length > 0) {
-            // setSearchData(spResponse.data.data);
+            // SP Response
+            if (spResponse.data.code === 200) {
+              if (spResponse.data.data.length > 0) {
+                // setSearchData(spResponse.data.data);
+              } else {
+                setHasData(false);
+                showNoDataAlert();
+              }
+            } else {
+              alert(spResponse.data.message);
+            }
+            if (irResponse.data.code === 200) {
+              // setSearchData(irResponse.data.data);
+            } else {
+              alert(irResponse.data.message);
+            }
+            setSearchData([...irResponse.data.data, ...spResponse.data.data]);
           } else {
-            setHasData(false);
-            showNoDataAlert();
+            setShowError(true);
           }
-        } else {
-          alert(spResponse.data.message);
+        } catch (error) {
+          UnexpectedError(error);
+        } finally {
+          setSearching(false);
+          setProceed(false);
         }
-        if (irResponse.data.code === 200) {
-          // setSearchData(irResponse.data.data);
-        } else {
-          alert(irResponse.data.message);
-        }
-        setSearchData([...irResponse.data.data, ...spResponse.data.data]);
-      } else {
-        setShowError(true);
-      }
-    } catch (error) {
-      UnexpectedError(error);
-    } finally {
-      setSearching(false);
-      setProceed(false);
+      };
+
+      handleSearchItem();
+      setBuSearch("");
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [buSearch]);
 
   const handleYesProceed = () => {
     setProceed(true);
+    setSearchItem({ searchItem: "" });
+    setSearchData([]);
   };
 
   const handleNotProceed = () => {
@@ -104,12 +122,10 @@ const useItemRequest = () => {
   // Create API
   const handleSubmitData = handleSubmit(async (data) => {
     try {
-      console.log(JSON.stringify(data));
       if (false) {
         setShowError(true);
       } else {
         const newData = dataTransform(selectedItemGroup.toLowerCase(), data);
-        console.log(newData);
         setShowError(false);
         const response = await axios.post(buApi, {
           data: newData,
@@ -126,6 +142,7 @@ const useItemRequest = () => {
       UnexpectedError({ error });
     } finally {
       setIsSaving(false);
+      reset();
     }
   });
 
@@ -150,6 +167,7 @@ const useItemRequest = () => {
     setProceed(false);
     setHasData(true);
   };
+
   const handleCancelButton = () => {
     setSubmit(false);
     setIsModalOpen(true);
@@ -171,10 +189,6 @@ const useItemRequest = () => {
     reset();
     setIsModalOpen(false);
     setHasData(true);
-  };
-
-  const handleCloseModal = () => {
-    reset();
   };
 
   useEffect(() => {
@@ -210,13 +224,11 @@ const useItemRequest = () => {
       isModalOpen,
     },
     actions: {
-      handleSearchItem,
       handleRadioChange,
       handleYesProceed,
       handleNotProceed,
       handleSubmitButton,
       handleCancelButton,
-      handleCloseModal,
       handleConfirm,
       handleCancel,
       handleSubmitData,
@@ -224,6 +236,7 @@ const useItemRequest = () => {
       setSearchItem,
       setSelectedItemGroup,
       setBUApi,
+      setBuSearch,
     },
   };
 };

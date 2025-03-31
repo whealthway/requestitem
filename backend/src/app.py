@@ -1,13 +1,20 @@
 import os
 
 # App Initialization
+from flask import redirect, request
 from . import create_app # from __init__ file
 app = create_app(os.getenv("CONFIG_MODE"))
 
 # Hello World!
 @app.route('/')
 def hello():
-    return "Hello World!"
+    # data =  dict(request.get_json())
+    # user_id = data['user_id']
+    # qualimed_bu = data['qualimed_bu']
+    # department = data['department']
+
+    # return redirect(f'http://localhost:3000/item-request-form?user_id={user_id}&qualimed_bu={qualimed_bu}&department={department}')
+    return redirect(f'http://localhost:3000/item-request-form?user_id=test_user_id&qualimed_bu=test_qualimed_bu&department=test_department')
 
 # Applications Routes
 from .api.MASCI.bbtemp import urls
