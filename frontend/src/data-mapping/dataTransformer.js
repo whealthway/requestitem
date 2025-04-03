@@ -23,7 +23,7 @@ const transformMedicineData = (data) => {
   return [medicineName, genericName, dosage];
 };
 
-const dataTransform = (itemGroup, data) => {
+const dataTransform = (itemGroup, data, user, bu) => {
   const sapItemGroup = data["itemGroupCode"]?.value
     ? {
         sapItemGroupCode: data["itemGroupCode"]?.value,
@@ -32,9 +32,9 @@ const dataTransform = (itemGroup, data) => {
     : { sapItemGroupCode: itemGroup, sapItemGroupName: itemGroup };
 
   let transformedData = {
-    createdBy: "user name",
+    createdBy: user,
     department: "department name",
-    qualimedBU: "qbu name",
+    qualimedBU: bu,
     inventoryUOMCode: data["inventoryUOM"]?.value,
     inventoryUOMName: data["inventoryUOM"]?.label,
     ...sapItemGroup,

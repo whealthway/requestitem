@@ -29,6 +29,7 @@ const BizBoxForm = ({ controller }) => {
             className="rounded-none rounded-l-md"
           />
           <BUSearchButton
+            allowedBU={controller.states.qualimedbu}
             setBUSearch={bbController.actions.setBuBranchSearch}
           />
         </div>

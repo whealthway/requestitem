@@ -7,13 +7,18 @@ import dataTransform from "../../data-mapping/dataTransformer";
 import UnexpectedError from "../../components/custom/UnexpectedError";
 import showNoDataAlert from "../../components/custom/ShowNoDataAlert";
 import SuccessRequest from "../../components/custom/SuccessRequest";
-import { useSearchParams } from "react-router-dom";
-import { DATA_UPON_LOADING_API } from "../../utils/endPoint";
+import { redirect, useSearchParams } from "react-router-dom";
 
 const useItemRequest = () => {
   const [searchParams] = useSearchParams();
-
-  console.log(searchParams.get("qualimed_bu"));
+  const user = searchParams.get("user_id");
+  console.log(user);
+  // const qualimedbu = searchParams.get("qualimed_bu");
+  let qualimedbu = searchParams.get("qualimed_bu");
+  qualimedbu = qualimedbu.replace(/([{,])(\s*)(\w+)\s*:/g, '$1"$3":');
+  qualimedbu = JSON.parse(qualimedbu);
+  console.log(typeof qualimedbu);
+  console.log(qualimedbu);
   const {
     register,
     unregister,
@@ -34,6 +39,7 @@ const useItemRequest = () => {
   const [proceed, setProceed] = useState(false);
 
   const [selectedItemGroup, setSelectedItemGroup] = useState();
+  const [selectedBU, setSelectedBU] = useState("");
 
   const [itemGroup, setItemGroup] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,22 +74,22 @@ const useItemRequest = () => {
             ]);
 
             // SP Response
-            if (spResponse.data.code === 200) {
-              if (spResponse.data.data.length > 0) {
-                // setSearchData(spResponse.data.data);
-              } else {
-                setHasData(false);
-                showNoDataAlert();
-              }
-            } else {
+            if (spResponse.data.code !== 200) {
               alert(spResponse.data.message);
             }
-            if (irResponse.data.code === 200) {
-              // setSearchData(irResponse.data.data);
-            } else {
+            if (irResponse.data.code !== 200) {
               alert(irResponse.data.message);
             }
+
+            if (
+              irResponse.data.data.length === 0 &&
+              spResponse.data.data.length === 0
+            ) {
+              setHasData(false);
+              showNoDataAlert();
+            }
             setSearchData([...irResponse.data.data, ...spResponse.data.data]);
+            console.log("data: " + searchData);
           } else {
             setShowError(true);
           }
@@ -125,8 +131,14 @@ const useItemRequest = () => {
       if (false) {
         setShowError(true);
       } else {
-        const newData = dataTransform(selectedItemGroup.toLowerCase(), data);
+        let newData = dataTransform(
+          selectedItemGroup.toLowerCase(),
+          data,
+          user,
+          selectedBU
+        );
         setShowError(false);
+        console.log(buApi);
         const response = await axios.post(buApi, {
           data: newData,
         });
@@ -173,7 +185,8 @@ const useItemRequest = () => {
     setIsModalOpen(true);
   };
 
-  const handleSubmitButton = (api) => {
+  const handleSubmitButton = (api, bu) => {
+    setSelectedBU(bu);
     setBUApi(api);
     setSubmit(true);
     setIsModalOpen(true);
@@ -183,12 +196,14 @@ const useItemRequest = () => {
     submit ? handleSubmitData() : setProceed(false);
     setIsModalOpen(false);
     setHasData(true);
+    setSelectedBU("");
   };
 
   const handleCancel = () => {
     reset();
     setIsModalOpen(false);
     setHasData(true);
+    setSelectedBU("");
   };
 
   useEffect(() => {
@@ -208,6 +223,8 @@ const useItemRequest = () => {
       errors,
     },
     states: {
+      user,
+      qualimedbu,
       itemGroup,
       uoms,
       searchItem,
@@ -237,6 +254,7 @@ const useItemRequest = () => {
       setSelectedItemGroup,
       setBUApi,
       setBuSearch,
+      setSelectedBU,
     },
   };
 };
