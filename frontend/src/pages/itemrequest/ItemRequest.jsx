@@ -25,6 +25,9 @@ const CreateRequestItem = () => {
   const form = FORM_MODE.find(
     (a) => a.ItemGrpCode === controller.states.selectedItemGroup
   );
+  if (!controller.states.user || !controller.states.qualimedbu) {
+    return <div>Please login to qreports</div>;
+  }
   return (
     <div className="text-[#495057] w-">
       {/* Search and Table Section */}
@@ -47,12 +50,13 @@ const CreateRequestItem = () => {
                 />
                 {!controller.states.searching ? (
                   <BUSearchButton
+                    allowedBU={controller.states.qualimedbu}
                     setBUSearch={controller.actions.setBuSearch}
                     isBizbox={false}
                   />
                 ) : (
                   <Button
-                    buttonName="Processing..."
+                    buttonName="Processing.. ."
                     disabled={controller.states.searching}
                     className="rounded-r-md rounded-l-sm"
                   >
@@ -218,6 +222,7 @@ const CreateRequestItem = () => {
                     onClick={controller.actions.handleSubmitButton}
                   /> */}
                   <BUSubmitButton
+                    allowedBU={controller.states.qualimedbu}
                     buttonName={`${
                       controller.states.isSaving ? "Processing..." : "Submit"
                     }`}
