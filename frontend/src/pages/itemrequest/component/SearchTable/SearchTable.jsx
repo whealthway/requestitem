@@ -75,7 +75,9 @@ const SearchTable = ({ data, itemGroups }) => {
               <td className="py-1 px-2 border">{item?.aa_order_item}</td>
               <td className="py-1 px-2 border">{item?.aa_item_master}</td>
               <td className="py-1 px-2 border">{item?.item_description}</td>
-              <td className="py-1 px-2 border">{item?.request_details}</td>
+              <td className="py-1 px-2 border text-sm">
+                {item?.request_details}
+              </td>
             </tr>
           ))}
         </tbody>

@@ -7,15 +7,17 @@ const useBizBox = () => {
   const [bbCode, setBbCode] = useState("");
   const [bbCodeData, setBbCodeData] = useState([]);
   const [hasData, setHasData] = useState(true);
-  const [buBranchSearch, setBuBranchSearch] = useState("");
+  const [buBranchSearch, setBuBranchSearch] = useState({ api: null, bu: null });
 
   useEffect(() => {
-    if (buBranchSearch === "") {
+    if (buBranchSearch.api === null) {
       // setBbCodeData([]);
     } else {
       console.log(buBranchSearch);
       const handleBizboxSearch = async () => {
-        const response = await axios.post(buBranchSearch, { bbCode: bbCode });
+        const response = await axios.post(buBranchSearch.api, {
+          bbCode: bbCode,
+        });
 
         if (response.data.code === 200) {
           if (response.data.data.length > 0) {
@@ -31,7 +33,7 @@ const useBizBox = () => {
         }
       };
       handleBizboxSearch();
-      setBuBranchSearch("");
+      setBuBranchSearch({ api: null, bu: null });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

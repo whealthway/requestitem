@@ -10,8 +10,7 @@ def CreateItemRequestController():
         data = request_item['data']
 
         date_now = datetime.now()
-        date_now_without_seconds = date_now.replace(second=0, microsecond=0)
-        formatted_datetime = date_now_without_seconds.strftime("%Y-%m-%d %H:%M")
+        formatted_date = date_now.strftime("%Y-%m-%d %H:%M:%S")
         
         new_item = SAP_ITEM_REQUESTS (
             sap_item_group_code = data['sapItemGroupCode'],
@@ -23,10 +22,10 @@ def CreateItemRequestController():
             sellable            = data['sellable'],
             inventorable        = data['inventorable'],
             detailed_item       = json.dumps(data['detailedItem']),
-            qualimed_bu          = data['qualimedBU'],
+            qualimed_bu          = data['qualimedBU'].upper(),
             department          = data['department'],
             created_by          = data['createdBy'],
-            created_at          = formatted_datetime,
+            created_at          = formatted_date,
             status              = "Pending"
         )
 

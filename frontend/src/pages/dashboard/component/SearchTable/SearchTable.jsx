@@ -12,8 +12,6 @@ const SearchTable = ({ data, buSearch, register, handleSubmitData }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / rowsPerPage);
 
-  console.log(controller.states.isOpen);
-  console.log(controller.states.selectedData);
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
