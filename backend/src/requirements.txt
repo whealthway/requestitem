@@ -9,7 +9,6 @@ flask-cors==5.0.1
 Flask-Debug==0.4.3
 Flask-Migrate==4.1.0
 Flask-SQLAlchemy==3.1.1
-Flask-Validator==1.4.2
 greenlet==3.1.1
 idna==3.10
 inflection==0.5.1
@@ -22,6 +21,7 @@ MarkupSafe==3.0.2
 psycopg2-binary==2.9.10
 py-moneyed==0.8.0
 pycountry==24.6.1
+pyodbc==5.2.0
 python-dotenv==1.0.1
 pytz==2020.1
 schwifty==2020.9.0
