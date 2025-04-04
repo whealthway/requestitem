@@ -8,13 +8,14 @@ import {
 const BUSearchButton = ({ allowedBU, setBUSearch, isBizbox = true }) => {
   const [isOpen, setIsOpen] = useState(false);
   const buttonRef = useRef(null);
-  allowedBU.map((bu, index) => {
-    console.log(bu.ShortDesc);
-  });
   const handleClick = (bu) => {
-    setBUSearch(
-      isBizbox ? SEARCH_BIZBOX_API[bu] : SEARCH_CURRENT_REQUEST_API[bu]
-    );
+    console.log(bu);
+    setBUSearch({
+      api: isBizbox
+        ? SEARCH_BIZBOX_API[bu]
+        : SEARCH_CURRENT_REQUEST_API["masci"],
+      bu: bu,
+    });
     setIsOpen(false);
   };
 

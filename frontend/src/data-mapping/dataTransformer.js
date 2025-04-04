@@ -3,10 +3,8 @@ import FORM_MODE from "../constants/formPath";
 const transformMedicineData = (data) => {
   let genericName = "";
   let dosage = "";
-  console.log(data["itemNameCount"]);
   for (let i = 1; i <= data["itemNameCount"]; i++) {
     if (Object.hasOwn(data, `genericName${i}`)) {
-      console.log("HASOWNPROPERTY");
       if (data[`genericName${i}`].trim().length > 0) {
         genericName += ` ${data[`genericName${i}`]} `;
         dosage += ` ${data[`dose${i}`]} ${data[`dosage${i}`]} `;

@@ -5,9 +5,10 @@ from ..models import SAP_ITEM_REQUESTS
 def SearchItemRequestController():
     try:
         search_term = request.get_json()['searchItem'].lower()
+        buSearch = request.get_json()['buSearch'].lower()
         items = SAP_ITEM_REQUESTS.query
 
-        search_items = items.filter(func.lower(SAP_ITEM_REQUESTS.item_description).like(f"%{search_term}%"))
+        search_items = items.filter(func.lower(SAP_ITEM_REQUESTS.item_description).like(f"%{search_term}%"), SAP_ITEM_REQUESTS.qualimed_bu == buSearch.upper())
         json_data = []
         if search_items:
             for u in search_items:
@@ -21,7 +22,7 @@ def SearchItemRequestController():
                     "aa_order_item"    : item['aa_order_item'],
                     "aa_item_master"   : item['aa_item_master'],
                     "item_description" : item['item_description'],
-                    "request_details"  : f"{item['qualimed_bu']} / {item['department']} / {item['created_by']} / {item['created_at']}",
+                    "request_details"  : f"{item['qualimed_bu']} / {item['created_by']} / {item['created_at']}",
                     "status"           : item['status']
                 })
         else:

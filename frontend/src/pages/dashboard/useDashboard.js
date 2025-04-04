@@ -80,7 +80,6 @@ const useDashboard = () => {
 
   const handleSubmitData = handleSubmit(async (data) => {
     try {
-      console.log(UPDATE_API[buSubmit]);
       const response = await axios.post(UPDATE_API[buSubmit], {
         data: data,
       });

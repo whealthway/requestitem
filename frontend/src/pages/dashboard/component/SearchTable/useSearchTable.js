@@ -15,8 +15,6 @@ const useSearchTable = ({ data }) => {
   const handleEditButton = (item) => {
     setSelectedData(item);
     setIsOpen(!isOpen);
-    console.log("ISOPEN: " + isOpen);
-    console.log("SELECTED DATA: " + selectedData);
   };
 
   return {

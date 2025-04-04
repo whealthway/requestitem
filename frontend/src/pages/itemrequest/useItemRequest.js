@@ -7,18 +7,15 @@ import dataTransform from "../../data-mapping/dataTransformer";
 import UnexpectedError from "../../components/custom/UnexpectedError";
 import showNoDataAlert from "../../components/custom/ShowNoDataAlert";
 import SuccessRequest from "../../components/custom/SuccessRequest";
-import { redirect, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 const useItemRequest = () => {
   const [searchParams] = useSearchParams();
   const user = searchParams.get("user_id");
-  console.log(user);
-  // const qualimedbu = searchParams.get("qualimed_bu");
   let qualimedbu = searchParams.get("qualimed_bu");
   qualimedbu = qualimedbu.replace(/([{,])(\s*)(\w+)\s*:/g, '$1"$3":');
   qualimedbu = JSON.parse(qualimedbu);
-  console.log(typeof qualimedbu);
-  console.log(qualimedbu);
+
   const {
     register,
     unregister,
@@ -29,11 +26,12 @@ const useItemRequest = () => {
     control,
     formState: { errors },
   } = useForm();
+
   const [searchItem, setSearchItem] = useState("");
   const [searchData, setSearchData] = useState([]);
   const [hasData, setHasData] = useState(true);
   const [searching, setSearching] = useState(false);
-  const [buSearch, setBuSearch] = useState("");
+  const [buSearch, setBuSearch] = useState({ api: null, bu: null });
   const [showError, setShowError] = useState(false);
 
   const [proceed, setProceed] = useState(false);
@@ -50,23 +48,20 @@ const useItemRequest = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [buApi, setBUApi] = useState("");
-
   const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
-    if (buSearch === "") {
+    if (buSearch.api === null) {
     } else {
       const handleSearchItem = async () => {
         try {
           setSearching(true);
-
+          console.log("buSearch" + buSearch.api);
           if (searchItem !== "") {
-            console.log("buSearch: " + buSearch);
-            setShowError(false);
             const [irResponse, spResponse] = await Promise.all([
-              axios.post(buSearch, {
+              axios.post(buSearch.api, {
                 searchItem: searchItem,
+                buSearch: buSearch.bu,
               }),
               axios.post(`${getBaseUrl()}/bizbox-masci/callSP/item-search`, {
                 searchItem: searchItem,
@@ -89,7 +84,6 @@ const useItemRequest = () => {
               showNoDataAlert();
             }
             setSearchData([...irResponse.data.data, ...spResponse.data.data]);
-            console.log("data: " + searchData);
           } else {
             setShowError(true);
           }
@@ -102,7 +96,7 @@ const useItemRequest = () => {
       };
 
       handleSearchItem();
-      setBuSearch("");
+      setBuSearch({ api: null, bu: null });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buSearch]);
@@ -128,27 +122,24 @@ const useItemRequest = () => {
   // Create API
   const handleSubmitData = handleSubmit(async (data) => {
     try {
-      if (false) {
-        setShowError(true);
-      } else {
-        let newData = dataTransform(
-          selectedItemGroup.toLowerCase(),
-          data,
-          user,
-          selectedBU
-        );
-        setShowError(false);
-        console.log(buApi);
-        const response = await axios.post(buApi, {
+      let newData = dataTransform(
+        selectedItemGroup.toLowerCase(),
+        data,
+        user,
+        selectedBU
+      );
+      const response = await axios.post(
+        `${getBaseUrl()}/bbtemp-masci/create-item-request`,
+        {
           data: newData,
-        });
-        setIsSaving(true);
-        if (response.data.code === 200) {
-          reset();
-          SuccessRequest();
-        } else {
-          alert(response.data.message);
         }
+      );
+      setIsSaving(true);
+      if (response.data.code === 200) {
+        reset();
+        SuccessRequest();
+      } else {
+        alert(response.data.message);
       }
     } catch (error) {
       UnexpectedError({ error });
@@ -158,7 +149,6 @@ const useItemRequest = () => {
     }
   });
 
-  // Get all API
   useEffect(() => {
     handleSearch(
       "/bbtemp-masci/item-group",
@@ -169,7 +159,6 @@ const useItemRequest = () => {
     );
   }, []);
 
-  //Get all UOMS
   useEffect(() => {
     handleSearch("/bbtemp-masci/uoms", "GET", "", setLoading, setUoms);
   }, []);
@@ -185,9 +174,8 @@ const useItemRequest = () => {
     setIsModalOpen(true);
   };
 
-  const handleSubmitButton = (api, bu) => {
+  const handleSubmitButton = (bu) => {
     setSelectedBU(bu);
-    setBUApi(api);
     setSubmit(true);
     setIsModalOpen(true);
   };
@@ -208,7 +196,7 @@ const useItemRequest = () => {
 
   useEffect(() => {
     reset(
-      { itemGroupCode: watch("itemGroupCode") } // Preserve 'country' field
+      { itemGroupCode: watch("itemGroupCode") } //preserve value
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedItemGroup]);
@@ -252,7 +240,6 @@ const useItemRequest = () => {
       handleBackToSearch,
       setSearchItem,
       setSelectedItemGroup,
-      setBUApi,
       setBuSearch,
       setSelectedBU,
     },
