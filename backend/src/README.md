@@ -10,7 +10,9 @@ activate the virtual env thru the command below
 install all dependecies
 "pip install -r src\requirements.txt"
 to run the backend 
-"flask run"
+"flask run --host 0.0.0.0 -p 5000"
+--host -> use to change the server host
+-p -> use to change port
 
 
 Migration commands:
@@ -19,3 +21,4 @@ note: always double check the migration file if there is a generated unnecessary
 
 "flask db upgrade" -> use create tables in the database base on the created migration file
 
+Download ODBC(v.18) for windows: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver16#download-for-windows

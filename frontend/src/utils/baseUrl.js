@@ -1,5 +1,5 @@
 const getBaseUrl = () => {
-  return "http://192.168.1.203:5000";
+  return "http://10.20.2.134:5000";
 };
 
 export default getBaseUrl;
