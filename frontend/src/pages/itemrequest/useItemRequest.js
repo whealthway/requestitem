@@ -57,7 +57,9 @@ const useItemRequest = () => {
         try {
           setSearching(true);
           console.log("buSearch" + buSearch.api);
-          if (searchItem !== "") {
+          console.log("SEARCH ITEM: " + JSON.stringify(searchItem))
+          if (searchItem?.searchItem !== "") {
+            setShowError(false);
             const [irResponse, spResponse] = await Promise.all([
               axios.post(buSearch.api, {
                 searchItem: searchItem,
@@ -170,6 +172,7 @@ const useItemRequest = () => {
   };
 
   const handleCancelButton = () => {
+    reset();
     setSubmit(false);
     setIsModalOpen(true);
   };
@@ -185,6 +188,7 @@ const useItemRequest = () => {
     setIsModalOpen(false);
     setHasData(true);
     setSelectedBU("");
+    setSelectedItemGroup("");
   };
 
   const handleCancel = () => {
